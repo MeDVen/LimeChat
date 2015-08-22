@@ -39,6 +39,8 @@ public class Server{
      * @param client
      */
     public void addClient(Client client){
+        client.setClientListener(clientListener);
+        client.listen();
         clients.add(client);
     }
     /**
@@ -46,7 +48,8 @@ public class Server{
      */
     public void startListen(){
         acceptManager = new ClientAcceptService(serverSocket);
-        acceptManager.listen(clientListener);
+        acceptManager.setClientListener(clientListener);
+        acceptManager.listen();
     }
 
     public static void main(String[] args) {
@@ -54,4 +57,7 @@ public class Server{
         server.startListen();
     }
 
+    public void removeClient(Client client) {
+        clients.remove(client);
+    }
 }

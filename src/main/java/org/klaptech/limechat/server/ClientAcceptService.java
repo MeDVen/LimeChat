@@ -14,15 +14,16 @@ import static java.util.logging.Logger.getLogger;
 public class ClientAcceptService {
     private static final Logger LOGGER = getLogger(ClientAcceptService.class.getCanonicalName());
     private final ServerSocket serverSocket;
+    private ClientListener listener;
+
     public ClientAcceptService(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
 
     /**
      * Listen for input connections
-     * @param listener Listener that will be notified when client connects
      */
-    public void listen(ClientListener listener){
+    public void listen(){
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -35,5 +36,9 @@ public class ClientAcceptService {
                 }
             }
         });
+    }
+
+    public void setClientListener(ClientListener clientListener) {
+        this.listener = clientListener;
     }
 }

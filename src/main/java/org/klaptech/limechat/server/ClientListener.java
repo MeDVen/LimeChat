@@ -10,4 +10,15 @@ public interface ClientListener {
      * @param e event object {@link ClientEvent}
      */
     void clientConnected(ClientEvent e);
+    /**
+     * Fires when client is disconnected to the server
+     * @param e event object {@link ClientEvent}
+     */
+    void clientDisconnected(ClientEvent e);
+
+    /**
+     * Fires when client is sending message
+     * @param e event object {@link ClientEvent}
+     */
+    void clientSendMessage(ClientEvent e);
 }
