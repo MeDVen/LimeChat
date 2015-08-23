@@ -23,9 +23,8 @@ public class ClientListenerImpl implements ClientListener {
 
     @Override
     public void clientDisconnected(ClientEvent e) {
-        Client client = new Client(e.getSocket());
-        server.removeClient(client);
-        LOGGER.info(String.format("Client %s disconnected successfully",client));
+        server.removeClient(e.getSocket());
+        LOGGER.info(String.format("Client %s disconnected successfully",e.getSocket()));
     }
 
     @Override

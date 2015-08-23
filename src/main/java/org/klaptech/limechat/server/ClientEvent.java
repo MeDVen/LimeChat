@@ -23,10 +23,18 @@ public class ClientEvent {
         return socket;
     }
 
+    /**
+     *
+     * @return text message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Setup user message
+     * @param message user message
+     */
     public void setMessage(String message) {
         this.message = message;
     }
