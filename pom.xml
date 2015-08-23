@@ -27,7 +27,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.1.3</version>
                 <configuration>
-                    <mainClass>org.klaptech.limechat.Main</mainClass>
+                    <mainClass>org.klaptech.limechat.client.ApplicationWindow</mainClass>
                 </configuration>
             </plugin>
 
@@ -41,7 +41,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.klaptech.limechat.Main</mainClass>
+                            <mainClass>org.klaptech.limechat.client.ApplicationWindow</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
