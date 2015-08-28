@@ -8,35 +8,21 @@ public enum MessageType {
     /**
      * User join room
      */
-    JOIN("JOIN"),
+    JOIN,
     /**
      * User write msg
      */
-    MSG("MSG"),
+    MSG,
     /**
      * User connect to server
      */
-    CONNECT("CON"),
+    LOGIN,
     /**
      * User disconnect
      */
-    DISCONNECT("EXIT"),
+    DISCONNECT,
     /**
      * Incorrect command
      */
-    ERROR("");
-
-    /**
-     * Pattern of message type(check before serialize)
-     */
-    private final String inputPattern;
-
-    MessageType(String inputPattern) {
-
-        this.inputPattern = inputPattern;
-    }
-
-    public String getInputPattern() {
-        return inputPattern;
-    }
+    ERROR;
 }

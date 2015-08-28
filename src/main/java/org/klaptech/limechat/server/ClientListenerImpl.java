@@ -19,6 +19,7 @@ public class ClientListenerImpl implements ClientListener {
         Client client = new Client(e.getSocket());
         server.addClient(client);
         LOGGER.info(String.format("Client %s connected successfully",client));
+        client.listen();
     }
 
     @Override
