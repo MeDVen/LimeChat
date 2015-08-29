@@ -53,9 +53,9 @@ public class Client {
                     Message msg = (Message) objInputStream.readObject();
                     if (msg.getType() == MessageType.LOGIN) {
                         Login loginMsg = (Login) msg;
-                        if (Authorizer.auth(loginMsg.getUsername(), loginMsg.getPassword())) {
-                            clientListener.clientLogin(new ClientEvent(Client.this));
-                        }
+                        ClientEvent clientEvent = new ClientEvent(Client.this);
+                        clientEvent.setType(Authorizer.auth(loginMsg.getUsername(),loginMsg.getPassword()));
+                        clientListener.clientLogin(clientEvent);
                     }
                     while (true) {
                         msg = (Message) objInputStream.readObject();

@@ -27,8 +27,8 @@ public class TestClient {
                         ois = new ObjectInputStream(socket.getInputStream());
                         while(true) {
                             Message msg = (Message) ois.readObject();
-                            if (msg.getType() == MessageType.ANSWER_LOGIN && ((LoginAnswer) msg).getAnswerType() == LoginAnswer.TYPE.SUCCESS) {
-                                System.out.println("Login success");
+                            if (msg.getType() == MessageType.ANSWER_LOGIN) {
+                                System.out.println(((LoginAnswer) msg).getAnswerType());
                             }
                         }
                     } catch (IOException e) {
@@ -47,7 +47,7 @@ public class TestClient {
 
                 }
             }).start();
-            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "admin"));
+            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "a1dmin"));
             oos.writeObject(GeneralMessageFactory.createSendMessage("hello world"));
         } catch (IOException e) {
             e.printStackTrace();

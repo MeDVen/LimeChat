@@ -1,6 +1,7 @@
 package org.klaptech.limechat.shared.client;
 
 import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.utils.HashUtils;
 
 /**
  * Client message factory
@@ -14,6 +15,6 @@ public class ClientMessageFactory {
      * @return message sending to server, when user is connecting
      */
     public static Message createLoginMessage(String username, String password) {
-        return new Login(username, password);
+        return new Login(username, HashUtils.md5(password));
     }
 }
