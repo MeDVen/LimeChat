@@ -1,9 +1,10 @@
 package org.klaptech.limechat.client;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -13,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -34,11 +34,12 @@ import java.io.IOException;
  */
 public class ApplicationWindow extends Application {
 
+    private static final int SPLASH_DURATION = 5;
     @FXML
     private Label testLabel;
 
     private static final String LIME_CHAT_ICON_64x64 = "could_put_icon_here_64x64";
-    private static final String LIME_CHAT_SPALSH = "/org/klaptech/limechat/client/limes_transperent_splash.png";
+    private static final String LIME_CHAT_SPLASH = "limes_transperent_splash.png";
 
     private static final int SPLASH_WIDTH = 800;
     private static final int SPLASH_HEIGHT = 600;
@@ -51,18 +52,15 @@ public class ApplicationWindow extends Application {
     @Override
     public void start(Stage initStage) throws Exception {
         showSplashScreen(initStage);
-        showMainStage();
         initStage.toFront();
-//        FadeTransition fadeSplash = new FadeTransition(Duration.seconds(10), splashLayout);
-//        fadeSplash.setFromValue(1.0);
-//        fadeSplash.setToValue(0.0);
-//        fadeSplash.setOnFinished(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                initStage.hide();
-//            }
-//        });
-//        fadeSplash.play();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
+        timeline.play();
+        FadeTransition fadeSplash = new FadeTransition(Duration.seconds(SPLASH_DURATION), splashLayout);
+        fadeSplash.setFromValue(1.0);
+        fadeSplash.setToValue(0.0);
+        fadeSplash.setOnFinished(actionEvent -> initStage.hide());
+        fadeSplash.play();
     }
 
     public static void main(String[] args) {
@@ -71,7 +69,7 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void init() {
-        ImageView splashImage = new ImageView(new Image(LIME_CHAT_SPALSH));
+        ImageView splashImage = new ImageView(new Image(getClass().getResourceAsStream(LIME_CHAT_SPLASH)));
         splashMessage = new Label("Welcome to best chat ever - LimeChat!");
         splashMessage.setAlignment(Pos.CENTER);
 
@@ -91,17 +89,27 @@ public class ApplicationWindow extends Application {
         splashLayout.setEffect(new DropShadow());
     }
 
-    private void showMainStage() throws IOException {
+    /**
+     * Init and show main stage
+     */
+    private void showMainStage(){
         mainStage = new Stage(StageStyle.DECORATED);
         mainStage.setTitle("Lime Chat beta v.0.0.1");
-        mainStage.setIconified(true);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
+            Scene scene = new Scene(root, 800, 582);
+            mainStage.setScene(scene);
+            mainStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
-        Scene scene = new Scene(root, 800, 582);
-        mainStage.setScene(scene);
-        mainStage.show();
     }
 
+    /**
+     * show splash screen
+     * @param initStage main stage
+     */
     private void showSplashScreen(Stage initStage) {
         Scene splashScene = new Scene(splashLayout);
         splashScene.setFill(Color.TRANSPARENT);
