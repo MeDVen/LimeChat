@@ -1,4 +1,4 @@
-package org.klaptech.limechat.server;
+package org.klaptech.limechat.server.client;
 
 import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.shared.Message;

@@ -1,4 +1,4 @@
-package org.klaptech.limechat.server;
+package org.klaptech.limechat.server.client;
 
 import java.io.IOException;
 import java.net.ServerSocket;

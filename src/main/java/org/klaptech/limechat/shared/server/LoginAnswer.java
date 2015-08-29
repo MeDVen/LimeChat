@@ -20,7 +20,7 @@ public class LoginAnswer implements Message {
 
     @Override
     public MessageType getType() {
-        return null;
+        return MessageType.ANSWER_LOGIN;
     }
 
     public TYPE getAnswerType() {

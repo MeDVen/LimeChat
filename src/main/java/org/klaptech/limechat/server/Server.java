@@ -1,5 +1,9 @@
 package org.klaptech.limechat.server;
 
+import org.klaptech.limechat.server.client.Client;
+import org.klaptech.limechat.server.client.ClientAcceptService;
+import org.klaptech.limechat.server.client.ClientListener;
+import org.klaptech.limechat.server.client.ClientListenerImpl;
 import org.klaptech.limechat.server.conf.Configuration;
 import org.klaptech.limechat.server.conf.DefaultConfiguration;
 
@@ -48,8 +52,6 @@ public class Server {
      * @param client
      */
     public void addClient(Client client) {
-        client.setClientListener(clientListener);
-        // NOTIFY THAT client is add
         clients.add(client);
     }
 

@@ -1,6 +1,6 @@
 package org.klaptech.limechat.server.io;
 
-import org.klaptech.limechat.server.Client;
+import org.klaptech.limechat.server.client.Client;
 import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.general.GeneralMessageFactory;
 

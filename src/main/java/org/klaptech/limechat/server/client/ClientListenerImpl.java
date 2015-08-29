@@ -1,5 +1,6 @@
-package org.klaptech.limechat.server;
+package org.klaptech.limechat.server.client;
 
+import org.klaptech.limechat.server.Server;
 import org.klaptech.limechat.server.io.Writer;
 import org.klaptech.limechat.shared.server.LoginAnswer;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
@@ -21,9 +22,10 @@ public class ClientListenerImpl implements ClientListener {
     @Override
     public void clientConnected(ClientEvent e) {
 
+
         Client client = e.getClient();
-        server.addClient(client);
         LOGGER.info(String.format("Client %s connected successfully",client));
+        client.setClientListener(this);
         client.listen();
     }
 
@@ -40,6 +42,9 @@ public class ClientListenerImpl implements ClientListener {
 
     @Override
     public void clientLogin(ClientEvent e) {
+        Client client = e.getClient();
+        server.addClient(client);
+        LOGGER.info(String.format("Client %s login successfully", client));
         Writer.write(e.getClient(), ServerMessageFactory.createLoginAnswer(LoginAnswer.TYPE.SUCCESS));
     }
 }
