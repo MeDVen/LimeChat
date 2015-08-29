@@ -29,7 +29,7 @@ public class ClientAcceptService {
             public void run() {
                 while(true){
                     try {
-                        listener.clientConnected(new ClientEvent(serverSocket.accept()));
+                        listener.clientConnected(new ClientEvent(new Client(serverSocket.accept())));
                     } catch (IOException e) {
                         LOGGER.severe(e.getMessage());
                     }

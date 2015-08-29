@@ -10,7 +10,7 @@ import org.klaptech.limechat.shared.MessageType;
 public class SendMessage implements Message{
     private String message;
 
-    public SendMessage(String message) {
+    protected SendMessage(String message) {
         this.message = message;
     }
 

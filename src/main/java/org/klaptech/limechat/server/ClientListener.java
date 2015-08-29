@@ -21,4 +21,10 @@ public interface ClientListener {
      * @param e event object {@link ClientEvent}
      */
     void clientSendMessage(ClientEvent e);
+
+    /**
+     * Fires when client is login to server
+     * @param e event object {@link ClientEvent}
+     */
+    void clientLogin(ClientEvent e);
 }

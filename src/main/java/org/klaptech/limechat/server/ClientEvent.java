@@ -1,26 +1,20 @@
 package org.klaptech.limechat.server;
 
-import java.net.Socket;
-
 /**
  * Client event contains information which transfer to clientlistener
  * @author rlapin
  */
 public class ClientEvent {
 
-    private Socket socket;
+    private final Client client;
     private String message;
 
-    public ClientEvent(Socket socket) {
-        this.socket = socket;
+    public ClientEvent(Client client) {
+        this.client = client;
     }
 
-    /**
-     *
-     * @return client socket
-     */
-    public Socket getSocket() {
-        return socket;
+    public Client getClient() {
+        return client;
     }
 
     /**

@@ -1,8 +1,9 @@
 package org.klaptech.limechat.server;
 
+import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageLogin;
 import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.client.Login;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -50,20 +51,20 @@ public class Client {
                 try {
                     ObjectInputStream objInputStream = new ObjectInputStream(socket.getInputStream());
                     Message msg = (Message) objInputStream.readObject();
-                    if(msg.getType() == MessageType.LOGIN){
-                        MessageLogin loginMsg = (MessageLogin)msg;
-                        if(loginMsg.getUsername().equals("admin") && loginMsg.getPassword().equals("admin")){
-                            System.out.println("success");
+                    if (msg.getType() == MessageType.LOGIN) {
+                        Login loginMsg = (Login) msg;
+                        if (Authorizer.auth(loginMsg.getUsername(), loginMsg.getPassword())) {
+                            clientListener.clientLogin(new ClientEvent(Client.this));
                         }
                     }
                     while (true) {
                         msg = (Message) objInputStream.readObject();
-                        if(msg!=null){
+                        if (msg != null) {
                             System.out.println(msg);
                         }
                     }
                 } catch (IOException | ClassNotFoundException e) { // Reading error. Client disconnect
-                    clientListener.clientDisconnected(new ClientEvent(socket));
+                    clientListener.clientDisconnected(new ClientEvent(Client.this));
                 }
             }
         });

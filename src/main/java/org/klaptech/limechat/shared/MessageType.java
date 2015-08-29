@@ -24,5 +24,9 @@ public enum MessageType {
     /**
      * Incorrect command
      */
-    ERROR;
+    ERROR,
+    /**
+     * Server answer on user login
+     */
+    ANSWER_LOGIN;
 }

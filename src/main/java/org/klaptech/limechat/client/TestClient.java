@@ -1,6 +1,7 @@
 package org.klaptech.limechat.client;
 
-import org.klaptech.limechat.shared.MessageFactory;
+import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.client.ClientMessageFactory;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -14,7 +15,8 @@ public class TestClient {
         try {
             Socket socket = new Socket("localhost",3306);
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(MessageFactory.createLoginMessage("admin","admin"));
+            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "admin"));
+            oos.writeObject(GeneralMessageFactory.createSendMessage("hello world"));
         } catch (IOException e) {
             e.printStackTrace();
         }

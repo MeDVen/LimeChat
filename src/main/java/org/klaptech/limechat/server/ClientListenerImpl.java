@@ -1,5 +1,9 @@
 package org.klaptech.limechat.server;
 
+import org.klaptech.limechat.server.io.Writer;
+import org.klaptech.limechat.shared.server.LoginAnswer;
+import org.klaptech.limechat.shared.server.ServerMessageFactory;
+
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +20,8 @@ public class ClientListenerImpl implements ClientListener {
 
     @Override
     public void clientConnected(ClientEvent e) {
-        Client client = new Client(e.getSocket());
+
+        Client client = e.getClient();
         server.addClient(client);
         LOGGER.info(String.format("Client %s connected successfully",client));
         client.listen();
@@ -24,12 +29,17 @@ public class ClientListenerImpl implements ClientListener {
 
     @Override
     public void clientDisconnected(ClientEvent e) {
-        server.removeClient(e.getSocket());
-        LOGGER.info(String.format("Client %s disconnected successfully",e.getSocket()));
+        server.removeClient(e.getClient());
+        LOGGER.info(String.format("Client %s disconnected successfully",e.getClient().getSocket()));
     }
 
     @Override
     public void clientSendMessage(ClientEvent e) {
-        System.out.println(e.getSocket()+":"+e.getMessage());
+        System.out.println(e.getClient().getSocket()+":"+e.getMessage());
+    }
+
+    @Override
+    public void clientLogin(ClientEvent e) {
+        Writer.write(e.getClient(), ServerMessageFactory.createLoginAnswer(LoginAnswer.TYPE.SUCCESS));
     }
 }

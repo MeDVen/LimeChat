@@ -1,0 +1,21 @@
+package org.klaptech.limechat.shared.general;
+
+import org.klaptech.limechat.shared.Message;
+
+/**
+ * Factory of general messages
+ *
+ * @author rlapin
+ */
+public class GeneralMessageFactory {
+
+    /**
+     * Create send message
+     * @param text
+     * @return message sending to client/server with text
+     */
+    public static Message createSendMessage(String text) {
+        return new SendMessage(text);
+    }
+
+}

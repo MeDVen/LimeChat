@@ -38,7 +38,7 @@ public class ApplicationWindow extends Application {
     @FXML
     private Label testLabel;
 
-    private static final String LIME_CHAT_ICON_64x64 = "could_put_icon_here_64x64";
+    private static final String LIME_CHAT_ICON_64x64 = "limechat_64x64.png";
     private static final String LIME_CHAT_SPLASH = "limes_transperent_splash.png";
 
     private static final int SPLASH_WIDTH = 800;
@@ -52,7 +52,7 @@ public class ApplicationWindow extends Application {
     @Override
     public void start(Stage initStage) throws Exception {
         showSplashScreen(initStage);
-        initStage.toFront();
+
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
         timeline.play();
@@ -69,6 +69,7 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void init() {
+
         ImageView splashImage = new ImageView(new Image(getClass().getResourceAsStream(LIME_CHAT_SPLASH)));
         splashMessage = new Label("Welcome to best chat ever - LimeChat!");
         splashMessage.setAlignment(Pos.CENTER);
@@ -114,6 +115,7 @@ public class ApplicationWindow extends Application {
         Scene splashScene = new Scene(splashLayout);
         splashScene.setFill(Color.TRANSPARENT);
         initStage.initStyle(StageStyle.TRANSPARENT);
+        initStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
         final Rectangle2D bounds = Screen.getPrimary().getBounds();
         initStage.setScene(splashScene);
         initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);

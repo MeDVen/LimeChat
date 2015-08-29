@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 
 /**
- * Describes server entity
+ * Server entity
  *
  * @author rlapin
  */
@@ -83,4 +83,5 @@ public class Server {
             }
         }
     }
+
 }
