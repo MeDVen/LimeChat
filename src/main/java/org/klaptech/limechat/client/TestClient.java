@@ -47,7 +47,7 @@ public class TestClient {
 
                 }
             }).start();
-            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "a1dmin"));
+            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "admin"));
             oos.writeObject(GeneralMessageFactory.createSendMessage("hello world"));
         } catch (IOException e) {
             e.printStackTrace();
