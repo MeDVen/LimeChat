@@ -1,6 +1,5 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
@@ -9,10 +8,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Arc;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
