@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -96,14 +98,24 @@ public class ApplicationWindow extends Application {
     private void showMainStage(){
         mainStage = new Stage(StageStyle.DECORATED);
         mainStage.setTitle("Lime Chat beta v.0.0.1");
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
-            Scene scene = new Scene(root, 800, 582);
-            mainStage.setScene(scene);
-            mainStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //            Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
+        Group root = new Group();
+
+        Scene scene = new Scene(root, 800, 600);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.prefHeightProperty().bind(scene.heightProperty());
+        borderPane.prefWidthProperty().bind(scene.widthProperty());
+
+        ChatTabPane chatTabPane = new ChatTabPane();
+        chatTabPane.addNewTab();
+
+        borderPane.setCenter(chatTabPane);
+        root.getChildren().add(borderPane);
+
+        mainStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
+        mainStage.setScene(scene);
+        mainStage.show();
 
     }
 
