@@ -1,16 +1,11 @@
 package org.klaptech.limechat.client;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -26,9 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
-
-import java.io.IOException;
+import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
 
 /**
  * Main window of LimeChat with application flow.
@@ -53,7 +46,9 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void start(Stage initStage) throws Exception {
-        showSplashScreen(initStage);
+        LoginDialog loginDialog = new LoginDialog();
+        loginDialog.show();
+     /*   showSplashScreen(initStage);
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
@@ -62,7 +57,7 @@ public class ApplicationWindow extends Application {
         fadeSplash.setFromValue(1.0);
         fadeSplash.setToValue(0.0);
         fadeSplash.setOnFinished(actionEvent -> initStage.hide());
-        fadeSplash.play();
+        fadeSplash.play();*/
     }
 
     public static void main(String[] args) {
