@@ -13,6 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 /**
  * Login/Register dialog
  * Contains: login field, password field, default room selector, remember password check.
@@ -24,10 +27,12 @@ public class LoginDialog {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
     private Stage stage;
-
+    private ResourceBundle resourceBundle;
 
     public LoginDialog() {
         stage = new Stage(StageStyle.DECORATED);
+        resourceBundle = ResourceBundle.getBundle("org.klaptech.limechat.client.gui.dialogs.LoginDialog", new Locale("ru"));
+
         initComponents();
         initListeners();
     }
@@ -62,12 +67,12 @@ public class LoginDialog {
      * LoginTab. User input name , password and select default room, then connect to server
      */
     private class LoginPane extends Tab {
-        public static final String TAB_TITLE = "Login";
         private TextField loginField;
         private PasswordField passwordField;
 
         public LoginPane() {
-            setText(TAB_TITLE);
+
+            setText(resourceBundle.getString("login"));
             initComponents();
             initListeners();
         }
@@ -77,15 +82,15 @@ public class LoginDialog {
             gridPane.setAlignment(Pos.CENTER);
             gridPane.setVgap(10);
             gridPane.setHgap(10);
-            Label loginLabel = new Label("Login:");
+            Label loginLabel = new Label(resourceBundle.getString("name"));
             gridPane.add(loginLabel, 0, 0);
             loginField = new TextField();
-            loginField.setPromptText("Input login");
+            loginField.setPromptText(resourceBundle.getString("inputlogin"));
             gridPane.add(loginField, 1, 0);
-            Label passwordLabel = new Label("Password:");
+            Label passwordLabel = new Label(resourceBundle.getString("password"));
             gridPane.add(passwordLabel, 0, 1);
             passwordField = new PasswordField();
-            passwordField.setPromptText("Input password");
+            passwordField.setPromptText(resourceBundle.getString("inputpwd"));
             gridPane.add(passwordField, 1, 1);
             setContent(gridPane);
         }
@@ -99,13 +104,12 @@ public class LoginDialog {
      * RegisterTab for registration user on server
      */
     private class RegisterPane extends Tab {
-        public static final String TAB_TITLE = "Login";
         private TextField loginField;
         private PasswordField passwordField;
         private PasswordField confirmPasswordField;
 
         public RegisterPane() {
-            setText(TAB_TITLE);
+            setText(resourceBundle.getString("register"));
             initComponents();
             initListeners();
         }
@@ -115,20 +119,20 @@ public class LoginDialog {
             gridPane.setAlignment(Pos.CENTER);
             gridPane.setVgap(10);
             gridPane.setHgap(10);
-            Label loginLabel = new Label("Login:");
+            Label loginLabel = new Label(resourceBundle.getString("name"));
             gridPane.add(loginLabel, 0, 0);
             loginField = new TextField();
-            loginField.setPromptText("Input login");
+            loginField.setPromptText(resourceBundle.getString("inputlogin"));
             gridPane.add(loginField, 1, 0);
-            Label passwordLabel = new Label("Password:");
+            Label passwordLabel = new Label(resourceBundle.getString("password"));
             gridPane.add(passwordLabel, 0, 1);
             passwordField = new PasswordField();
-            passwordField.setPromptText("Input password");
+            passwordField.setPromptText(resourceBundle.getString("inputpwd"));
             gridPane.add(passwordField, 1, 1);
-            Label confirmPasswordLabel = new Label("Confirm password:");
+            Label confirmPasswordLabel = new Label(resourceBundle.getString("confirmpwd"));
             gridPane.add(confirmPasswordLabel, 0, 2);
             confirmPasswordField = new PasswordField();
-            confirmPasswordField.setPromptText("Repeat password");
+            confirmPasswordField.setPromptText(resourceBundle.getString("repeatpwd"));
             gridPane.add(confirmPasswordField, 1, 2);
             setContent(gridPane);
         }
