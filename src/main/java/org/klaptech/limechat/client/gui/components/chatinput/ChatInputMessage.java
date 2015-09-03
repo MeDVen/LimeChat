@@ -8,10 +8,10 @@ import javafx.scene.layout.Priority;
  * Ex
  * @author rlapin
  */
-public class ChatInput extends HBox{
+public class ChatInputMessage extends HBox{
     private TextArea inputTextArea;
-    public ChatInput() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/chatinput.css").toExternalForm());
+    public ChatInputMessage() {
+        getStylesheets().add(getClass().getClassLoader().getResource("fxml/chatinputmessage.css").toExternalForm());
         initComponents();
     }
 

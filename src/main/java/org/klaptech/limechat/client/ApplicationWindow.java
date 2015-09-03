@@ -22,7 +22,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
-import org.klaptech.limechat.client.gui.components.chatinput.ChatInput;
+import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
 
 /**
@@ -110,7 +110,7 @@ public class ApplicationWindow extends Application {
         chatTabPane.addNewTab(new RoomTab("Default room"));
         chatTabPane.addNewTab(new RoomTab("219 room"));
         borderPane.setCenter(chatTabPane);
-        borderPane.setBottom(new ChatInput());
+        borderPane.setBottom(new ChatInputMessage());
         root.getChildren().add(borderPane);
 
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));

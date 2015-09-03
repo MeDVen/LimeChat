@@ -1,0 +1,27 @@
+
+#chatinput
+{
+    -fx-text-fill: #96b946;
+    -fx-background-color: black;
+    -fx-font: 12px;
+
+}
+
+#chatinput .content{
+    -fx-background-color: #000000;
+}
+
+#chatinput .scroll-pane
+{
+
+    -fx-hbar-policy : never;
+
+    -fx-background-color: black;
+}
+
+#chatinput .scroll-pane .viewport
+{
+
+    -fx-background-color: black;
+
+}
