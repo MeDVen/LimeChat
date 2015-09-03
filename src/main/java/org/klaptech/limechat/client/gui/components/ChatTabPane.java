@@ -1,4 +1,4 @@
-package org.klaptech.limechat.client;
+package org.klaptech.limechat.client.gui.components;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -21,9 +21,10 @@ public class ChatTabPane extends TabPane {
 
     /**
      * Add new tab to TabPane
+     * @param roomTab tab with room
      */
-    public void addNewTab() {
-        Tab tab = new Tab();
+    public void addNewTab(Tab roomTab) {
+
         TextArea textArea = new TextArea();
         textArea.setScrollLeft(300);
 
@@ -31,11 +32,11 @@ public class ChatTabPane extends TabPane {
         glow.setLevel(5);
 
         textArea.setEffect(glow);
-        tab.setContent(textArea);
 
-        pinInstrumentPanel(tab); // empty
 
-        this.getTabs().add(tab);
+        pinInstrumentPanel(roomTab); // empty
+
+        this.getTabs().add(roomTab);
     }
 
     /**

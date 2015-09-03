@@ -21,7 +21,9 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
+import org.klaptech.limechat.client.gui.components.ChatTabPane;
+import org.klaptech.limechat.client.gui.components.chatinput.ChatInput;
+import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
 
 /**
  * Main window of LimeChat with application flow.
@@ -46,9 +48,11 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void start(Stage initStage) throws Exception {
-        LoginDialog loginDialog = new LoginDialog();
-        loginDialog.show();
-     /*   showSplashScreen(initStage);
+
+       // LoginDialog loginDialog = new LoginDialog();
+      //  loginDialog.show();//showMainStage();
+        showMainStage();
+    /* showSplashScreen(initStage);
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
@@ -103,9 +107,10 @@ public class ApplicationWindow extends Application {
         borderPane.prefWidthProperty().bind(scene.widthProperty());
 
         ChatTabPane chatTabPane = new ChatTabPane();
-        chatTabPane.addNewTab();
-
+        chatTabPane.addNewTab(new RoomTab("Default room"));
+        chatTabPane.addNewTab(new RoomTab("219 room"));
         borderPane.setCenter(chatTabPane);
+        borderPane.setBottom(new ChatInput());
         root.getChildren().add(borderPane);
 
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
