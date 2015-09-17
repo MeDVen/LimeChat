@@ -17,9 +17,9 @@ import static java.util.logging.Logger.getLogger;
  *
  * @author rlapin
  */
-public class ByteObjectConvertor {
-    private static final Logger LOGGER = getLogger(ByteObjectConvertor.class.getName());
-    private ByteObjectConvertor() {
+public class ByteObjectConverter {
+    private static final Logger LOGGER = getLogger(ByteObjectConverter.class.getName());
+    private ByteObjectConverter() {
     }
 
     /**
