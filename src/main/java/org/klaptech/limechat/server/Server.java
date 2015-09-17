@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -80,7 +82,28 @@ public class Server {
      * @param key selectionKey with connection information
      */
     private void write(SelectionKey key) {
+        SocketChannel socketChannel = (SocketChannel) key.channel();
+     /*   synchronized (this.pendingData) {
+            List queue = (List) this.pendingData.get(socketChannel);
 
+            // Write until there's not more data ...
+            while (!queue.isEmpty()) {
+                ByteBuffer buf = (ByteBuffer) queue.get(0);
+                socketChannel.write(buf);
+                if (buf.remaining() > 0) {
+                    // ... or the socket's buffer fills up
+                    break;
+                }
+                queue.remove(0);
+            }
+
+            if (queue.isEmpty()) {
+                // We wrote away all data, so we're no longer interested
+                // in writing on this socket. Switch back to waiting for
+                // data.
+                key.interestOps(SelectionKey.OP_READ);
+            }
+        }*/
     }
 
     /**
