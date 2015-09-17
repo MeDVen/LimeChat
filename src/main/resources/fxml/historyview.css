@@ -1,0 +1,27 @@
+
+#historytextarea
+{
+    -fx-text-fill: #96b946;
+    -fx-background-color: #828282;
+    -fx-font: 12px;
+
+}
+
+#historytextarea .content{
+    -fx-background-color: #828282;
+}
+
+#historytextarea .scroll-pane
+{
+
+    -fx-hbar-policy : never;
+
+    -fx-background-color: #828282;
+}
+
+#historytextarea .scroll-pane .viewport
+{
+
+    -fx-background-color: #828282;
+
+}
