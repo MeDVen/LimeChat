@@ -21,20 +21,18 @@ import static java.util.logging.Logger.getLogger;
 public class TestClient {
     private static final Logger LOGGER = getLogger(TestClient.class.getName());
     public static void main(String[] args) {
-        try(SocketChannel socketChannel = SocketChannel.open();){
+        try(SocketChannel socketChannel = SocketChannel.open()){
             socketChannel.configureBlocking(false);
             socketChannel.connect(new InetSocketAddress("localhost",3306));
             while(!socketChannel.finishConnect()){
 
             }
-            while(true) {
                 Message message = ClientMessageFactory.createLoginMessage("admin", "admin");
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ObjectOutput out = new ObjectOutputStream(bos);
                 out.writeObject(message);
                 ByteBuffer byteBuffer = ByteBuffer.wrap(bos.toByteArray());
                 socketChannel.write(byteBuffer);
-            }
 
 
 
