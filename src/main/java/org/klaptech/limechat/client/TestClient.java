@@ -1,54 +1,43 @@
 package org.klaptech.limechat.client;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageType;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
-import org.klaptech.limechat.shared.general.GeneralMessageFactory;
-import org.klaptech.limechat.shared.server.LoginAnswer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
+
 
 /**
  * @author rlapin
  */
 public class TestClient {
+    private static final Logger LOGGER = getLogger(TestClient.class.getName());
     public static void main(String[] args) {
-        try {
-            Socket socket = new Socket("localhost",3306);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ObjectInputStream ois = null;
-                    try {
-                        ois = new ObjectInputStream(socket.getInputStream());
-                        while(true) {
-                            Message msg = (Message) ois.readObject();
-                            if (msg.getType() == MessageType.ANSWER_LOGIN) {
-                                System.out.println(((LoginAnswer) msg).getAnswerType());
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            if (ois != null) {
-                                ois.close();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+        try(SocketChannel socketChannel = SocketChannel.open();){
+            socketChannel.configureBlocking(false);
+            socketChannel.connect(new InetSocketAddress("localhost",3306));
+            while(!socketChannel.finishConnect()){
 
-                }
-            }).start();
-            oos.writeObject(ClientMessageFactory.createLoginMessage("admin", "admin"));
-            oos.writeObject(GeneralMessageFactory.createSendMessage("hello world"));
+            }
+            while(true) {
+                Message message = ClientMessageFactory.createLoginMessage("admin", "admin");
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutput out = new ObjectOutputStream(bos);
+                out.writeObject(message);
+                ByteBuffer byteBuffer = ByteBuffer.wrap(bos.toByteArray());
+                socketChannel.write(byteBuffer);
+            }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

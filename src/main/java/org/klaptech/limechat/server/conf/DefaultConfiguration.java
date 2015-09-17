@@ -9,4 +9,9 @@ public class DefaultConfiguration implements Configuration{
     public int getPort() {
         return 3306;
     }
+
+    @Override
+    public String getAddr() {
+        return "localhost";
+    }
 }

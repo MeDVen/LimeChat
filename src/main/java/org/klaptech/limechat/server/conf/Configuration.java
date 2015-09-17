@@ -10,4 +10,10 @@ public interface Configuration {
      * @return listen port , where clients should connect
      */
     int getPort();
+
+    /**
+     * get host addr
+     * @return addr as ip4 or dns
+     */
+    String getAddr();
 }

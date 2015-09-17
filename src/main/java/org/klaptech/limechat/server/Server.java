@@ -1,19 +1,19 @@
 package org.klaptech.limechat.server;
 
-import org.klaptech.limechat.server.client.Client;
-import org.klaptech.limechat.server.client.ClientAcceptService;
-import org.klaptech.limechat.server.client.ClientListener;
-import org.klaptech.limechat.server.client.ClientListenerImpl;
+
 import org.klaptech.limechat.server.conf.Configuration;
 import org.klaptech.limechat.server.conf.DefaultConfiguration;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Set;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 
@@ -24,66 +24,132 @@ import java.util.logging.Logger;
  */
 public class Server {
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
-    private final Configuration config;
-    private ServerSocket serverSocket;
-    private ClientAcceptService acceptManager;
-    private List<Client> clients;
-    private ClientListener clientListener;
+    public static final int N_THREADS = 4;
+    private Selector selector;
+    private Configuration config;
+    private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+    private ReadWorker readWorker = new ReadWorker();
+
 
     public Server(Configuration config) {
         this.config = config;
-        clients = Collections.synchronizedList(new ArrayList<>());
-        try {
-            serverSocket = new ServerSocket(config.getPort());
+
+
+    }
+
+    private void start() {
+        try (
+                ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        ) {
+            selector = Selector.open();
+            serverSocketChannel.bind(new InetSocketAddress(config.getAddr(), config.getPort()));
+            serverSocketChannel.configureBlocking(false);
+            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            while (true) {
+                int num = selector.select();
+                if (num == 0) {
+                    continue;
+                }
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                for (SelectionKey key : selectionKeys) {
+                    if (!key.isValid()) {
+                        continue;
+                    }
+                    if (key.isConnectable()) {
+                        LOGGER.info("User[ip:%s] disconnected");
+                    }
+                    if (key.isAcceptable()) {
+                        accept(key);
+                    } else if (key.isReadable()) {
+                        read(key);
+                    } else if (key.isWritable()) {
+                        write(key);
+                    }
+                }
+                selectionKeys.clear();
+            }
 
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-        clientListener = new ClientListenerImpl(this);
-
     }
 
-
-
-
     /**
-     * Add client to client list
+     * Write data to client
      *
-     * @param client
+     * @param key selectionKey with connection information
      */
-    public void addClient(Client client) {
-        clients.add(client);
+    private void write(SelectionKey key) {
+
     }
 
     /**
-     * Start clientlisten for accept service
+     * Read data from client
+     *
+     * @param key selectionKey with connection information
      */
-    public void startListenForAccept() {
-        acceptManager = new ClientAcceptService(serverSocket);
-        acceptManager.setClientListener(clientListener);
-        acceptManager.listen();
+    private void read(SelectionKey key) throws IOException {
+        SocketChannel socketChannel = (SocketChannel) key.channel();
+        readBuffer.clear();
+        int numRead;
+        try {
+            numRead = socketChannel.read(readBuffer);
+        } catch (IOException e) {
+            LOGGER.severe("Problem with reading information from client");
+            key.cancel();
+            socketChannel.close();
+            return;
+        }
+        if (numRead == -1) {
+            key.channel().close();
+            key.cancel();
+            return;
+        }
+        readWorker.processData(socketChannel,readBuffer.array(),numRead);
     }
+
+    /**
+     * Accept connections and if success register socketchannel for reading
+     *
+     * @param key selectionkey with connection info
+     * @throws IOException Problem with accepting connection
+     */
+    private void accept(SelectionKey key) throws IOException {
+        ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+        SocketChannel socketChannel = serverSocketChannel.accept();
+        Socket socket = socketChannel.socket();
+        socketChannel.configureBlocking(false);
+        socketChannel.register(selector, SelectionKey.OP_READ);
+        LOGGER.info(String.format("User[ip:%s] connected successfully", socket.getLocalAddress()));
+    }
+
 
     public static void main(String[] args) {
         Server server = new Server(new DefaultConfiguration());
-        server.startListenForAccept();
-    }
-
-    public void removeClient(Client client) {
-        clients.remove(client);
+        server.start();
     }
 
     /**
-     * Remove client by it socket
-     * @param socket clientsocket
+     * Run server
      */
-    public void removeClient(Socket socket) {
-        for (Iterator<Client> iterator = clients.iterator(); iterator.hasNext(); ) {
-            Client client = iterator.next();
-            if(client.getSocket() == socket){
-                iterator.remove();
+    private void run() {
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                start();
             }
-        }
+        });
+        startReadWorker();
     }
+
+    /**
+     * Start worker for reading data from clients
+     */
+    private void startReadWorker() {
+
+        Executors.newFixedThreadPool(N_THREADS).submit(readWorker);
+    }
+
 
 }
