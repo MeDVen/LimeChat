@@ -1,18 +1,22 @@
 package org.klaptech.limechat.client;
 
-import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import static java.util.logging.Logger.getLogger;
 
-import java.io.ByteArrayOutputStream;
+
+
+
+
+
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.Scanner;
 import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 
 /**
@@ -27,15 +31,16 @@ public class TestClient {
             while(!socketChannel.finishConnect()){
 
             }
-                Message message = ClientMessageFactory.createLoginMessage("admin", "admin");
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ObjectOutput out = new ObjectOutputStream(bos);
-                out.writeObject(message);
-                ByteBuffer byteBuffer = ByteBuffer.wrap(bos.toByteArray());
+            Message message = ClientMessageFactory.createLoginMessage("admin", "admin");
+            ByteBuffer byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message));
+            socketChannel.write(byteBuffer);
+            Scanner scanner = new Scanner(System.in);
+            while(scanner.hasNextLine()){
+                String str = scanner.nextLine();
+                message = GeneralMessageFactory.createSendMessage(str);
+                byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message));
                 socketChannel.write(byteBuffer);
-
-
-
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

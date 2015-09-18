@@ -1,23 +1,19 @@
 package org.klaptech.limechat.server;
 
-
-import org.klaptech.limechat.server.conf.Configuration;
-import org.klaptech.limechat.server.conf.DefaultConfiguration;
-
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
+import org.klaptech.limechat.server.conf.Configuration;
+import org.klaptech.limechat.server.conf.DefaultConfiguration;
 
 /**
  * Server entity
@@ -29,13 +25,11 @@ public class Server {
     public static final int N_THREADS = 4;
     private Selector selector;
     private Configuration config;
-    private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
+    private ByteBuffer readBuffer = ByteBuffer.allocate(10);
     private ReadWorker readWorker = new ReadWorker();
-
 
     public Server(Configuration config) {
         this.config = config;
-
 
     }
 
@@ -65,6 +59,7 @@ public class Server {
                     } else if (key.isReadable()) {
                         read(key);
                     } else if (key.isWritable()) {
+                        System.out.println(10);
                         write(key);
                     }
                 }
@@ -113,22 +108,33 @@ public class Server {
      */
     private void read(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
-        readBuffer.clear();
-        int numRead;
-        try {
-            numRead = socketChannel.read(readBuffer);
-        } catch (IOException e) {
-            LOGGER.severe("Problem with reading information from client");
-            key.cancel();
-            socketChannel.close();
-            return;
+
+        ByteOutputStream byteOutputStream = new ByteOutputStream();
+        int numRead = -1;
+        while (numRead != 0) {
+            readBuffer.clear();
+            try {
+                numRead = socketChannel.read(readBuffer);
+                if (numRead == -1) {
+                    key.channel().close();
+                    key.cancel();
+                    // User disconnected or lost connection
+                    LOGGER.info("User disconnected");
+                    return;
+                }
+
+                byteOutputStream.write(readBuffer.array());
+            } catch (IOException e) {
+                // User disconnected or lost connection
+                LOGGER.severe("Problem with reading information from client");
+                key.cancel();
+                socketChannel.close();
+                return;
+            }
+
         }
-        if (numRead == -1) {
-            key.channel().close();
-            key.cancel();
-            return;
-        }
-        readWorker.processData(socketChannel,readBuffer.array(),numRead);
+        readWorker.processData(socketChannel, byteOutputStream);
+        byteOutputStream.close();
     }
 
     /**
@@ -144,8 +150,8 @@ public class Server {
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
         LOGGER.info(String.format("User[ip:%s] connected successfully", socket.getLocalAddress()));
+        socketChannel.write(ByteBuffer.wrap("hello world".getBytes()));
     }
-
 
     public static void main(String[] args) {
         Server server = new Server(new DefaultConfiguration());
@@ -173,6 +179,5 @@ public class Server {
 
         Executors.newFixedThreadPool(N_THREADS).submit(readWorker);
     }
-
 
 }

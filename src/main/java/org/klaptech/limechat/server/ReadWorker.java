@@ -1,16 +1,22 @@
 package org.klaptech.limechat.server;
 
-import org.klaptech.limechat.shared.Message;
+import static java.util.logging.Logger.getLogger;
 
-import java.io.ByteArrayInputStream;
+
+
+
+
+
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.general.SendMessage;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
  * Worker with input information
@@ -20,35 +26,23 @@ import static java.util.logging.Logger.getLogger;
 public class ReadWorker implements Runnable{
     private static final Logger LOGGER = getLogger(ReadWorker.class.getName());
 
-    private List<Message> queue = new ArrayList<>();
+    private final List<MessageWrapper> queue = new ArrayList<>();
 
-    public void processData(SocketChannel socket, byte[] data, int count) {
-        byte[] dataCopy = new byte[count];
-        System.arraycopy(data, 0, dataCopy, 0, count);
+    public void processData(SocketChannel socket, ByteOutputStream byteOutputStream) {
         synchronized(queue) {
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(data));
-                queue.add((Message) objectInputStream.readObject());
-                queue.notify();
-            } catch (IOException e) {
-                try {
-                    LOGGER.severe("Error while reading data from:"+socket.getLocalAddress());
-                } catch (IOException e1) {
-                    LOGGER.severe("Error while getting socket address");
-                }
-            } catch (ClassNotFoundException e) {
-                try {
-                    LOGGER.severe("Reading incorrect object from client:" + socket.getLocalAddress());
-                } catch (IOException e1) {
-                    LOGGER.severe("Error while getting socket address");
+            Object[] messages = ByteObjectConverter.bytesToObjects(byteOutputStream.getBytes(), byteOutputStream.getCount());
+            for (Object  message : messages) {
+                if(message instanceof Message) {
+                    queue.add(new MessageWrapper(socket, (Message) message));
                 }
             }
+            queue.notify();
 
         }
     }
 
     public void run() {
-        Message message;
+        MessageWrapper messageWrapper;
 
         while(true) {
             // Wait for data to become available
@@ -59,11 +53,19 @@ public class ReadWorker implements Runnable{
                     } catch (InterruptedException e) {
                     }
                 }
-                message = queue.remove(0);
+                messageWrapper = queue.remove(0);
+            }
+            Message message = messageWrapper.getMessage();
+            // Return to sender
+            if(message.getType() == MessageType.MSG){
+                try {
+                    System.out.println(String.format("%s sends: %s",messageWrapper.getSocket().getRemoteAddress().toString(),((SendMessage) message).getMessage()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
-            // Return to sender
-            System.out.println(message);
+         //   System.out.println(message);
         }
     }
 }
