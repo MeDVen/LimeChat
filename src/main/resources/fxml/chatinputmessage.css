@@ -19,8 +19,4 @@
 
 #chatinput {
     -fx-font: 12 cambria;
-    -fx-border-color: brown;
-    -fx-border-style: dotted;
-    -fx-border-width: 2;
-    -fx-background-color: #0a0513;
 }
