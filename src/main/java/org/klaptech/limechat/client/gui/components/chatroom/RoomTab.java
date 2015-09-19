@@ -5,9 +5,10 @@ import javafx.scene.control.Tab;
 /**
  * @author rlapin
  */
-public class RoomTab extends Tab{
+public class RoomTab extends Tab {
 
     private RoomView roomView;
+
     public RoomTab(String roomName) {
         super(roomName);
         roomView = new RoomView();

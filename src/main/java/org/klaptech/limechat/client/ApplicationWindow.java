@@ -18,12 +18,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
 import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
+
+import static org.klaptech.limechat.shared.utils.GUIUtils.hideHTMLEditorToolbars;
 
 /**
  * Main window of LimeChat with application flow.
@@ -49,12 +52,12 @@ public class ApplicationWindow extends Application {
     @Override
     public void start(Stage initStage) throws Exception {
 
-       // LoginDialog loginDialog = new LoginDialog();
-      //  loginDialog.show();//showMainStage();
+//        LoginDialog loginDialog = new LoginDialog();
+//        loginDialog.show();//showMainStage();
         showMainStage();
+//        showHTMLEditor(initStage);
+
     /* showSplashScreen(initStage);
-
-
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
         timeline.play();
         FadeTransition fadeSplash = new FadeTransition(Duration.seconds(SPLASH_DURATION), splashLayout);
@@ -99,7 +102,6 @@ public class ApplicationWindow extends Application {
         mainStage.setTitle("Lime Chat beta v.0.0.1");
         //            Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
         Group root = new Group();
-
         Scene scene = new Scene(root, 800, 600);
 
         BorderPane borderPane = new BorderPane();
@@ -133,6 +135,19 @@ public class ApplicationWindow extends Application {
         initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
         initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
         initStage.show();
+    }
+
+    /**
+     * Show input user message with HTMLEditor without toolbar.
+     * @param initStage
+     */
+    public void showHTMLEditor(Stage initStage) {
+        HTMLEditor htmlEditor = new HTMLEditor();
+        Scene sceneEditor = new Scene(htmlEditor);
+        initStage.setScene(sceneEditor);
+        initStage.show();
+        htmlEditor.setHtmlText("<a href='http://google.com' target='_blank'>Test link google.com</a>");
+        hideHTMLEditorToolbars(htmlEditor);
     }
 
     public void showText(ActionEvent actionEvent) {

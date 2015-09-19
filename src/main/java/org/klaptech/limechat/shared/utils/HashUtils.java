@@ -9,7 +9,6 @@ import java.util.logging.Logger;
  */
 public class HashUtils {
     private HashUtils() {
-
     }
 
     private static final Logger LOGGER = Logger.getLogger(HashUtils.class.getCanonicalName());

@@ -2,8 +2,6 @@ package org.klaptech.limechat.client.gui.components;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.effect.Glow;
 
 /**
  * TabPane with tabs. One tab - one room.
@@ -24,18 +22,12 @@ public class ChatTabPane extends TabPane {
      * @param roomTab tab with room
      */
     public void addNewTab(Tab roomTab) {
-
-        TextArea textArea = new TextArea();
-        textArea.setScrollLeft(300);
-
-        Glow glow = new Glow();
-        glow.setLevel(5);
-
-        textArea.setEffect(glow);
-
-
+//        TextArea textArea = new TextArea();
+//        textArea.setScrollLeft(300);
+//        Glow glow = new Glow();
+//        glow.setLevel(5);
+//        textArea.setEffect(glow);
         pinInstrumentPanel(roomTab); // empty
-
         this.getTabs().add(roomTab);
     }
 

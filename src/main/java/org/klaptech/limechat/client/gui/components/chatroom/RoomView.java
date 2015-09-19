@@ -8,8 +8,8 @@ import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
  * Room pane. Contains of input, room history
  * @author rlapin
  */
-public class RoomView extends VBox{
-    ChatInputMessage chatInputMessage;
+public class RoomView extends VBox {
+    private ChatInputMessage chatInputMessage;
     private HistoryView historyView;
 
     public RoomView() {

@@ -1,18 +1,20 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
+import javafx.scene.web.HTMLEditor;
+import org.klaptech.limechat.shared.utils.GUIUtils;
 
 /**
  * Ex
  * @author rlapin
  */
-public class ChatInputMessage extends HBox{
-    private TextArea inputTextArea;
+public class ChatInputMessage extends HBox {
+
+    private HTMLEditor inputHTMLTextArea;
+
+//    private TextArea inputTextArea;
     /**
      * Text using for get height of text
      */
@@ -30,34 +32,45 @@ public class ChatInputMessage extends HBox{
     }
 
     private void initListeners() {
-        inputTextArea.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                updateSize(newValue);
-            }
-        });
+//        inputTextArea.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//                updateSize(newValue);
+//            }
+//        });
+
+//        inputHTMLTextArea.heightProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                updateSize(newValue.toString());
+//            }
+//        });
     }
 
     private void initComponents() {
-
-
-        inputTextArea = new TextArea();
+//        inputTextArea = new TextArea();
         // Set priority for horizontal growing to text field
-        HBox.setHgrow(inputTextArea, Priority.ALWAYS);
-        inputTextArea.setId("chatinput");
-        inputTextArea.setContextMenu(new ChatInputContextMenu());
-        inputTextArea.setWrapText(true);
-        inputTextArea.setVisible(true);
+//        HBox.setHgrow(inputTextArea, Priority.ALWAYS);
+//        inputTextArea.setId("chatinput");
+//        inputTextArea.setContextMenu(new ChatInputContextMenu());
+//        inputTextArea.setWrapText(true);
+//        inputTextArea.setVisible(true);
+//        getChildren().add(inputTextArea);
 
-        getChildren().add(inputTextArea);
-
-
-
+        inputHTMLTextArea = new HTMLEditor();
+        inputHTMLTextArea.setHtmlText("<p>Test input message!</p>");
+        GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
+        HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
+        inputHTMLTextArea.setId("chatinput");
+        inputHTMLTextArea.setContextMenu(new ChatInputContextMenu());
+        inputHTMLTextArea.setVisible(true);
+        getChildren().add(inputHTMLTextArea);
     }
 
     private void updateSize(String newValue) {
         TEXT.setText(newValue);
-        inputTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
+//        inputTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
+        inputHTMLTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
     }
 
 }
