@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.client.JoinChannelMessage;
 import org.klaptech.limechat.shared.client.LoginMessage;
 import org.klaptech.limechat.shared.general.SendMessage;
 import org.klaptech.limechat.shared.server.LoginAnswer;
@@ -70,8 +71,15 @@ public class ReadWorker implements Runnable{
                 case LOGIN:
                     LoginMessage loginMessage = (LoginMessage) message;
                     LoginAnswer.TYPE auth = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
-                    LOGGER.info("LOGIN "+auth);
+                    LOGGER.info("LOGIN " + auth);
                     server.send(messageWrapper.getSocket(), ServerMessageFactory.createLoginAnswer(auth));
+                    break;
+                case JOIN:
+                    JoinChannelMessage joinChannelMessage = (JoinChannelMessage) message;
+                    Channel channel = server.getChannels().getChannelByName(joinChannelMessage.getChannelName());
+                    if(channel == Channels.DUMMY_CHANNEL){
+
+                    }
                     break;
                 case MSG:
                     try {

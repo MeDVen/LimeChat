@@ -17,4 +17,12 @@ public class ClientMessageFactory {
     public static Message createLoginMessage(String username, byte[] password) {
         return new LoginMessage(username, HashUtils.md5(password));
     }
+
+
+    public static Message createJoinChannelMessage(String channelName, byte[] password){
+        return new JoinChannelMessage(channelName, HashUtils.md5(password));
+    }
+    public static Message createJoinChannelMessage(String channelName){
+        return new JoinChannelMessage(channelName, "");
+    }
 }

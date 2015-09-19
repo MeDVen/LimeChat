@@ -12,7 +12,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +37,7 @@ public class Server {
     private ReadWorker readWorker = new ReadWorker(this);
     private final List<ChangeRequest> changeRequests = new ArrayList<>();
     private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
+    private Channels channels;
 
     public Server(Configuration config) {
         this.config = config;
@@ -210,5 +210,9 @@ public class Server {
 
         //Wake up selector
         this.selector.wakeup();
+    }
+
+    public Channels getChannels() {
+        return channels;
     }
 }
