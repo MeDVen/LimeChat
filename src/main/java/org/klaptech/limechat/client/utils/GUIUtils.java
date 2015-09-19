@@ -1,4 +1,4 @@
-package org.klaptech.limechat.shared.utils;
+package org.klaptech.limechat.client.utils;
 
 import javafx.application.Platform;
 import javafx.scene.Node;

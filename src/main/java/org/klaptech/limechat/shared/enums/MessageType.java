@@ -1,4 +1,6 @@
-package org.klaptech.limechat.shared;
+package org.klaptech.limechat.shared.enums;
+
+import org.klaptech.limechat.shared.Message;
 
 /**
  * Type of message{@link Message}
@@ -28,5 +30,5 @@ public enum MessageType {
     /**
      * Server answer on user login
      */
-    ANSWER_LOGIN;
+    ANSWER_LOGIN, ANSWER_JOIN;
 }

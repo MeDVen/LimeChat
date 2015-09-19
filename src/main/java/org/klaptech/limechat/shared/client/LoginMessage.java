@@ -1,7 +1,7 @@
 package org.klaptech.limechat.shared.client;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.enums.MessageType;
 
 /**
  * Login message. Message is sending when user connect to server.

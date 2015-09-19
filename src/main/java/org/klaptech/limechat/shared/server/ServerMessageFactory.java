@@ -1,7 +1,8 @@
 package org.klaptech.limechat.shared.server;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.server.LoginAnswer.TYPE;
+import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
 
 /**
  * Factory for server messages
@@ -10,10 +11,14 @@ import org.klaptech.limechat.shared.server.LoginAnswer.TYPE;
 public class ServerMessageFactory {
     /**
      * Create login answer to login message
-     * @param answerType result of login operation {@link TYPE}
+     * @param answerType result of login operation {@link LoginAnswerType}
      * @return
      */
-    public static Message createLoginAnswer(TYPE answerType) {
+    public static Message createLoginAnswer(LoginAnswerType answerType) {
         return new LoginAnswer(answerType);
+    }
+
+    public static Message createJoinChannelAnswer(JoinResultType joinAnswer) {
+        return new JoinChannelAnswer(joinAnswer);
     }
 }

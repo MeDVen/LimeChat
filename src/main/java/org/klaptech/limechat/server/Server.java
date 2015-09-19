@@ -37,6 +37,7 @@ public class Server {
     private ReadWorker readWorker = new ReadWorker(this);
     private final List<ChangeRequest> changeRequests = new ArrayList<>();
     private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
+    private final Map<SocketChannel, User> users = new HashMap<>();
     private Channels channels;
 
     public Server(Configuration config) {
@@ -214,5 +215,14 @@ public class Server {
 
     public Channels getChannels() {
         return channels;
+    }
+
+    /**
+     *
+     * @param socket
+     * @return user if he's already connected
+     */
+    public User getUser(SocketChannel socket) {
+        return users.get(socket);
     }
 }

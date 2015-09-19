@@ -26,7 +26,7 @@ import org.klaptech.limechat.client.gui.components.ChatTabPane;
 import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
 
-import static org.klaptech.limechat.shared.utils.GUIUtils.hideHTMLEditorToolbars;
+import static org.klaptech.limechat.client.utils.GUIUtils.hideHTMLEditorToolbars;
 
 /**
  * Main window of LimeChat with application flow.

@@ -3,11 +3,8 @@ package org.klaptech.limechat.server;
 import static java.util.logging.Logger.getLogger;
 
 
-
-
-
-
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
@@ -18,17 +15,19 @@ import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.client.JoinChannelMessage;
 import org.klaptech.limechat.shared.client.LoginMessage;
+import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.general.SendMessage;
-import org.klaptech.limechat.shared.server.LoginAnswer;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
  * Worker with input information
  * Convert bytes to message and work with that
+ *
  * @author rlapin
  */
-public class ReadWorker implements Runnable{
+public class ReadWorker implements Runnable {
     private static final Logger LOGGER = getLogger(ReadWorker.class.getName());
 
     private final List<MessageWrapper> queue = new ArrayList<>();
@@ -39,10 +38,10 @@ public class ReadWorker implements Runnable{
     }
 
     public void processData(SocketChannel socket, ByteOutputStream byteOutputStream) {
-        synchronized(queue) {
+        synchronized (queue) {
             Object[] messages = ByteObjectConverter.bytesToObjects(byteOutputStream.getBytes(), byteOutputStream.getCount());
-            for (Object  message : messages) {
-                if(message instanceof Message) {
+            for (Object message : messages) {
+                if (message instanceof Message) {
                     queue.add(new MessageWrapper(socket, (Message) message));
                 }
             }
@@ -54,10 +53,10 @@ public class ReadWorker implements Runnable{
     public void run() {
         MessageWrapper messageWrapper;
 
-        while(true) {
+        while (true) {
             // Wait for data to become available
-            synchronized(queue) {
-                while(queue.isEmpty()) {
+            synchronized (queue) {
+                while (queue.isEmpty()) {
                     try {
                         queue.wait();
                     } catch (InterruptedException e) {
@@ -67,23 +66,28 @@ public class ReadWorker implements Runnable{
             }
             Message message = messageWrapper.getMessage();
             // Return to sender
-            switch(message.getType()){
+            SocketChannel socket = messageWrapper.getSocket();
+            switch (message.getType()) {
                 case LOGIN:
                     LoginMessage loginMessage = (LoginMessage) message;
-                    LoginAnswer.TYPE auth = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
-                    LOGGER.info("LOGIN " + auth);
-                    server.send(messageWrapper.getSocket(), ServerMessageFactory.createLoginAnswer(auth));
+                    LoginAnswerType authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
+                    LOGGER.info("LOGIN " + authAnswer);
+                    server.send(socket, ServerMessageFactory.createLoginAnswer(authAnswer));
                     break;
                 case JOIN:
                     JoinChannelMessage joinChannelMessage = (JoinChannelMessage) message;
                     Channel channel = server.getChannels().getChannelByName(joinChannelMessage.getChannelName());
-                    if(channel == Channels.DUMMY_CHANNEL){
-
+                    JoinResultType joinAnswer;
+                    if (channel == Channels.DUMMY_CHANNEL) {
+                        joinAnswer = JoinResultType.CHANNEL_NOT_FOUND;
+                    } else {
+                        joinAnswer = channel.join(server.getUser(socket));
                     }
+                    server.send(socket, ServerMessageFactory.createJoinChannelAnswer(joinAnswer));
                     break;
                 case MSG:
                     try {
-                        System.out.println(String.format("%s sends: %s",messageWrapper.getSocket().getRemoteAddress().toString(),((SendMessage) message).getMessage()));
+                        System.out.println(String.format("%s sends: %s", socket.getRemoteAddress().toString(), ((SendMessage) message).getMessage()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

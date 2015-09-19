@@ -4,7 +4,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
-import org.klaptech.limechat.shared.utils.GUIUtils;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Ex

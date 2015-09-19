@@ -1,7 +1,7 @@
 package org.klaptech.limechat.shared.general;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.enums.MessageType;
 
 /**
  * Use when client send message

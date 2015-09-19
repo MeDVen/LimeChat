@@ -1,7 +1,8 @@
 package org.klaptech.limechat.shared.server;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.enums.MessageType;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
 
 /**
  * Message sends as answer from server to client with result of authorization
@@ -12,9 +13,9 @@ public class LoginAnswer implements Message {
     /**
      * Defines result of login operation
      */
-    private final TYPE answerType;
+    private final LoginAnswerType answerType;
 
-    protected LoginAnswer(LoginAnswer.TYPE answerType) {
+    protected LoginAnswer(LoginAnswerType answerType) {
         this.answerType = answerType;
     }
 
@@ -23,21 +24,8 @@ public class LoginAnswer implements Message {
         return MessageType.ANSWER_LOGIN;
     }
 
-    public TYPE getAnswerType() {
+    public LoginAnswerType getAnswerType() {
         return answerType;
     }
 
-    /**
-     * Answer type
-     * SUCCESS - when user successfully login to the server
-     * USER_ALREADY_CON - user has already connected to the server
-     * INCORRECT_PASSWORD - user input incorrrect pwd
-     * USER_NOT_EXISTS - first user should register
-     */
-    public enum TYPE {
-        SUCCESS,
-        USER_ALREADY_CON,
-        INCORRECT_PASSWORD,
-        USER_NOT_EXISTS
-    }
 }
