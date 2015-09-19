@@ -1,6 +1,7 @@
 package org.klaptech.limechat.server;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -9,11 +10,19 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+
 import org.klaptech.limechat.server.conf.Configuration;
 import org.klaptech.limechat.server.conf.DefaultConfiguration;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
  * Server entity
@@ -26,7 +35,9 @@ public class Server {
     private Selector selector;
     private Configuration config;
     private ByteBuffer readBuffer = ByteBuffer.allocate(10);
-    private ReadWorker readWorker = new ReadWorker();
+    private ReadWorker readWorker = new ReadWorker(this);
+    private final List<ChangeRequest> changeRequests = new ArrayList<>();
+    private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
 
     public Server(Configuration config) {
         this.config = config;
@@ -42,6 +53,18 @@ public class Server {
             serverSocketChannel.configureBlocking(false);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
             while (true) {
+
+                synchronized (changeRequests) {
+                    for (ChangeRequest changeRequest : changeRequests) {
+                        switch (changeRequest.type) {
+                            case ChangeRequest.CHANGEOPS:
+                                changeRequest.socket.keyFor(selector).interestOps(changeRequest.ops);
+                                break;
+                            default:
+                        }
+                    }
+                    changeRequests.clear();
+                }
                 int num = selector.select();
                 if (num == 0) {
                     continue;
@@ -76,29 +99,18 @@ public class Server {
      *
      * @param key selectionKey with connection information
      */
-    private void write(SelectionKey key) {
+    private void write(SelectionKey key) throws IOException {
         SocketChannel socketChannel = (SocketChannel) key.channel();
-     /*   synchronized (this.pendingData) {
-            List queue = (List) this.pendingData.get(socketChannel);
-
-            // Write until there's not more data ...
-            while (!queue.isEmpty()) {
-                ByteBuffer buf = (ByteBuffer) queue.get(0);
-                socketChannel.write(buf);
-                if (buf.remaining() > 0) {
-                    // ... or the socket's buffer fills up
-                    break;
-                }
-                queue.remove(0);
+        synchronized (pendingData) {
+            List<Message> sendData = pendingData.get(socketChannel);
+            while (!sendData.isEmpty()) {
+                socketChannel.write(ByteBuffer.wrap(ByteObjectConverter.objectToBytes(sendData.get(0))));
+                sendData.remove(0);
             }
-
-            if (queue.isEmpty()) {
-                // We wrote away all data, so we're no longer interested
-                // in writing on this socket. Switch back to waiting for
-                // data.
+            if (sendData.isEmpty()) {
                 key.interestOps(SelectionKey.OP_READ);
             }
-        }*/
+        }
     }
 
     /**
@@ -180,4 +192,23 @@ public class Server {
         Executors.newFixedThreadPool(N_THREADS).submit(readWorker);
     }
 
+    public void send(SocketChannel socket, Message message) {
+        synchronized (changeRequests) {
+            // Indicate we want the interest ops set changed
+            changeRequests.add(new ChangeRequest(socket, ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
+
+            // And queue the data we want written
+            synchronized (this.pendingData) {
+                List<Message> queue = this.pendingData.get(socket);
+                if (queue == null) {
+                    queue = new ArrayList<>();
+                    this.pendingData.put(socket, queue);
+                }
+                queue.add(message);
+            }
+        }
+
+        //Wake up selector
+        this.selector.wakeup();
+    }
 }

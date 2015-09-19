@@ -10,7 +10,7 @@ public enum MessageType {
      */
     JOIN,
     /**
-     * User write msg
+     * User send msg
      */
     MSG,
     /**
