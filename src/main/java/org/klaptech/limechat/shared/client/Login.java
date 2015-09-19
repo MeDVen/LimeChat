@@ -10,9 +10,9 @@ import org.klaptech.limechat.shared.MessageType;
 public class Login implements Message {
 
     private final String username;
-    private final byte[] password;
+    private final String password;
 
-    protected Login(String username, byte[] password) {
+    protected Login(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -27,7 +27,7 @@ public class Login implements Message {
         return username;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 }
