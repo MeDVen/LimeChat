@@ -15,6 +15,6 @@ public class ClientMessageFactory {
      * @return message sending to server, when user is connecting
      */
     public static Message createLoginMessage(String username, byte[] password) {
-        return new Login(username, HashUtils.md5(password));
+        return new LoginMessage(username, HashUtils.md5(password));
     }
 }

@@ -7,12 +7,12 @@ import org.klaptech.limechat.shared.MessageType;
  * Login message. Message is sending when user connect to server.
  * @author rlapin
  */
-public class Login implements Message {
+public class LoginMessage implements Message {
 
     private final String username;
     private final String password;
 
-    protected Login(String username, String password) {
+    protected LoginMessage(String username, String password) {
         this.username = username;
         this.password = password;
     }

@@ -13,9 +13,13 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import org.klaptech.limechat.server.auth.Authorizer;
+import org.klaptech.limechat.server.auth.db.Connector;
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.MessageType;
+import org.klaptech.limechat.shared.client.LoginMessage;
 import org.klaptech.limechat.shared.general.SendMessage;
+import org.klaptech.limechat.shared.server.LoginAnswer;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
@@ -57,14 +61,21 @@ public class ReadWorker implements Runnable{
             }
             Message message = messageWrapper.getMessage();
             // Return to sender
-            if(message.getType() == MessageType.MSG){
-                try {
-                    System.out.println(String.format("%s sends: %s",messageWrapper.getSocket().getRemoteAddress().toString(),((SendMessage) message).getMessage()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            switch(message.getType()){
+                case LOGIN:
+                    LoginMessage loginMessage = (LoginMessage) message;
+                    LoginAnswer.TYPE auth = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
+                    System.out.println(auth);
+                    break;
+                case MSG:
+                    try {
+                        System.out.println(String.format("%s sends: %s",messageWrapper.getSocket().getRemoteAddress().toString(),((SendMessage) message).getMessage()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
             }
-
          //   System.out.println(message);
         }
     }
