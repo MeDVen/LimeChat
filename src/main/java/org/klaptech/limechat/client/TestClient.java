@@ -31,7 +31,7 @@ public class TestClient {
             while(!socketChannel.finishConnect()){
 
             }
-            Message message = ClientMessageFactory.createLoginMessage("admin", "admin");
+            Message message = ClientMessageFactory.createLoginMessage("admin", "admin".getBytes());
             ByteBuffer byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message));
             socketChannel.write(byteBuffer);
             Scanner scanner = new Scanner(System.in);
