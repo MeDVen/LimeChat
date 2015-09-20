@@ -8,5 +8,6 @@ public enum UserState {
     AFK,
     ONLINE,
     OFFLINE,
-    BUSY
+    BUSY,
+    TYPING
 }
