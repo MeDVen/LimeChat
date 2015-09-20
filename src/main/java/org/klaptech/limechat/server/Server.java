@@ -42,6 +42,7 @@ public class Server {
 
     public Server(Configuration config) {
         this.config = config;
+        channels = new Channels();
 
     }
 
@@ -83,7 +84,6 @@ public class Server {
                     } else if (key.isReadable()) {
                         read(key);
                     } else if (key.isWritable()) {
-                        System.out.println(10);
                         write(key);
                     }
                 }
@@ -135,7 +135,6 @@ public class Server {
                     LOGGER.info("User disconnected");
                     return;
                 }
-
                 byteOutputStream.write(readBuffer.array());
             } catch (IOException e) {
                 // User disconnected or lost connection
@@ -163,7 +162,6 @@ public class Server {
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
         LOGGER.info(String.format("User[ip:%s] connected successfully", socket.getLocalAddress()));
-        socketChannel.write(ByteBuffer.wrap("hello world".getBytes()));
     }
 
     public static void main(String[] args) {

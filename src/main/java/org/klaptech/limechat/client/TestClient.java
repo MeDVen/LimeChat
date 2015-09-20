@@ -18,7 +18,12 @@ import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.klaptech.limechat.server.MessageWrapper;
 import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import org.klaptech.limechat.shared.client.JoinChannelMessage;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
+import org.klaptech.limechat.shared.enums.MessageType;
 import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.server.JoinChannelAnswer;
+import org.klaptech.limechat.shared.server.LoginAnswer;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 
@@ -28,9 +33,11 @@ import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 public class TestClient {
     private static final Logger LOGGER = getLogger(TestClient.class.getName());
     private static ByteBuffer readBuffer = ByteBuffer.allocate(8196);
+    private static SocketChannel socketChannel;
 
     public static void main(String[] args) {
-        try (SocketChannel socketChannel = SocketChannel.open()) {
+        try {
+            socketChannel = SocketChannel.open();
             socketChannel.configureBlocking(false);
             socketChannel.connect(new InetSocketAddress("localhost", 3306));
             Selector selector = Selector.open();
@@ -107,7 +114,18 @@ public class TestClient {
         Object[] messages = ByteObjectConverter.bytesToObjects(byteOutputStream.getBytes(), byteOutputStream.getCount());
         for (Object  message : messages) {
             if(message instanceof Message) {
-                System.out.println(message);
+                Message msg = (Message) message;
+                if(msg.getType() == MessageType.ANSWER_LOGIN){
+                    if(((LoginAnswer)msg).getAnswerType() == LoginAnswerType.SUCCESS){
+                        ByteBuffer byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(ClientMessageFactory.createJoinChannelMessage("default" +
+                                "")));
+                        socketChannel.write(byteBuffer);
+                    }
+                }else if(msg.getType() == MessageType.ANSWER_JOIN){
+                    System.out.println(((JoinChannelAnswer)msg).getJoinAnswer());
+                }else {
+                    System.out.println(message);
+                }
             }
         }
         byteOutputStream.close();
