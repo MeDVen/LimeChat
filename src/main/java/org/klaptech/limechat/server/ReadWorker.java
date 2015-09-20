@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.klaptech.limechat.server.auth.Authorizer;
+import org.klaptech.limechat.server.utils.Messages;
 import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.client.JoinChannelMessage;
+import org.klaptech.limechat.shared.client.LeaveChannelMessage;
 import org.klaptech.limechat.shared.client.LoginMessage;
 import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.enums.LeaveType;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.general.SendMessage;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
@@ -88,6 +91,13 @@ public class ReadWorker implements Runnable {
                     SendMessage sendMessage = (SendMessage) message;
                     channel = server.getChannels().getChannelByName(sendMessage.getChannelName());
                     channel.sendMessage(sendMessage.getMessage());
+                    break;
+                case LEAVE:
+                    LeaveChannelMessage leaveChannelMessage = (LeaveChannelMessage) message;
+                    channel = server.getChannels().getChannelByName(leaveChannelMessage.getChannelName());
+                    if(channel.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
+                        server.send(messageWrapper.getSocket(),ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveChannelMessage.getChannelName()));
+                    }
                     break;
                 default:
             }

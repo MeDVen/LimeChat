@@ -81,4 +81,12 @@ public class Channel {
         }
 
     }
+
+    /**
+     * Remove user from channel
+     * @param user
+     */
+    public boolean dropUser(User user) {
+        return users.remove(user);
+    }
 }

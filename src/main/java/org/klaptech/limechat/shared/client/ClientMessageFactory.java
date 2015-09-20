@@ -18,11 +18,30 @@ public class ClientMessageFactory {
         return new LoginMessage(username, HashUtils.md5(password));
     }
 
-
+    /**
+     * User join channel
+     * @param channelName
+     * @param password
+     * @return joinmessage
+     */
     public static Message createJoinChannelMessage(String channelName, byte[] password){
         return new JoinChannelMessage(channelName, HashUtils.md5(password));
     }
+    /**
+     * User join channel
+     * @param channelName
+     * @return joinmessage
+     */
     public static Message createJoinChannelMessage(String channelName){
         return new JoinChannelMessage(channelName, "");
+    }
+
+    /**
+     * User leave channe
+     * @param channelName
+     * @return leavechannelmessage
+     */
+    public static Message createLeaveChannelMessage(String channelName){
+        return new LeaveChannelMessage(channelName);
     }
 }
