@@ -31,11 +31,7 @@ public class ReadWorker implements Runnable {
     private static final Logger LOGGER = getLogger(ReadWorker.class.getName());
 
     private final List<MessageWrapper> queue = new ArrayList<>();
-    private Server server;
 
-    public ReadWorker(final Server server) {
-        this.server = server;
-    }
 
     public void processData(SocketChannel socket, ByteOutputStream byteOutputStream) {
         synchronized (queue) {
@@ -51,6 +47,7 @@ public class ReadWorker implements Runnable {
     }
 
     public void run() {
+        final Server server = Server.getInstance();
         MessageWrapper messageWrapper;
         while (true) {
             // Wait for data to become available
@@ -70,6 +67,9 @@ public class ReadWorker implements Runnable {
                 case LOGIN:
                     LoginMessage loginMessage = (LoginMessage) message;
                     LoginAnswerType authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
+                    if(authAnswer == LoginAnswerType.SUCCESS){
+                        server.addUser(new User(loginMessage.getUsername(), messageWrapper.getSocket()));
+                    }
                     LOGGER.info("LOGIN " + authAnswer);
                     server.send(socket, ServerMessageFactory.createLoginAnswer(authAnswer));
                     break;
@@ -85,11 +85,9 @@ public class ReadWorker implements Runnable {
                     server.send(socket, ServerMessageFactory.createJoinChannelAnswer(joinAnswer));
                     break;
                 case MSG:
-                    try {
-                        System.out.println(String.format("%s sends: %s", socket.getRemoteAddress().toString(), ((SendMessage) message).getMessage()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    SendMessage sendMessage = (SendMessage) message;
+                    channel = server.getChannels().getChannelByName(sendMessage.getChannelName());
+                    channel.sendMessage(sendMessage.getMessage());
                     break;
                 default:
             }

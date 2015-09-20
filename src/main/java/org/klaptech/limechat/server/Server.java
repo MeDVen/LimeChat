@@ -12,6 +12,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,27 +26,32 @@ import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
  * Server entity
- *
+ * Singletone
  * @author rlapin
  */
 public class Server {
+    private static Server instance;
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
-    public static final int N_THREADS = 4;
     private Selector selector;
     private Configuration config;
     private ByteBuffer readBuffer = ByteBuffer.allocate(10);
-    private ReadWorker readWorker = new ReadWorker(this);
+    private ReadWorker readWorker = new ReadWorker();
     private final List<ChangeRequest> changeRequests = new ArrayList<>();
     private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
-    private final Map<SocketChannel, User> users = new HashMap<>();
+    private final Set<User> users = new HashSet<>();
     private Channels channels;
 
-    public Server(Configuration config) {
+    private Server(Configuration config) {
         this.config = config;
         channels = new Channels();
 
     }
-
+    public static Server getInstance(){
+        if(instance == null){
+            instance = new Server(new DefaultConfiguration());
+        }
+        return instance;
+    }
     private void start() {
         try (
                 ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
@@ -165,8 +171,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        Server server = new Server(new DefaultConfiguration());
-        server.run();
+        Server.getInstance().run();
     }
 
     /**
@@ -211,11 +216,24 @@ public class Server {
     }
 
     /**
-     *
+     * Get user by socketchannel
      * @param socket
-     * @return user if he's already connected
+     * @return user if he's already connected, if there is no user with such socketchannel
      */
     public User getUser(SocketChannel socket) {
-        return users.get(socket);
+        for(User user : users){
+            if(user.getSocketChannel().equals(socket)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Add user to server
+     * @param user
+     */
+    public void addUser(User user) {
+        users.add(user);
     }
 }

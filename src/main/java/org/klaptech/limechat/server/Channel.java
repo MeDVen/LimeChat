@@ -1,6 +1,10 @@
 package org.klaptech.limechat.server;
 
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.client.ClientMessageFactory;
 import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.server.ServerMessageFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -66,4 +70,15 @@ public class Channel {
 
     }
 
+    /**
+     * Send text to all users on channel
+     * @param text
+     */
+    public void sendMessage(String text) {
+        Message message = GeneralMessageFactory.createSendMessage(getName(),text);
+        for (User user : users) {
+            Server.getInstance().send(user.getSocketChannel(), message);
+        }
+
+    }
 }
