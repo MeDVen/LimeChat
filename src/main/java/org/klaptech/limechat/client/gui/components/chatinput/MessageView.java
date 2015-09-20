@@ -10,7 +10,7 @@ import org.klaptech.limechat.client.utils.GUIUtils;
  * Ex
  * @author rlapin
  */
-public class ChatInputMessage extends HBox {
+public class MessageView extends HBox {
 
     private HTMLEditor inputHTMLTextArea;
 
@@ -20,7 +20,7 @@ public class ChatInputMessage extends HBox {
      */
     public static final Text TEXT = new Text();
 
-    public ChatInputMessage() {
+    public MessageView() {
         getStylesheets().add(getClass().getClassLoader().getResource("fxml/chatinputmessage.css").toExternalForm());
         initComponents();
         initListeners();
@@ -52,7 +52,7 @@ public class ChatInputMessage extends HBox {
         // Set priority for horizontal growing to text field
 //        HBox.setHgrow(inputTextArea, Priority.ALWAYS);
 //        inputTextArea.setId("chatinput");
-//        inputTextArea.setContextMenu(new ChatInputContextMenu());
+//        inputTextArea.setContextMenu(new MessageViewContextMenu());
 //        inputTextArea.setWrapText(true);
 //        inputTextArea.setVisible(true);
 //        getChildren().add(inputTextArea);
@@ -63,7 +63,7 @@ public class ChatInputMessage extends HBox {
         GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
         inputHTMLTextArea.setId("chatinput");
-        inputHTMLTextArea.setContextMenu(new ChatInputContextMenu());
+        inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setVisible(true);
         getChildren().add(inputHTMLTextArea);
     }

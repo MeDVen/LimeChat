@@ -5,9 +5,9 @@ import javafx.scene.control.ContextMenu;
 /**
  * @author rlapin
  */
-public class ChatInputContextMenu extends ContextMenu {
+public class MessageViewContextMenu extends ContextMenu {
 
-    public ChatInputContextMenu() {
+    public MessageViewContextMenu() {
 
     }
 }

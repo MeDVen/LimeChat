@@ -27,7 +27,10 @@ public class MembersView extends Group {
     private ListView<UserInfo> listView;
 
     private ObservableList<UserInfo> testData = FXCollections.observableArrayList(new UserInfo("user1", UserState.ONLINE),
-            new UserInfo("user2", UserState.AFK), new UserInfo("user3", UserState.BUSY), new UserInfo("user4", UserState.OFFLINE));
+            new UserInfo("user2", UserState.AFK),
+            new UserInfo("user3", UserState.BUSY),
+            new UserInfo("user4", UserState.OFFLINE),
+            new UserInfo("user5", UserState.TYPING));
 
     public MembersView() {
         getStylesheets().add(getClass().getClassLoader().getResource("fxml/membersview.css").toExternalForm());
