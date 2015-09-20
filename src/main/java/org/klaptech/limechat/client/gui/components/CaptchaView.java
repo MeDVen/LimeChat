@@ -81,7 +81,7 @@ public class CaptchaView {
 
         }
         int lineCount = random.nextInt(LINE_COUNT) + MIN_LINE_COUNT;
-        System.out.println(lineCount);
+
         gc.setLineWidth(1);
         for (int i = 0; i < lineCount; i++) {
             gc.setStroke(randomColor());
