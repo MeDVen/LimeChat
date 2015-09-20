@@ -48,6 +48,7 @@ public class LoginDialog {
                     "TestRoom1",
                     "TestRoom2"
             );
+    private TextField captchaTextField;
 
     public LoginDialog() {
         stage = new Stage(StageStyle.DECORATED);
@@ -207,16 +208,20 @@ public class LoginDialog {
             confirmPasswordField.setPromptText(resourceBundle.getString("repeatpwd"));
             gridPane.add(confirmPasswordField, 1, 2);
             Label emailLabel = new Label(resourceBundle.getString("email"));
-            emailMaskview = new MaskInputView(new TextField(), new EmailValidator());
+            TextField emailTextField = new TextField();
+            emailTextField.setPromptText(resourceBundle.getString("inputemail"));
+            emailMaskview = new MaskInputView(emailTextField, new EmailValidator());
             gridPane.add(emailLabel, 0, 3);
             gridPane.add(emailMaskview.getTextField(), 1, 3);
-            Label captchaLabel = new Label("Input data");
-            gridPane.add(captchaLabel, 0, 4);
             CaptchaView captcha = new CaptchaView(100, 100);
-            gridPane.add(captcha.getCanvas(), 1, 4);
+            gridPane.add(captcha.getCanvas(), 0, 4, 1, 2);
+            Label captchaLabel = new Label(resourceBundle.getString("captcha"));
+            gridPane.add(captchaLabel, 1, 4);
+            captchaTextField = new TextField();
+            gridPane.add(captchaTextField, 1, 5);
             registerButton = new Button(resourceBundle.getString("register"));
-            gridPane.add(new Label(), 0, 5);
-            gridPane.add(registerButton, 1, 5);
+            gridPane.add(new Label(), 0, 6);
+            gridPane.add(registerButton, 1, 6);
             setContent(gridPane);
         }
 
