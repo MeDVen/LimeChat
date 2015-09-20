@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -25,6 +26,8 @@ public class Dialogs {
 
     public static void showMessageBox(String title, String message, IconType type) {
         Stage dialogStage = new Stage(StageStyle.DECORATED);
+        dialogStage.setIconified(false);
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
         ResourceBundle resourceBundle = ResourceBundle.getBundle("org.klaptech.limechat.client.gui.dialogs.Dialogs");
         dialogStage.setResizable(false);
         dialogStage.getIcons().add(DIALOG_ICON);

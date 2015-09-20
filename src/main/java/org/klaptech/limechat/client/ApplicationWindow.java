@@ -33,6 +33,7 @@ public class ApplicationWindow extends Application {
                 LOGGER.severe("cannot connect to server");
             }
         });
+
         GUIManager.getInstance().setMainStage(initStage);
         GUIManager.getInstance().getLoginDialog().show();
 

@@ -27,6 +27,7 @@ import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthVa
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
+import org.klaptech.limechat.shared.enums.RegisterAnswerType;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -128,6 +129,33 @@ public class LoginDialog {
     }
 
     /**
+     * Fired when user registered
+     *
+     * @param registerAnswerType {@link RegisterAnswerType}
+     */
+    public void userRegistered(RegisterAnswerType registerAnswerType) {
+        lock.lock();
+        condition.signal();
+        lock.unlock();
+        Platform.runLater(() -> {
+            switch (registerAnswerType) {
+                case SUCCESS:
+                    Dialogs.showMessageBox(resourceBundle.getString("info"), resourceBundle.getString("registrationsuccess"), Dialogs.IconType.INFO);
+                    stage.hide();
+                    GUIManager.getInstance().showSplashScreen();
+                    break;
+                case USER_ALREADY_REGISTER:
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("useralreadyexists"), Dialogs.IconType.ERROR);
+                    break;
+                case ERROR:
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
+                    break;
+                default:
+            }
+        });
+    }
+
+    /**
      * LoginTab. User input name , password and select default room, then connect to server
      */
     private class LoginPane extends Tab {
@@ -194,7 +222,7 @@ public class LoginDialog {
                         ServerConnector.INSTANCE.write(ClientMessageFactory.createLoginMessage(login, password.getBytes()));
                         try {
                             lock.lock();
-                            condition.await(1, TimeUnit.MILLISECONDS);
+                            condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
                             lock.unlock();
                         } catch (InterruptedException e) {
                             Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
@@ -207,15 +235,18 @@ public class LoginDialog {
         }
 
 
-
     }
 
     /**
      * RegisterTab for registration user on server
      */
     private class RegisterPane extends Tab {
-        private MaskInputView emailMaskview;
+        private MaskInputView emailMaskView;
         private Button registerButton;
+        private MaskInputView loginMaskView;
+        private MaskInputView passwordMaskView;
+        private MaskInputView confirmPasswordMaskView;
+        private CaptchaView captcha;
 
         public RegisterPane() {
             setText(resourceBundle.getString("register"));
@@ -231,26 +262,28 @@ public class LoginDialog {
             Label loginLabel = new Label(resourceBundle.getString("name"));
             gridPane.add(loginLabel, 0, 0);
             TextField loginField = new TextField();
-            new MaskInputView(loginField, new LengthValidator(5));
+            loginMaskView = new MaskInputView(loginField, new LengthValidator(5));
             loginField.setPromptText(resourceBundle.getString("inputlogin"));
             gridPane.add(loginField, 1, 0);
             Label passwordLabel = new Label(resourceBundle.getString("password"));
             gridPane.add(passwordLabel, 0, 1);
             PasswordField passwordField = new PasswordField();
             passwordField.setPromptText(resourceBundle.getString("inputpwd"));
+            passwordMaskView = new MaskInputView(passwordField, new LengthValidator(5));
             gridPane.add(passwordField, 1, 1);
             Label confirmPasswordLabel = new Label(resourceBundle.getString("confirmpwd"));
             gridPane.add(confirmPasswordLabel, 0, 2);
             PasswordField confirmPasswordField = new PasswordField();
+            confirmPasswordMaskView = new MaskInputView(confirmPasswordField, new LengthValidator(5));
             confirmPasswordField.setPromptText(resourceBundle.getString("repeatpwd"));
             gridPane.add(confirmPasswordField, 1, 2);
             Label emailLabel = new Label(resourceBundle.getString("email"));
             TextField emailTextField = new TextField();
             emailTextField.setPromptText(resourceBundle.getString("inputemail"));
-            emailMaskview = new MaskInputView(emailTextField, new EmailValidator());
+            emailMaskView = new MaskInputView(emailTextField, new EmailValidator());
             gridPane.add(emailLabel, 0, 3);
-            gridPane.add(emailMaskview.getTextField(), 1, 3);
-            CaptchaView captcha = new CaptchaView(100, 100);
+            gridPane.add(emailMaskView.getTextField(), 1, 3);
+            captcha = new CaptchaView(100, 100);
             gridPane.add(captcha.getCanvas(), 0, 4, 1, 2);
             Label captchaLabel = new Label(resourceBundle.getString("captcha"));
             gridPane.add(captchaLabel, 1, 4);
@@ -264,7 +297,30 @@ public class LoginDialog {
 
         private void initListeners() {
             registerButton.setOnAction(event -> {
-                System.out.println("Register");
+                String login = loginMaskView.getText();
+                String password = passwordMaskView.getText();
+                String email = emailMaskView.getText();
+                if (login.isEmpty() || password.isEmpty() || email.isEmpty()) {
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
+                } else {
+                    if (!captchaTextField.getText().equals(captcha.getValue())) {
+                        Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("incorrectcaptcha"), Dialogs.IconType.ERROR);
+                        captcha.generateValue();
+                    } else {
+                        try {
+                            ServerConnector.INSTANCE.write(ClientMessageFactory.createRegisterMessage(login, password.getBytes(), email));
+                            try {
+                                lock.lock();
+                                condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
+                                lock.unlock();
+                            } catch (InterruptedException e) {
+                                Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
+                            }
+                        } catch (IOException e) {
+                            Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
+                        }
+                    }
+                }
             });
         }
 

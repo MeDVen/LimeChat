@@ -4,6 +4,7 @@ import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.enums.JoinResultType;
 import org.klaptech.limechat.shared.enums.LeaveType;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
+import org.klaptech.limechat.shared.enums.RegisterAnswerType;
 
 /**
  * Factory for server messages
@@ -38,5 +39,15 @@ public class ServerMessageFactory {
      */
     public static Message createLeaveChannelAnswer(LeaveType leaveType, String channelName) {
         return new LeaveChannelAnswer(leaveType, channelName);
+    }
+
+    /**
+     * Register answer
+     *
+     * @param registerAnswerType {@link RegisterAnswerType}
+     * @return message sending to user when he try to register
+     */
+    public static Message createRegisterAnswer(RegisterAnswerType registerAnswerType) {
+        return new RegisterAnswer(registerAnswerType);
     }
 }

@@ -30,5 +30,5 @@ public enum MessageType {
     /**
      * Server answer on user login
      */
-    ANSWER_LOGIN, ANSWER_JOIN, LEAVE, ANSWER_LEAVE;
+    ANSWER_LOGIN, ANSWER_JOIN, LEAVE, ANSWER_LEAVE, REGISTER, ANSWER_REGISTER;
 }

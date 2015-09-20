@@ -12,9 +12,11 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
@@ -36,13 +38,14 @@ public class GUIManager {
     private Stage mainStage;
     private static final String LIME_CHAT_ICON_64x64 = "images/limechat_64x64.png";
     private static final String LIME_CHAT_SPLASH = "images/limes_transperent_splash.png";
-    private static final int SPLASH_DURATION = 5;
+    private static final int SPLASH_DURATION = 7;
     public static final String APP_TITLE = "Lime Chat alpha v.0.0.1";
     private static final int SPLASH_WIDTH = 800;
     private static final int SPLASH_HEIGHT = 600;
     private LoginDialog loginDialog;
     private Pane splashLayout;
     private Label splashMessage;
+    private AnchorPane splashImagePane;
 
 
     public static GUIManager getInstance() {
@@ -55,10 +58,11 @@ public class GUIManager {
     }
 
     private void initSplashScreen() {
-        ImageView splashImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_SPLASH)));
-        splashMessage = new Label("Welcome to best chat ever - LimeChat!");
+        splashMessage = new Label("Welcome to LimeChat!");
         splashMessage.setAlignment(Pos.CENTER);
 
+        ImageView splashImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_SPLASH)));
+        splashImagePane = new AnchorPane(splashImage);
         InnerShadow is = new InnerShadow();
         is.setOffsetX(3);
         is.setOffsetY(3);
@@ -66,9 +70,13 @@ public class GUIManager {
         splashMessage.setEffect(is);
         splashMessage.setStyle("-fx-text-fill: black; -fx-font-size: 25pt");
         splashMessage.setFont(Font.font("Times New Roman", FontWeight.BOLD, 32));
-
+        splashImagePane.getChildren().addAll(progressEllipses);
+        for (Ellipse ellipse : progressEllipses) {
+            ellipse.setFill(Color.valueOf("#96b946"));
+            ellipse.setVisible(false);
+        }
         splashLayout = new VBox();
-        splashLayout.getChildren().addAll(splashImage, splashMessage);
+        splashLayout.getChildren().addAll(splashImagePane, splashMessage);
 //        splashLayout.setStyle("-fx-padding: 5; -fx-background-color: transparent; -fx-border-width:2; -fx-border-color: linear-gradient(to bottom, green, black);" +
 //                "-fx-border-radius: 30 30 30 30;");
         splashLayout.setStyle("-fx-padding: 5; -fx-background-color: transparent;");
@@ -98,7 +106,7 @@ public class GUIManager {
     }
 
     /**
-     * show splash screen
+     * show splash screen with progress effect and fade out
      */
     public void showSplashScreen() {
         Scene splashScene = new Scene(splashLayout);
@@ -110,15 +118,37 @@ public class GUIManager {
         splashStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
         splashStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
         splashStage.show();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
+        final int[] count = {0};
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), e -> progress(count[0]++)));
+        timeline.setCycleCount(SPLASH_DURATION);
         timeline.play();
-        FadeTransition fadeSplash = new FadeTransition(Duration.seconds(SPLASH_DURATION), splashLayout);
+
+        FadeTransition fadeSplash = new FadeTransition(Duration.seconds(1), splashLayout);
         fadeSplash.setFromValue(1.0);
         fadeSplash.setToValue(0.0);
-        fadeSplash.setOnFinished(actionEvent -> splashStage.hide());
-        fadeSplash.play();
+        timeline.setOnFinished(actionEvent -> {
+            fadeSplash.play();
+
+        });
+        fadeSplash.setOnFinished(event -> {
+            splashStage.hide();
+            showMainStage();
+        });
+
 
     }
+
+    /**
+     * Draw progress on splash
+     *
+     * @param value count of progress
+     */
+    private void progress(int value) {
+        progressEllipses[value].setVisible(true);
+    }
+
+    Ellipse[] progressEllipses = new Ellipse[]{new Ellipse(135, 411, 12, 12), new Ellipse(187, 409, 14, 15), new Ellipse(248, 413, 16, 16),
+            new Ellipse(301, 424, 16, 14), new Ellipse(354, 437, 14, 12), new Ellipse(408, 441, 16, 12), new Ellipse(466, 440, 16, 12)};
 
     public LoginDialog getLoginDialog() {
         return loginDialog;

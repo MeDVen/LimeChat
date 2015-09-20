@@ -3,9 +3,8 @@ package org.klaptech.limechat.client.net;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.klaptech.limechat.client.events.UserEvents;
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.enums.MessageType;
-import org.klaptech.limechat.shared.server.JoinChannelAnswer;
 import org.klaptech.limechat.shared.server.LoginAnswer;
+import org.klaptech.limechat.shared.server.RegisterAnswer;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 import java.io.IOException;
@@ -98,12 +97,15 @@ public class ServerListener implements Runnable {
         for (Object message : messages) {
             if (message instanceof Message) {
                 Message msg = (Message) message;
-                if (msg.getType() == MessageType.ANSWER_LOGIN) {
-                    events.userLogged(((LoginAnswer) msg).getAnswerType());
-                } else if (msg.getType() == MessageType.ANSWER_JOIN) {
-                    System.out.println(((JoinChannelAnswer) msg).getJoinAnswer());
-                } else {
-                    System.out.println(message);
+                switch (msg.getType()) {
+                    case ANSWER_LOGIN:
+                        events.userLogged(((LoginAnswer) msg).getAnswerType());
+                        break;
+                    case ANSWER_JOIN:
+                        break;
+                    case ANSWER_REGISTER:
+                        events.userRegistered(((RegisterAnswer) msg).getRegisterAnswerType());
+                        break;
                 }
             }
         }

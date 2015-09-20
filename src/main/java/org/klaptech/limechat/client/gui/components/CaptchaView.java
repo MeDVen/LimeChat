@@ -34,7 +34,7 @@ public class CaptchaView {
         generateValue();
     }
 
-    private void generateValue() {
+    public void generateValue() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < SIGN_COUNT; i++) {
             stringBuilder.append(getRandomChar());
@@ -96,4 +96,7 @@ public class CaptchaView {
     }
 
 
+    public String getValue() {
+        return value;
+    }
 }

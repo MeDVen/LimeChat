@@ -19,6 +19,17 @@ public class ClientMessageFactory {
     }
 
     /**
+     * Create register message
+     *
+     * @param username
+     * @param password
+     * @param email
+     * @return message sending to server, when user wants to register
+     */
+    public static Message createRegisterMessage(String username, byte[] password, String email) {
+        return new RegisterMessage(username, HashUtils.md5(password), email);
+    }
+    /**
      * User join channel
      * @param channelName
      * @param password
