@@ -25,7 +25,7 @@ public class Authorizer {
             ResultSet resultSet = statement.executeQuery("SELECT * from users WHERE username='"+username+"'");
             if(resultSet.next()){
                 if(resultSet.getString("password").equals(password)){
-                    return LoginAnswerType.SUCCESS; //TODO добавить проверка на то что юзер уже авторизован
+                    return LoginAnswerType.SUCCESS;
                 }else{
                     return LoginAnswerType.INCORRECT_PASSWORD;
                 }
@@ -36,12 +36,7 @@ public class Authorizer {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
-            try {
-                assert connection != null;
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            Connector.INSTANCE.close();
         }
         return LoginAnswerType.USER_ALREADY_CON;
     }
