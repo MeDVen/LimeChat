@@ -18,7 +18,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.gui.components.CaptchaView;
 import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.EmailValidator;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthValidator;
 
 import java.util.ResourceBundle;
@@ -172,6 +174,7 @@ public class LoginDialog {
         private MaskInputView loginMaskView;
         private MaskInputView passwordMaskView;
         private MaskInputView confirmPasswordMaskView;
+        private MaskInputView emailMaskview;
         private Button registerButton;
 
         public RegisterPane() {
@@ -203,9 +206,17 @@ public class LoginDialog {
             confirmPasswordMaskView = new MaskInputView(confirmPasswordField, new LengthValidator(5));
             confirmPasswordField.setPromptText(resourceBundle.getString("repeatpwd"));
             gridPane.add(confirmPasswordField, 1, 2);
-            registerButton = new Button(resourceBundle.getString("login"));
-            gridPane.add(new Label(), 0, 3);
-            gridPane.add(registerButton,1,3);
+            Label emailLabel = new Label(resourceBundle.getString("email"));
+            emailMaskview = new MaskInputView(new TextField(), new EmailValidator());
+            gridPane.add(emailLabel, 0, 3);
+            gridPane.add(emailMaskview.getTextField(), 1, 3);
+            Label captchaLabel = new Label("Input data");
+            gridPane.add(captchaLabel, 0, 4);
+            CaptchaView captcha = new CaptchaView(100, 100);
+            gridPane.add(captcha.getCanvas(), 1, 4);
+            registerButton = new Button(resourceBundle.getString("register"));
+            gridPane.add(new Label(), 0, 5);
+            gridPane.add(registerButton, 1, 5);
             setContent(gridPane);
         }
 
@@ -215,20 +226,7 @@ public class LoginDialog {
             });
         }
 
-        /**
-         * Add text validator
-         *
-         * @param field textfield
-         */
-        private void addTextListener(TextField field) {
-            field.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.length() < 5) {
-                    field.setId("incorrect");
-                } else {
-                    field.setId("correct");
-                }
-            });
-        }
+
     }
 
 }
