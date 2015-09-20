@@ -17,6 +17,8 @@ public class HistoryView extends Group {
     private void initComponents() {
         historyTextArea = new TextArea();
         historyTextArea.setId("historytextarea");
+        historyTextArea.setEditable(false);
+        historyTextArea.setText("This place for messages history.");
         getChildren().add(historyTextArea);
     }
 }

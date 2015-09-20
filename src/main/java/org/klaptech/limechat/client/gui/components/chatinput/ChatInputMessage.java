@@ -59,6 +59,7 @@ public class ChatInputMessage extends HBox {
 
         inputHTMLTextArea = new HTMLEditor();
         inputHTMLTextArea.setHtmlText("<p>Test input message!</p>");
+        inputHTMLTextArea.setMinHeight( 200 );
         GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
         inputHTMLTextArea.setId("chatinput");
