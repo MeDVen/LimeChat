@@ -188,7 +188,7 @@ public class Server {
      */
     private void startReadWorker() {
 
-        Executors.newFixedThreadPool(N_THREADS).submit(readWorker);
+        Executors.newSingleThreadExecutor().submit(readWorker);
     }
 
     public void send(SocketChannel socket, Message message) {
