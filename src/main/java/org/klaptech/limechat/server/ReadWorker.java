@@ -1,18 +1,7 @@
 package org.klaptech.limechat.server;
 
-import static java.util.logging.Logger.getLogger;
-
-
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-
-import java.io.IOException;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.klaptech.limechat.server.auth.Authorizer;
-import org.klaptech.limechat.server.utils.Messages;
 import org.klaptech.limechat.shared.Message;
 import org.klaptech.limechat.shared.client.JoinChannelMessage;
 import org.klaptech.limechat.shared.client.LeaveChannelMessage;
@@ -23,6 +12,13 @@ import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.general.SendMessage;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
+
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Worker with input information
@@ -70,7 +66,7 @@ public class ReadWorker implements Runnable {
                 case LOGIN:
                     LoginMessage loginMessage = (LoginMessage) message;
                     LoginAnswerType authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
-                    if(authAnswer == LoginAnswerType.SUCCESS){
+                    if (authAnswer == LoginAnswerType.SUCCESS) {
                         server.addUser(new User(loginMessage.getUsername(), messageWrapper.getSocket()));
                     }
                     LOGGER.info("LOGIN " + authAnswer);
@@ -95,8 +91,8 @@ public class ReadWorker implements Runnable {
                 case LEAVE:
                     LeaveChannelMessage leaveChannelMessage = (LeaveChannelMessage) message;
                     channel = server.getChannels().getChannelByName(leaveChannelMessage.getChannelName());
-                    if(channel.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
-                        server.send(messageWrapper.getSocket(),ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveChannelMessage.getChannelName()));
+                    if (channel.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
+                        server.send(messageWrapper.getSocket(), ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveChannelMessage.getChannelName()));
                     }
                     break;
                 default:
