@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
+import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
 
 /**
  * Main window of LimeChat with application flow.
@@ -34,8 +35,8 @@ public class ApplicationWindow extends Application {
     @FXML
     private Label testLabel;
 
-    private static final String LIME_CHAT_ICON_64x64 = "limechat_64x64.png";
-    private static final String LIME_CHAT_SPLASH = "limes_transperent_splash.png";
+    private static final String LIME_CHAT_ICON_64x64 = "images/limechat_64x64.png";
+    private static final String LIME_CHAT_SPLASH = "images/limes_transperent_splash.png";
 
     private static final int SPLASH_WIDTH = 800;
     private static final int SPLASH_HEIGHT = 600;
@@ -45,13 +46,13 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void start(Stage initStage) throws Exception {
-        initStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
-        showMainStage(initStage);
-//        showMembersView(initStage);
+        //initStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
+        //showMainStage(initStage);
 
-//        LoginDialog loginDialog = new LoginDialog();
-//        loginDialog.show();//showMainStage();
-//        showHTMLEditor(initStage);
+
+        LoginDialog loginDialog = new LoginDialog();
+        loginDialog.show();//showMainStage();
+        //  showHTMLEditor(initStage);
     /* showSplashScreen(initStage);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
         timeline.play();
@@ -68,7 +69,7 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void init() {
-        ImageView splashImage = new ImageView(new Image(getClass().getResourceAsStream(LIME_CHAT_SPLASH)));
+        ImageView splashImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_SPLASH)));
         splashMessage = new Label("Welcome to best chat ever - LimeChat!");
         splashMessage.setAlignment(Pos.CENTER);
 

@@ -1,12 +1,18 @@
 package org.klaptech.limechat.client;
 
-import static java.util.logging.Logger.getLogger;
-
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
+import org.klaptech.limechat.shared.enums.MessageType;
+import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.server.JoinChannelAnswer;
+import org.klaptech.limechat.shared.server.LoginAnswer;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -14,17 +20,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import org.klaptech.limechat.server.MessageWrapper;
-import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.client.ClientMessageFactory;
-import org.klaptech.limechat.shared.client.JoinChannelMessage;
-import org.klaptech.limechat.shared.enums.LoginAnswerType;
-import org.klaptech.limechat.shared.enums.MessageType;
-import org.klaptech.limechat.shared.general.GeneralMessageFactory;
-import org.klaptech.limechat.shared.server.JoinChannelAnswer;
-import org.klaptech.limechat.shared.server.LoginAnswer;
-import org.klaptech.limechat.shared.utils.ByteObjectConverter;
+import static java.util.logging.Logger.getLogger;
 
 
 /**
@@ -45,7 +41,13 @@ public class TestClient {
             while (!socketChannel.finishConnect()) {
 
             }
-            Message message = ClientMessageFactory.createLoginMessage("admin", "admin".getBytes());
+            String username = "admin";
+            String password = "admin";
+            if (args.length == 1) {
+                username = args[0];
+                password = args[0];
+            }
+            Message message = ClientMessageFactory.createLoginMessage(username, password.getBytes());
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
