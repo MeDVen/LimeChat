@@ -9,7 +9,7 @@ import javafx.scene.control.TabPane;
  * and area with conversation history.
  * Every tab has instrument panel. Smiles, call history
  * and other.
- * Created by MeDVen on 02.09.2015.
+ * @author MeDVen
  */
 public class ChatTabPane extends TabPane {
 
@@ -17,24 +17,19 @@ public class ChatTabPane extends TabPane {
         super();
     }
 
-    /**
-     * Add new tab to TabPane
-     * @param roomTab tab with room
-     */
-    public void addNewTab(Tab roomTab) {
-//        TextArea textArea = new TextArea();
-//        textArea.setScrollLeft(300);
-//        Glow glow = new Glow();
-//        glow.setLevel(5);
-//        textArea.setEffect(glow);
-        pinInstrumentPanel(roomTab); // empty
-        this.getTabs().add(roomTab);
+    public void addNewTab(Tab tab) {
+        pinToolbar(tab); // empty
+        this.getTabs().add(tab);
+    }
+
+    public void removeTab(Tab tab) {
+        getTabs().removeAll(tab);
     }
 
     /**
      * Need do this.
      */
-    public void pinInstrumentPanel(Tab tab) {
-        /* TO-DO */
+    public void pinToolbar(Tab tab) {
+        // TODO make toolbar
     }
 }

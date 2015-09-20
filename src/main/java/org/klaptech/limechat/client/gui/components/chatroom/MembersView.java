@@ -36,6 +36,7 @@ public class MembersView extends Group {
 
     private void initComponents() {
         listView = new ListView<>();
+        listView.setId("membersview");
         listView.setItems(testData);
         listView.setCellFactory(param -> new UserCell());
         getChildren().add(listView);

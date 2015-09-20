@@ -8,8 +8,8 @@ import javafx.scene.control.TextArea;
  */
 public class HistoryView extends Group {
     private TextArea historyTextArea;
-    public HistoryView() {
 
+    public HistoryView() {
         getStylesheets().add(getClass().getClassLoader().getResource("fxml/historyview.css").toExternalForm());
         initComponents();
     }

@@ -12,21 +12,16 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.web.HTMLEditor;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
-import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
-
-import static org.klaptech.limechat.client.utils.GUIUtils.hideHTMLEditorToolbars;
 
 /**
  * Main window of LimeChat with application flow.
@@ -35,6 +30,7 @@ import static org.klaptech.limechat.client.utils.GUIUtils.hideHTMLEditorToolbars
 public class ApplicationWindow extends Application {
 
     private static final int SPLASH_DURATION = 5;
+    public static final String APP_TITLE = "Lime Chat alpha v.0.0.1";
     @FXML
     private Label testLabel;
 
@@ -47,16 +43,15 @@ public class ApplicationWindow extends Application {
     private Pane splashLayout;
     private Label splashMessage;
 
-    private Stage mainStage;
-
     @Override
     public void start(Stage initStage) throws Exception {
+        initStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
+        showMainStage(initStage);
+//        showMembersView(initStage);
 
 //        LoginDialog loginDialog = new LoginDialog();
 //        loginDialog.show();//showMainStage();
-        showMainStage();
 //        showHTMLEditor(initStage);
-
     /* showSplashScreen(initStage);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
         timeline.play();
@@ -73,7 +68,6 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void init() {
-
         ImageView splashImage = new ImageView(new Image(getClass().getResourceAsStream(LIME_CHAT_SPLASH)));
         splashMessage = new Label("Welcome to best chat ever - LimeChat!");
         splashMessage.setAlignment(Pos.CENTER);
@@ -97,57 +91,32 @@ public class ApplicationWindow extends Application {
     /**
      * Init and show main stage
      */
-    private void showMainStage(){
-        mainStage = new Stage(StageStyle.DECORATED);
-        mainStage.setTitle("Lime Chat beta v.0.0.1");
-        //            Parent root = FXMLLoader.load(getClass().getResource("limechat.fxml"));
+    private void showMainStage(Stage stage){
+        stage.setTitle(APP_TITLE);
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.prefHeightProperty().bind(scene.heightProperty());
-        borderPane.prefWidthProperty().bind(scene.widthProperty());
-
-        ChatTabPane chatTabPane = new ChatTabPane();
-        chatTabPane.addNewTab(new RoomTab("Default room"));
-        chatTabPane.addNewTab(new RoomTab("219 room"));
-        borderPane.setCenter(chatTabPane);
-        borderPane.setBottom(new ChatInputMessage());
-        root.getChildren().add(borderPane);
-
-        mainStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
-        mainStage.setScene(scene);
-        mainStage.show();
-
+        ChatTabPane tabPane = new ChatTabPane();
+        tabPane.addNewTab(new RoomTab("Room 1"));
+        tabPane.addNewTab(new RoomTab("Room 2"));
+        tabPane.addNewTab(new RoomTab("Room 3"));
+        root.getChildren().add(tabPane);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
      * show splash screen
-     * @param initStage main stage
+     * @param stage main stage
      */
-    private void showSplashScreen(Stage initStage) {
+    private void showSplashScreen(Stage stage) {
         Scene splashScene = new Scene(splashLayout);
         splashScene.setFill(Color.TRANSPARENT);
-        initStage.initStyle(StageStyle.TRANSPARENT);
-        initStage.getIcons().add(new Image(getClass().getResourceAsStream(LIME_CHAT_ICON_64x64)));
+        stage.initStyle(StageStyle.TRANSPARENT);
         final Rectangle2D bounds = Screen.getPrimary().getBounds();
-        initStage.setScene(splashScene);
-        initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
-        initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
-        initStage.show();
-    }
-
-    /**
-     * Show input user message with HTMLEditor without toolbar.
-     * @param initStage
-     */
-    public void showHTMLEditor(Stage initStage) {
-        HTMLEditor htmlEditor = new HTMLEditor();
-        Scene sceneEditor = new Scene(htmlEditor);
-        initStage.setScene(sceneEditor);
-        initStage.show();
-        htmlEditor.setHtmlText("<a href='http://google.com' target='_blank'>Test link google.com</a>");
-        hideHTMLEditorToolbars(htmlEditor);
+        stage.setScene(splashScene);
+        stage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
+        stage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
+        stage.show();
     }
 
     public void showText(ActionEvent actionEvent) {

@@ -1,7 +1,7 @@
 #chatinput {
-    -fx-text-fill: #96b946;
-    -fx-background-color: black;
-    -fx-font-size: 12px;
+    /*-fx-text-fill: #96b946;*/
+    /*-fx-background-color: black;*/
+    /*-fx-font-size: 12px;*/
 }
 
 #chatinput .content {
@@ -18,5 +18,5 @@
 }
 
 #chatinput {
-    -fx-font: 12 cambria;
+    -fx-font: 12 bold;
 }

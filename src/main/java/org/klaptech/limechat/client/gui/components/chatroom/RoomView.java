@@ -1,14 +1,16 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.klaptech.limechat.client.gui.components.chatinput.ChatInputMessage;
 
 /**
  * Room pane. Contains of input, room history
  * @author rlapin
+ * @author MeDVen
  */
 public class RoomView extends VBox {
+    private MembersView membersView;
     private ChatInputMessage chatInputMessage;
     private HistoryView historyView;
 
@@ -17,10 +19,12 @@ public class RoomView extends VBox {
     }
 
     private void initComponents() {
-        BorderPane borderPane = new BorderPane();
         historyView = new HistoryView();
+        membersView = new MembersView();
         chatInputMessage = new ChatInputMessage();
-        borderPane.setCenter(historyView);
-        borderPane.setBottom(chatInputMessage);
+
+        HBox hbox = new HBox();
+        hbox.getChildren().addAll(historyView, membersView);
+        getChildren().addAll(hbox, chatInputMessage);
     }
 }

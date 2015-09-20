@@ -73,7 +73,6 @@ public class LoginDialog {
         private PasswordField passwordField;
 
         public LoginPane() {
-
             setText(resourceBundle.getString("login"));
             initComponents();
             initListeners();
@@ -86,8 +85,8 @@ public class LoginDialog {
             gridPane.setHgap(10);
             Label titleLabel = new Label("Login");
             titleLabel.setFont(new Font(72));
-            titleLabel.setEffect(new InnerShadow(10,Color.WHITE));
-            gridPane.add(titleLabel,0,0,2,1);
+            titleLabel.setEffect(new InnerShadow(10, Color.WHITE));
+            gridPane.add(titleLabel, 0, 0, 2, 1);
             Label loginLabel = new Label(resourceBundle.getString("name"));
             gridPane.add(loginLabel, 0, 1);
             loginField = new TextField();
