@@ -59,15 +59,22 @@ public class ReadWorker implements Runnable {
                 }
                 messageWrapper = queue.remove(0);
             }
+
             Message message = messageWrapper.getMessage();
             // Return to sender
             SocketChannel socket = messageWrapper.getSocket();
             switch (message.getType()) {
                 case LOGIN:
                     LoginMessage loginMessage = (LoginMessage) message;
-                    LoginAnswerType authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
-                    if (authAnswer == LoginAnswerType.SUCCESS) {
-                        server.addUser(new User(loginMessage.getUsername(), messageWrapper.getSocket()));
+                    LoginAnswerType authAnswer;
+                    if (server.containsUser(loginMessage.getUsername())) {
+                        authAnswer = LoginAnswerType.USER_ALREADY_CON;
+
+                    } else {
+                        authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
+                        if (authAnswer == LoginAnswerType.SUCCESS) {
+                            server.addUser(new User(loginMessage.getUsername(), messageWrapper.getSocket()));
+                        }
                     }
                     LOGGER.info("LOGIN " + authAnswer);
                     server.send(socket, ServerMessageFactory.createLoginAnswer(authAnswer));

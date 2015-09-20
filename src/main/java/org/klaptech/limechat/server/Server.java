@@ -1,6 +1,10 @@
 package org.klaptech.limechat.server;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import org.klaptech.limechat.server.conf.Configuration;
+import org.klaptech.limechat.server.conf.DefaultConfiguration;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,11 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
-import org.klaptech.limechat.server.conf.Configuration;
-import org.klaptech.limechat.server.conf.DefaultConfiguration;
-import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 /**
  * Server entity
@@ -135,9 +134,12 @@ public class Server {
             try {
                 numRead = socketChannel.read(readBuffer);
                 if (numRead == -1) {
-                    key.channel().close();
-                    key.cancel();
+
+                    //   key.cancel();
+                    //   socketChannel.close();
                     // User disconnected or lost connection
+                    key.cancel();
+                    socketChannel.close();
                     LOGGER.info("User disconnected");
                     return;
                 }
@@ -235,5 +237,20 @@ public class Server {
      */
     public void addUser(User user) {
         users.add(user);
+    }
+
+    /**
+     * Check if server contains user
+     *
+     * @param username
+     * @return true , if user has already connected
+     */
+    public boolean containsUser(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
