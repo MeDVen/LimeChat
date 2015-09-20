@@ -10,12 +10,13 @@ import org.klaptech.limechat.shared.Message;
 public class GeneralMessageFactory {
 
     /**
-     * Create send message
+     * Create send message to channel
+     * @param channelName
      * @param text
      * @return message sending to client/server with text
      */
-    public static Message createSendMessage(String text) {
-        return new SendMessage(text);
+    public static Message createSendMessage(String channelName, String text) {
+        return new SendMessage(channelName, text);
     }
 
 }

@@ -75,7 +75,7 @@ public class TestClient {
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNextLine()) {
                 String str = scanner.nextLine();
-                message = GeneralMessageFactory.createSendMessage(str);
+                message = GeneralMessageFactory.createSendMessage("default",str);
                 byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message));
                 socketChannel.write(byteBuffer);
             }
@@ -117,8 +117,7 @@ public class TestClient {
                 Message msg = (Message) message;
                 if(msg.getType() == MessageType.ANSWER_LOGIN){
                     if(((LoginAnswer)msg).getAnswerType() == LoginAnswerType.SUCCESS){
-                        ByteBuffer byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(ClientMessageFactory.createJoinChannelMessage("default" +
-                                "")));
+                        ByteBuffer byteBuffer = ByteBuffer.wrap(ByteObjectConverter.objectToBytes(ClientMessageFactory.createJoinChannelMessage("default")));
                         socketChannel.write(byteBuffer);
                     }
                 }else if(msg.getType() == MessageType.ANSWER_JOIN){

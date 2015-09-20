@@ -57,7 +57,7 @@ public class Channel {
     public JoinResultType join(User user, String password){
         if(users.contains(user)){
             return JoinResultType.ALREADY_ON_CHANNEL;
-        }else if(!isOpened && password.equals(this.password)){
+        }else if(!isOpened && !password.equals(this.password)){
             return JoinResultType.INCORRECT_PASSWORD;
         }else{
             users.add(user);

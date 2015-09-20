@@ -174,12 +174,7 @@ public class Server {
      */
     private void run() {
 
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                start();
-            }
-        });
+        Executors.newSingleThreadExecutor().execute(() -> start());
         startReadWorker();
     }
 

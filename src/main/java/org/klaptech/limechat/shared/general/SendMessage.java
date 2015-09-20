@@ -9,14 +9,19 @@ import org.klaptech.limechat.shared.enums.MessageType;
  */
 public class SendMessage implements Message{
     private String message;
-
-    protected SendMessage(String message) {
+    private String channelName;
+    protected SendMessage(String channelName, String message) {
+        this.channelName = channelName;
         this.message = message;
     }
 
 
     public String getMessage() {
         return message;
+    }
+
+    public String getChannelName() {
+        return channelName;
     }
 
     @Override

@@ -52,7 +52,6 @@ public class ReadWorker implements Runnable {
 
     public void run() {
         MessageWrapper messageWrapper;
-
         while (true) {
             // Wait for data to become available
             synchronized (queue) {
