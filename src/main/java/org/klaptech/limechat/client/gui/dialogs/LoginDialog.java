@@ -1,5 +1,6 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -18,12 +19,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.components.CaptchaView;
 import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.EmailValidator;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthValidator;
+import org.klaptech.limechat.client.net.ServerConnector;
+import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import org.klaptech.limechat.shared.enums.LoginAnswerType;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
@@ -37,6 +46,8 @@ import static java.util.logging.Logger.getLogger;
  */
 public class LoginDialog {
     private static final Logger LOGGER = getLogger(LoginDialog.class.getName());
+    private final ReentrantLock lock = new ReentrantLock();
+    public Condition condition = lock.newCondition();
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
     private static final String LIME_CHAT_ICON_64x64 = "images/limechat_64x64.png";
@@ -49,6 +60,7 @@ public class LoginDialog {
                     "TestRoom2"
             );
     private TextField captchaTextField;
+
 
     public LoginDialog() {
         stage = new Stage(StageStyle.DECORATED);
@@ -84,6 +96,35 @@ public class LoginDialog {
 
     public void show() {
         stage.show();
+    }
+
+    /**
+     * Fired when user logged
+     *
+     * @param loginType {@link LoginAnswerType}
+     */
+    public void userLogged(LoginAnswerType loginType) {
+        lock.lock();
+        condition.signal();
+        lock.unlock();
+        Platform.runLater(() -> {
+            switch (loginType) {
+                case SUCCESS:
+                    stage.hide();
+                    GUIManager.getInstance().showSplashScreen();
+                    break;
+                case USER_NOT_EXISTS:
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("usernotexists"), Dialogs.IconType.ERROR);
+                    break;
+                case USER_ALREADY_CON:
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("useralreadyconnects"), Dialogs.IconType.ERROR);
+                    break;
+                case INCORRECT_PASSWORD:
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("incorrectpassword"), Dialogs.IconType.ERROR);
+                    break;
+                default:
+            }
+        });
     }
 
     /**
@@ -139,31 +180,32 @@ public class LoginDialog {
 
         private void initListeners() {
             TextField loginField = loginMaskView.getTextField();
-            TextField passwordField = passwordMaskView.getTextField();
             defaultRoomCmb.prefWidthProperty().bind(loginField.widthProperty());
             rememberChb.prefWidthProperty().bind(loginField.widthProperty());
             fillerLabel.prefWidthProperty().bind(loginLabel.widthProperty());
-            addTextListener(loginField);
-            addTextListener(passwordField);
-            loginButton.setOnAction(event -> {
-                System.out.println("Try login");
-            });
-        }
 
-        /**
-         * Add text validator
-         *
-         * @param field textfield
-         */
-        private void addTextListener(TextField field) {
-            field.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.length() < 5) {
-                    field.setId("incorrect");
+            loginButton.setOnAction(event -> {
+                String login = loginMaskView.getText();
+                String password = passwordMaskView.getText();
+                if (login.isEmpty() || password.isEmpty()) {
+                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
                 } else {
-                    field.setId("correct");
+                    try {
+                        ServerConnector.INSTANCE.write(ClientMessageFactory.createLoginMessage(login, password.getBytes()));
+                        try {
+                            lock.lock();
+                            condition.await(1, TimeUnit.MILLISECONDS);
+                            lock.unlock();
+                        } catch (InterruptedException e) {
+                            Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
+                        }
+                    } catch (IOException e) {
+                        Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("autherror"), Dialogs.IconType.ERROR);
+                    }
                 }
             });
         }
+
 
 
     }
@@ -172,9 +214,6 @@ public class LoginDialog {
      * RegisterTab for registration user on server
      */
     private class RegisterPane extends Tab {
-        private MaskInputView loginMaskView;
-        private MaskInputView passwordMaskView;
-        private MaskInputView confirmPasswordMaskView;
         private MaskInputView emailMaskview;
         private Button registerButton;
 
@@ -192,19 +231,17 @@ public class LoginDialog {
             Label loginLabel = new Label(resourceBundle.getString("name"));
             gridPane.add(loginLabel, 0, 0);
             TextField loginField = new TextField();
-            loginMaskView = new MaskInputView(loginField, new LengthValidator(5));
+            new MaskInputView(loginField, new LengthValidator(5));
             loginField.setPromptText(resourceBundle.getString("inputlogin"));
             gridPane.add(loginField, 1, 0);
             Label passwordLabel = new Label(resourceBundle.getString("password"));
             gridPane.add(passwordLabel, 0, 1);
             PasswordField passwordField = new PasswordField();
-            passwordMaskView = new MaskInputView(passwordField, new LengthValidator(5));
             passwordField.setPromptText(resourceBundle.getString("inputpwd"));
             gridPane.add(passwordField, 1, 1);
             Label confirmPasswordLabel = new Label(resourceBundle.getString("confirmpwd"));
             gridPane.add(confirmPasswordLabel, 0, 2);
             PasswordField confirmPasswordField = new PasswordField();
-            confirmPasswordMaskView = new MaskInputView(confirmPasswordField, new LengthValidator(5));
             confirmPasswordField.setPromptText(resourceBundle.getString("repeatpwd"));
             gridPane.add(confirmPasswordField, 1, 2);
             Label emailLabel = new Label(resourceBundle.getString("email"));
