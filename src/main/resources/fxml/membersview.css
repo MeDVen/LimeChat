@@ -1,0 +1,11 @@
+#membersview {
+    -fx-font-size: 12pt;
+}
+
+#membersview .list-cell {
+    -fx-background-color: #828282;
+}
+
+#membersview .list-cell:selected {
+    -fx-background-color: #96b946;
+}
