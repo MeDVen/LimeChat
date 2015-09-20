@@ -46,7 +46,7 @@ public class MembersView extends Group {
         public void updateItem(UserInfo item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
-                setText(item.getName() + " " + item.getState().toString());
+                setText(item.getName() + " " + item.getState());
             }
         }
     }

@@ -7,20 +7,20 @@ import org.klaptech.limechat.shared.enums.UserState;
  */
 public class UserInfo {
 
-    private String userName;
+    final private String name;
 
-    private UserState userState;
+    final private UserState state;
 
     public UserInfo(String userName, UserState userState) {
-        this.userName = userName;
-        this.userState = userState;
+        this.name = userName;
+        this.state = userState;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public UserState getUserState() {
-        return userState;
+    public UserState getState() {
+        return state;
     }
 }
