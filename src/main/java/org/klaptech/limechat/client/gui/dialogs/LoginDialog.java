@@ -60,7 +60,10 @@ public class LoginDialog {
                     "TestRoom1",
                     "TestRoom2"
             );
-    private TextField captchaTextField;
+
+    private TabPane loginTabPane;
+    private LoginPane loginPane;
+    private RegisterPane registerPane;
 
 
     public LoginDialog() {
@@ -78,7 +81,9 @@ public class LoginDialog {
 
 
     private void initComponents() {
-        TabPane loginTabPane = new TabPane(new LoginPane(), new RegisterPane());
+        loginPane = new LoginPane();
+        registerPane = new RegisterPane();
+        loginTabPane = new TabPane(loginPane, registerPane);
         loginTabPane.setSide(Side.TOP);
         loginTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         BorderPane borderPane = new BorderPane();
@@ -141,8 +146,10 @@ public class LoginDialog {
             switch (registerAnswerType) {
                 case SUCCESS:
                     Dialogs.showMessageBox(resourceBundle.getString("info"), resourceBundle.getString("registrationsuccess"), Dialogs.IconType.INFO);
-                    stage.hide();
-                    GUIManager.getInstance().showSplashScreen();
+                    loginTabPane.getSelectionModel().select(loginPane);
+                    clearAllComponents();
+                    loginPane.loginMaskView.getTextField().setText(registerPane.loginMaskView.getText());
+                    loginPane.passwordMaskView.getTextField().setText("");
                     break;
                 case USER_ALREADY_REGISTER:
                     Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("useralreadyexists"), Dialogs.IconType.ERROR);
@@ -153,6 +160,17 @@ public class LoginDialog {
                 default:
             }
         });
+    }
+
+    private void clearAllComponents() {
+        loginPane.loginMaskView.getTextField().setText("");
+        loginPane.passwordMaskView.getTextField().setText("");
+        registerPane.loginMaskView.getTextField().setText("");
+        registerPane.passwordMaskView.getTextField().setText("");
+        registerPane.confirmPasswordMaskView.getTextField().setText("");
+        registerPane.emailMaskView.getTextField().setText("");
+        registerPane.captchaTextField.setText("");
+
     }
 
     /**
@@ -247,6 +265,7 @@ public class LoginDialog {
         private MaskInputView passwordMaskView;
         private MaskInputView confirmPasswordMaskView;
         private CaptchaView captcha;
+        private TextField captchaTextField;
 
         public RegisterPane() {
             setText(resourceBundle.getString("register"));
