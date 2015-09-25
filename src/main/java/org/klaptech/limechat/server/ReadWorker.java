@@ -1,6 +1,17 @@
 package org.klaptech.limechat.server;
 
+import static java.util.logging.Logger.getLogger;
+
+
+
+
+
+
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.server.auth.Registrator;
 import org.klaptech.limechat.shared.Message;
@@ -15,13 +26,6 @@ import org.klaptech.limechat.shared.enums.RegisterAnswerType;
 import org.klaptech.limechat.shared.general.SendMessage;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
-
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
 
 /**
  * Worker with input information
@@ -92,6 +96,9 @@ public class ReadWorker implements Runnable {
                         joinAnswer = channel.join(server.getUser(socket));
                     }
                     server.send(socket, ServerMessageFactory.createJoinChannelAnswer(joinAnswer));
+                    if(joinAnswer == JoinResultType.SUCCESS){
+                        //server.send(socket, ServerMessageFactory.createUserListMessage());
+                    }
                     break;
                 case MSG:
                     SendMessage sendMessage = (SendMessage) message;

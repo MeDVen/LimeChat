@@ -1,13 +1,10 @@
 package org.klaptech.limechat.server;
 
-import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.client.ClientMessageFactory;
-import org.klaptech.limechat.shared.enums.JoinResultType;
-import org.klaptech.limechat.shared.general.GeneralMessageFactory;
-import org.klaptech.limechat.shared.server.ServerMessageFactory;
-
 import java.util.HashSet;
 import java.util.Set;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.general.GeneralMessageFactory;
 
 /**
  * @author rlapin
@@ -65,8 +62,17 @@ public class Channel {
             return JoinResultType.INCORRECT_PASSWORD;
         }else{
             users.add(user);
+            onUserJoin();
             return JoinResultType.SUCCESS;
         }
+
+    }
+
+    public void onUserJoin(){
+
+    }
+
+    public void onUserLeave(){
 
     }
 

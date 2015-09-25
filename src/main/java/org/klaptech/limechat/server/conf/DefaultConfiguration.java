@@ -7,11 +7,11 @@ package org.klaptech.limechat.server.conf;
 public class DefaultConfiguration implements Configuration{
     @Override
     public int getPort() {
-        return 3306;
+        return 5678;
     }
 
     @Override
     public String getAddr() {
-        return "localhost";
+        return "192.168.1.28";
     }
 }

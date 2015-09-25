@@ -3,6 +3,8 @@ package org.klaptech.limechat.client.utils;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.web.HTMLEditor;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /**
  * Gui Utils with hacks methods.
@@ -28,5 +30,16 @@ public class GUIUtils {
             }
             editor.setVisible(true);
         });
+    }
+
+    /**
+     * Move stage to center
+     * @param stage
+     */
+    public static void centerStage(Stage stage) {
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+        stage.setX((Screen.getPrimary().getBounds().getWidth()-width)/2);
+        stage.setY((Screen.getPrimary().getBounds().getHeight()-height)/2);
     }
 }

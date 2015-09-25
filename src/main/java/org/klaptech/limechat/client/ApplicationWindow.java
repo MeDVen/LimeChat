@@ -1,15 +1,20 @@
 package org.klaptech.limechat.client;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-import org.klaptech.limechat.client.gui.GUIManager;
-import org.klaptech.limechat.client.net.ServerConnector;
+import static java.util.logging.Logger.getLogger;
+
+
+
+
+
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.klaptech.limechat.client.gui.components.sconnector.ServerConnectorView;
+import org.klaptech.limechat.client.net.ServerConnector;
 
 /**
  * Main window of LimeChat with application flow.
@@ -33,9 +38,13 @@ public class ApplicationWindow extends Application {
                 LOGGER.severe("cannot connect to server");
             }
         });
-
-        GUIManager.getInstance().setMainStage(initStage);
-        GUIManager.getInstance().getLoginDialog().show();
+        Stage stage = new Stage();
+        ServerConnectorView serverConnectorView = new ServerConnectorView();
+        stage.setScene(new Scene(serverConnectorView.getPanel(),500,500));
+        stage.show();
+      /*  GUIManager.getInstance().setMainStage(initStage);
+        GUIManager.getInstance().getLoginDialog().show();*/
+//        GUIManager.getInstance().showMainStage();
 
         //  showHTMLEditor(initStage);
     /* showSplashScreen(initStage);

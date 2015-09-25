@@ -1,5 +1,6 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Tab;
 
 /**
@@ -12,6 +13,8 @@ public class RoomTab extends Tab {
     public RoomTab(String roomName) {
         super(roomName);
         roomView = new RoomView();
+        setClosable(false);
+        setContextMenu(new ContextMenu());
         setContent(roomView);
     }
 }

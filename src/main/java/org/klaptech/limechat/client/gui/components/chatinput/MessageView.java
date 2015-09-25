@@ -1,5 +1,6 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -32,6 +33,16 @@ public class MessageView extends HBox {
     }
 
     private void initListeners() {
+        inputHTMLTextArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()){
+            case A:
+                System.out.println(10);
+                event.consume();
+                inputHTMLTextArea.setHtmlText(inputHTMLTextArea.getHtmlText()+"<br>");
+                break;
+            default:
+            }
+        });
 //        inputTextArea.textProperty().addListener(new ChangeListener<String>() {
 //            @Override
 //            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

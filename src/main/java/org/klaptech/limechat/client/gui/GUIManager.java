@@ -91,7 +91,8 @@ public class GUIManager {
     /**
      * Init and show main stage
      */
-    private void showMainStage() {
+    // TODO changed to private
+    public void showMainStage() {
         mainStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
         mainStage.setTitle(APP_TITLE);
         Group root = new Group();
