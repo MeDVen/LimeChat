@@ -2,10 +2,13 @@ package org.klaptech.limechat.client.gui.dialogs;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
@@ -16,14 +19,21 @@ import org.klaptech.limechat.client.utils.GUIUtils;
  * @author rlapin
  */
 public class ServerChooserDialog {
+    private final Group root;
     ObservableList<ServerInfo> servers = FXCollections.observableArrayList();
     private final Stage stage;
 
     public ServerChooserDialog() {
-        stage = new Stage();
+        stage = new Stage(StageStyle.UTILITY);
+        root = new Group();
+        stage.setScene(new Scene(root, 300, 300));
         initComponents();
+        generateTestData();
     }
 
+    private void generateTestData() {
+        servers.add(new ServerInfo("127.0.0.1", 6234, "Localhost server"));
+    }
     private void initComponents() {
         ComboBox<ServerInfo> serversComboBox = new ComboBox<>(servers);
         serversComboBox.setCellFactory(new Callback<ListView<ServerInfo>, ListCell<ServerInfo>>() {
@@ -41,6 +51,7 @@ public class ServerChooserDialog {
                 return cell;
             }
         });
+        root.getChildren().addAll(serversComboBox);
     }
 
     /**
@@ -48,7 +59,6 @@ public class ServerChooserDialog {
      */
     public void show() {
         stage.show();
-        System.out.println(stage.getX());
         GUIUtils.centerStage(stage);
     }
 
