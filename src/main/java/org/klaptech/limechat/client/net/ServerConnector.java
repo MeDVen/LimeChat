@@ -1,11 +1,8 @@
 package org.klaptech.limechat.client.net;
 
-import static java.util.logging.Logger.getLogger;
-
-
-
-
-
+import org.klaptech.limechat.client.events.UserEvents;
+import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,9 +12,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-import org.klaptech.limechat.client.events.UserEvents;
-import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.utils.ByteObjectConverter;
+
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Connects to server and create read selector
@@ -35,11 +31,18 @@ public enum ServerConnector {
     private Selector selector;
     private UserEvents events;
 
-    public void connect() throws IOException {
+    /**
+     * Connect to server
+     *
+     * @param addr address of server
+     * @param port server port
+     * @throws IOException cannot connect to server
+     */
+    public void connect(String addr, int port) throws IOException {
         socketChannel = SocketChannel.open();
         socketChannel.configureBlocking(false);
         events = new UserEvents();
-        socketChannel.connect(new InetSocketAddress("192.168.1.28", 5678));
+        socketChannel.connect(new InetSocketAddress(addr, port));
         LOGGER.info("connection succeed");
         selector = Selector.open();
         socketChannel.register(selector, SelectionKey.OP_READ);

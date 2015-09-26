@@ -1,0 +1,39 @@
+.serverConnectorPanel {
+    -fx-background-color: #5e5e5e;
+}
+
+#refresh-button {
+    -fx-background-color: #2d2d2d;
+}
+
+#settings-button {
+    -fx-background-color: #2d2d2d;
+}
+
+#refresh-button:hover {
+    -fx-background-color: #96b946;
+}
+
+#settings-button:hover {
+    -fx-background-color: #96b946;
+}
+
+#refresh-button:hover:pressed {
+    -fx-background-color: #e9ffc8;
+}
+
+#settings-button:hover:pressed {
+    -fx-background-color: #e9ffc8;
+}
+
+#successLabel {
+    -fx-text-fill: #86ff13;
+}
+
+#errorLabel {
+    -fx-text-fill: #ff002b;
+}
+
+#notconLabel {
+    -fx-text-fill: #10000f;
+}
