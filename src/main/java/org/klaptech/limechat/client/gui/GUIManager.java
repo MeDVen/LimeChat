@@ -5,16 +5,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Font;
@@ -95,13 +92,20 @@ public class GUIManager {
     public void showMainStage() {
         mainStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
         mainStage.setTitle(APP_TITLE);
-        Group root = new Group();
-        Scene scene = new Scene(root, 800, 600);
+        GridPane grid = new GridPane();
+        Scene scene = new Scene(grid, 800, 600);
         ChatTabPane tabPane = new ChatTabPane();
         tabPane.addNewTab(new RoomTab("Room 1"));
         tabPane.addNewTab(new RoomTab("Room 2"));
         tabPane.addNewTab(new RoomTab("Room 3"));
-        root.getChildren().add(tabPane);
+        grid.add(tabPane, 0, 0);
+
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().add(cc);
+        RowConstraints rc = new RowConstraints();
+        rc.setVgrow(Priority.ALWAYS);
+        grid.getRowConstraints().add(rc);
         mainStage.setScene(scene);
         mainStage.show();
     }
