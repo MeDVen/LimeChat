@@ -2,9 +2,9 @@ package org.klaptech.limechat.client.gui.components.chatroom;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
 import org.klaptech.limechat.client.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.UserState;
 
@@ -22,7 +22,7 @@ import org.klaptech.limechat.shared.enums.UserState;
  *
  * @author MeDVen
  */
-public class MembersView extends Group {
+public class MembersView extends VBox {
 
     private ListView<UserInfo> listView;
 

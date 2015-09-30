@@ -1,13 +1,13 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
-import javafx.scene.Group;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 
 /**
  * @author rlapin
  */
-public class HistoryView extends Group {
+public class HistoryView extends VBox {
     private TextArea historyTextArea;
 
     public HistoryView() {
