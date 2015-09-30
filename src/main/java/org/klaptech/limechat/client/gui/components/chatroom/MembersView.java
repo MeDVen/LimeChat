@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
 import org.klaptech.limechat.client.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.UserState;
 
@@ -22,9 +21,9 @@ import org.klaptech.limechat.shared.enums.UserState;
  *
  * @author MeDVen
  */
-public class MembersView extends VBox {
+public class MembersView extends ListView {
 
-    private ListView<UserInfo> listView;
+//    private ListView<UserInfo> listView;
 
     private ObservableList<UserInfo> testData = FXCollections.observableArrayList(new UserInfo("user1", UserState.ONLINE),
             new UserInfo("user2", UserState.AFK),
@@ -38,11 +37,14 @@ public class MembersView extends VBox {
     }
 
     private void initComponents() {
-        listView = new ListView<>();
-        listView.setId("membersview");
-        listView.setItems(testData);
-        listView.setCellFactory(param -> new UserCell());
-        getChildren().add(listView);
+        setId("membersview");
+        setItems(testData);
+        setCellFactory(param -> new UserCell());
+//        listView = new ListView<>();
+//        listView.setId("membersview");
+//        listView.setItems(testData);
+//        listView.setCellFactory(param -> new UserCell());
+//        getChildren().add(listView);
     }
 
     // TODO add colored circle-statuses
