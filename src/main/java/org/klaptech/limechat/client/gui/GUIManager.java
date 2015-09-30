@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
 import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Contains all gui entities
@@ -99,13 +100,8 @@ public class GUIManager {
         tabPane.addNewTab(new RoomTab("Room 2"));
         tabPane.addNewTab(new RoomTab("Room 3"));
         grid.add(tabPane, 0, 0);
-
-        ColumnConstraints cc = new ColumnConstraints();
-        cc.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().add(cc);
-        RowConstraints rc = new RowConstraints();
-        rc.setVgrow(Priority.ALWAYS);
-        grid.getRowConstraints().add(rc);
+        GUIUtils.autoSizeGridPaneColumns(grid);
+        GUIUtils.autoSizeGridPaneRows(grid);
         mainStage.setScene(scene);
         mainStage.show();
     }
