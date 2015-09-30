@@ -23,7 +23,7 @@ public class MessageView extends HBox {
     public String typedText;
 
     public MessageView() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/chatinputmessage.css").toExternalForm());
+        getStylesheets().add(getClass().getClassLoader().getResource("fxml/messageview.css").toExternalForm());
         initComponents();
         initListeners();
         updateSize();
@@ -45,13 +45,6 @@ public class MessageView extends HBox {
                     break;
             }
         });
-
-//        inputHTMLTextArea.heightProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                updateSize(newValue.toString());
-//            }
-//        });
     }
 
     private void initComponents() {
@@ -59,7 +52,7 @@ public class MessageView extends HBox {
         inputHTMLTextArea.setMinHeight( 200 );
         GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
-        inputHTMLTextArea.setId("chatinput");
+        inputHTMLTextArea.setId("messageview");
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setVisible(true);
         getChildren().add(inputHTMLTextArea);

@@ -1,0 +1,21 @@
+#messageview {
+    -fx-background-color: #828282;
+    -fx-font: 12 bold;
+}
+
+#messageview .content {
+    -fx-background-color: #828282;
+}
+
+#messageview .scroll-pane {
+    -fx-hbar-policy : never;
+    -fx-background-color: #828282;
+}
+
+#messageview .scroll-pane .viewport {
+    -fx-background-color: #828282;
+}
+
+#messageview .web-view .html-editor {
+    -fx-background-color: #828282;
+}
