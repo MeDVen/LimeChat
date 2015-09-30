@@ -15,11 +15,12 @@ public class MessageView extends HBox {
 
     private HTMLEditor inputHTMLTextArea;
 
-//    private TextArea inputTextArea;
     /**
      * Text using for get height of text
      */
     public static final Text TEXT = new Text();
+
+    public String typedText;
 
     public MessageView() {
         getStylesheets().add(getClass().getClassLoader().getResource("fxml/chatinputmessage.css").toExternalForm());
@@ -33,22 +34,17 @@ public class MessageView extends HBox {
     }
 
     private void initListeners() {
-        inputHTMLTextArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()){
-            case A:
-                System.out.println(10);
-                event.consume();
-                inputHTMLTextArea.setHtmlText(inputHTMLTextArea.getHtmlText()+"<br>");
-                break;
-            default:
+        inputHTMLTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            switch (event.getCode()) {
+                case ENTER:
+                    typedText = inputHTMLTextArea.getHtmlText().toString();
+                    inputHTMLTextArea.setHtmlText("");
+                    event.consume();
+                    System.out.println( "Typed: " + typedText );
+                    // TODO send messegeView content to server
+                    break;
             }
         });
-//        inputTextArea.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-//                updateSize(newValue);
-//            }
-//        });
 
 //        inputHTMLTextArea.heightProperty().addListener(new ChangeListener<Number>() {
 //            @Override
@@ -59,17 +55,7 @@ public class MessageView extends HBox {
     }
 
     private void initComponents() {
-//        inputTextArea = new TextArea();
-        // Set priority for horizontal growing to text field
-//        HBox.setHgrow(inputTextArea, Priority.ALWAYS);
-//        inputTextArea.setId("chatinput");
-//        inputTextArea.setContextMenu(new MessageViewContextMenu());
-//        inputTextArea.setWrapText(true);
-//        inputTextArea.setVisible(true);
-//        getChildren().add(inputTextArea);
-
         inputHTMLTextArea = new HTMLEditor();
-        inputHTMLTextArea.setHtmlText("<p>Test input message!</p>");
         inputHTMLTextArea.setMinHeight( 200 );
         GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
@@ -81,7 +67,6 @@ public class MessageView extends HBox {
 
     private void updateSize(String newValue) {
         TEXT.setText(newValue);
-//        inputTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
         inputHTMLTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
     }
 

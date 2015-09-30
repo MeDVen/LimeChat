@@ -1,6 +1,7 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
 import javafx.scene.Group;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextArea;
 
 /**
@@ -20,5 +21,6 @@ public class HistoryView extends Group {
         historyTextArea.setEditable(false);
         historyTextArea.setText("This place for messages history.");
         getChildren().add(historyTextArea);
+        historyTextArea.setContextMenu(new ContextMenu());
     }
 }
