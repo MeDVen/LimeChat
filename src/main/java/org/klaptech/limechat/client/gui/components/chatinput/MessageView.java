@@ -21,7 +21,8 @@ public class MessageView extends HBox {
      */
     public static final Text TEXT = new Text();
 
-    public static final String EDITOR_DEFAULT_STYLE = "<body style=\"background-color: #828282; border: 1px solid black\"></body>";
+    public static final String EDITOR_DEFAULT_STYLE = "<body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
+            + "background-color: #828282; border: 1px solid black\"></body>";
 
     public String typedText;
 
@@ -56,8 +57,9 @@ public class MessageView extends HBox {
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
         inputHTMLTextArea.setId("messageview");
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
-        inputHTMLTextArea.setVisible(true);
         inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE);
+        inputHTMLTextArea.setVisible(true);
+        inputHTMLTextArea.requestFocus();
         getChildren().add(inputHTMLTextArea);
     }
 
