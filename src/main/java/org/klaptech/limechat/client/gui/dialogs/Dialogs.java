@@ -1,5 +1,9 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
+import java.util.ResourceBundle;
+
+import org.klaptech.limechat.client.utils.GUIUtils;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,8 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.util.ResourceBundle;
 
 /**
  * MessageBox , alertbox, inputbox etc
@@ -45,6 +47,7 @@ public class Dialogs {
         okButton.setOnAction(event -> dialogStage.hide());
         vbox.getChildren().add(okButton);
         dialogStage.show();
+        GUIUtils.centerStage(dialogStage);
     }
 
     /**
