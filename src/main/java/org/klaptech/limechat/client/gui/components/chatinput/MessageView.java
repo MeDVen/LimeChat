@@ -5,6 +5,7 @@ import org.klaptech.limechat.client.utils.GUIUtils;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 
@@ -15,7 +16,7 @@ import javafx.scene.web.HTMLEditor;
  * @see GUIUtils - hideHTMLEditorToolbars(HTMLEditor editor)
  * @author MeDVen
  */
-public class MessageView extends HBox {
+public class MessageView extends VBox {
 
     private HTMLEditor inputHTMLTextArea;
 
@@ -68,6 +69,8 @@ public class MessageView extends HBox {
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
         inputHTMLTextArea.setVisible(true);
+
+        getChildren().add(new MessageViewToolbar());
         getChildren().add(inputHTMLTextArea);
     }
 

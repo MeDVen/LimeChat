@@ -16,15 +16,9 @@ import javafx.stage.Stage;
 public class ApplicationWindow extends Application {
     private static final Logger LOGGER = getLogger(ApplicationWindow.class.getName());
 
-
-
-
-
-
     @Override
     public void start(Stage initStage) throws Exception {
-
-        //  new ProgressDialog().show();
+//        new ProgressDialog().show();
 //        Stage stage = new Stage();
 //        ServerConnectorView serverConnectorView = new ServerConnectorView();
 //        stage.setScene(new Scene(serverConnectorView.getPanel(),500,500));
@@ -35,16 +29,6 @@ public class ApplicationWindow extends Application {
         GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();
         GUIManager.getInstance().showMainStage();
-
-        //  showHTMLEditor(initStage);
-    /* showSplashScreen(initStage);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(SPLASH_DURATION), e -> showMainStage()));
-        timeline.play();
-        FadeTransition fadeSplash = new FadeTransition(Duration.seconds(SPLASH_DURATION), splashLayout);
-        fadeSplash.setFromValue(1.0);
-        fadeSplash.setToValue(0.0);
-        fadeSplash.setOnFinished(actionEvent -> initStage.hide());
-        fadeSplash.play();*/
     }
 
     public static void main(String[] args) {
