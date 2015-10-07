@@ -1,10 +1,21 @@
 package org.klaptech.limechat.client.utils;
 
+import static java.util.logging.Logger.getLogger;
+
+
+
+
+
+
+import java.net.URL;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Screen;
@@ -15,7 +26,7 @@ import javafx.stage.Stage;
  * @author  MeDVen
  */
 public class GUIUtils {
-
+    private final static Logger LOGGER = getLogger(GUIUtils.class.getName());
     private GUIUtils() {
     }
 
@@ -67,5 +78,38 @@ public class GUIUtils {
         RowConstraints rc = new RowConstraints();
         rc.setVgrow(Priority.ALWAYS);
         grid.getRowConstraints().add(rc);
+    }
+
+    /**
+     * Add css to node
+     *
+     * @param node
+     * @param path path to css from resources root directory
+     */
+    public static void addCss(Region node, String path) {
+
+        URL resource = GUIUtils.class.getClassLoader().getResource(path);
+        if (resource != null) {
+            node.getStylesheets().add(resource.toExternalForm());
+        } else {
+            LOGGER.severe("Failed to load " + path);
+        }
+
+    }
+
+    /**
+     * Add css to scene
+     *
+     * @param node
+     * @param path path to css from resources root directory
+     */
+    public static void addCss(Scene node, String path) {
+        URL resource = GUIUtils.class.getClassLoader().getResource(path);
+        if (resource != null) {
+            node.getStylesheets().add(resource.toExternalForm());
+        } else {
+            LOGGER.severe("Failed to load " + path);
+        }
+
     }
 }

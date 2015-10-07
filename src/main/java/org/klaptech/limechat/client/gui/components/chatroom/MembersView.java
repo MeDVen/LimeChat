@@ -1,13 +1,13 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
-import org.klaptech.limechat.client.entities.UserInfo;
-import org.klaptech.limechat.shared.enums.UserState;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import org.klaptech.limechat.client.entities.UserInfo;
+import org.klaptech.limechat.client.utils.GUIUtils;
+import org.klaptech.limechat.shared.enums.UserState;
 
 /**
  * View of members in room. Display members name and status circle.
@@ -34,7 +34,7 @@ public class MembersView extends ListView {
             new UserInfo("user5", UserState.TYPING));
 
     public MembersView() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/membersview.css").toExternalForm());
+        GUIUtils.addCss(this, "fxml/membersview.css");
         initComponents();
     }
 

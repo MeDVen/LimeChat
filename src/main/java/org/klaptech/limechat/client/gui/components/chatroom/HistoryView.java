@@ -2,6 +2,7 @@ package org.klaptech.limechat.client.gui.components.chatroom;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextArea;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * @author rlapin
@@ -10,7 +11,7 @@ import javafx.scene.control.TextArea;
 public class HistoryView extends TextArea {
 
     public HistoryView() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/historyview.css").toExternalForm());
+        GUIUtils.addCss(this, "fxml/historyview.css");
         initComponents();
     }
 

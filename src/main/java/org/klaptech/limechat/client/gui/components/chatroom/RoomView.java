@@ -1,11 +1,10 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
-import org.klaptech.limechat.client.gui.components.chatinput.MessageView;
-import org.klaptech.limechat.client.utils.GUIUtils;
-
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.klaptech.limechat.client.gui.components.chatinput.MessageView;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Room pane. Contains of input, room history
@@ -18,7 +17,7 @@ public class RoomView extends GridPane {
     private HistoryView historyView;
 
     public RoomView() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/roomview.css").toExternalForm());
+        GUIUtils.addCss(this, "fxml/roomview.css");
         initComponents();
     }
 

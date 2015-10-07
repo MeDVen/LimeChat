@@ -1,13 +1,13 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
-import org.klaptech.limechat.client.gui.GUIConstants;
-import org.klaptech.limechat.client.gui.dialogs.Dialogs;
-
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.klaptech.limechat.client.gui.GUIConstants;
+import org.klaptech.limechat.client.gui.dialogs.Dialogs;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * @author MeDVen
@@ -16,7 +16,7 @@ public class MessageViewToolbar extends HBox {
     private ToolBar toolbar;
 
     public MessageViewToolbar() {
-        getStylesheets().add(getClass().getClassLoader().getResource("fxml/messageviewtoolbar.css").toExternalForm());
+        GUIUtils.addCss(this, "fxml/messageviewtoolbar.css");
         initComponents();
     }
 

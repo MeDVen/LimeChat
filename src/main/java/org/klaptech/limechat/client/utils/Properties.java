@@ -21,4 +21,8 @@ public class Properties implements Serializable {
     private void fillSampleData() {
         servers.add(new ServerInfo("127.0.0.1", 1234, "TestServer"));
     }
+
+    public List<ServerInfo> getServerList() {
+        return servers;
+    }
 }

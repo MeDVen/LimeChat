@@ -8,8 +8,9 @@ import static java.util.logging.Logger.getLogger;
 
 
 import java.io.IOException;
-import java.util.concurrent.Executors;
+import java.util.List;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -18,15 +19,18 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import org.klaptech.limechat.client.gui.dialogs.ServerChooserDialog;
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.net.ServerInfo;
+import org.klaptech.limechat.client.utils.GUIUtils;
+import org.klaptech.limechat.client.utils.PropertyManager;
 
 /**
  * Panel with status of connection to server, refresh button and connection settings dialog
+ *
  * @author rlapin
  */
-public class ServerConnectorView{
+public class ServerConnectorView extends HBox {
+    public static final int SPACING = 5;
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
     private ConnectionType type;
     private ComboBox<ServerInfo> serversComboBox;
@@ -44,21 +48,18 @@ public class ServerConnectorView{
      * Button for show connection settings dialog
      */
     private Button settingsButton;
-    private HBox panel;
 
     public ServerConnectorView() {
+        super(SPACING);
+        setAlignment(Pos.CENTER_RIGHT);
+        setId("serverConnectorPanel");
         initComponents();
         initListeners();
     }
 
     private void initListeners() {
-        refreshButton.setOnAction(event -> Executors.newSingleThreadExecutor().execute(this::tryConnect));
-        settingsButton.setOnAction(event -> showServerChooserDialog());
-    }
+       /* refreshButton.setOnAction(event -> Executors.newSingleThreadExecutor().execute(this::tryConnect));*/
 
-    private void showServerChooserDialog() {
-        ServerChooserDialog serverChooserDialog = new ServerChooserDialog();
-        serverChooserDialog.show();
     }
 
     /**
@@ -75,23 +76,24 @@ public class ServerConnectorView{
     }
 
     private void initComponents() {
-        panel = new HBox(5);
-        panel.setAlignment(Pos.CENTER_RIGHT);
-        panel.getStyleClass().add("serverConnectorPanel");
-        panel.getStylesheets().add(getClass().getClassLoader().getResource("fxml/serverconnectorview.css").toExternalForm());
-        serversComboBox = createServersComboBox();
-        panel.getChildren().addAll(refreshButton, settingsButton);
 
+        GUIUtils.addCss(this, "fxml/serverconnectorview.css");
+        serversComboBox = createServersComboBox();
+        getChildren().addAll(serversComboBox);
 
     }
 
     private ComboBox<ServerInfo> createServersComboBox() {
-        //  List<ServerInfo> servers = PropertyManager.INSTANCE.getServerList();
-        return null;
+        List<ServerInfo> servers = PropertyManager.INSTANCE.getProperties().getServerList();
+
+        ComboBox<ServerInfo> comboBox = new ComboBox<>(FXCollections.observableArrayList(servers));
+        comboBox.setId("serversListCmb");
+        return comboBox;
     }
 
     /**
      * Creates imageview using path
+     *
      * @param path
      * @return ImageView
      */
@@ -113,11 +115,4 @@ public class ServerConnectorView{
 
     }
 
-    /**
-     *
-     * @return component to add as panel
-     */
-    public HBox getPanel() {
-        return panel;
-    }
 }

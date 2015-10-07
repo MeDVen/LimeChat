@@ -1,5 +1,18 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
+import static java.util.logging.Logger.getLogger;
+
+
+
+
+
+
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,18 +38,10 @@ import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.EmailValidator;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthValidator;
 import org.klaptech.limechat.client.net.ServerConnector;
+import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
-
-import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
 
 /**
  * Login/Register dialog
@@ -46,21 +51,20 @@ import static java.util.logging.Logger.getLogger;
  * @author rlapin
  */
 public class LoginDialog {
-    private static final Logger LOGGER = getLogger(LoginDialog.class.getName());
-    private final ReentrantLock lock = new ReentrantLock();
-    public Condition condition = lock.newCondition();
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
+    private static final Logger LOGGER = getLogger(LoginDialog.class.getName());
     private static final String LIME_CHAT_ICON_64x64 = "images/limechat_64x64.png";
-    private Stage stage;
-    private ResourceBundle resourceBundle;
+    private final ReentrantLock lock = new ReentrantLock();
+    public Condition condition = lock.newCondition();
     ObservableList<String> roomList =
             FXCollections.observableArrayList(
                     "Room 219",
                     "TestRoom1",
                     "TestRoom2"
             );
-
+    private Stage stage;
+    private ResourceBundle resourceBundle;
     private TabPane loginTabPane;
     private LoginPane loginPane;
     private RegisterPane registerPane;
@@ -88,11 +92,7 @@ public class LoginDialog {
         loginTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         BorderPane borderPane = new BorderPane();
         Scene scene = new Scene(borderPane, WIDTH, HEIGHT);
-        try {
-            scene.getStylesheets().add(getClass().getClassLoader().getResource("fxml/login.css").toExternalForm());
-        } catch (NullPointerException e) {
-            LOGGER.severe("Error while loading file: login.css");
-        }
+        GUIUtils.addCss(scene, "fxml/login.css");
         stage.setScene(scene);
         borderPane.setCenter(loginTabPane);
 

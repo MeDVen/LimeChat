@@ -9,9 +9,10 @@ import static java.util.logging.Logger.getLogger;
 
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.klaptech.limechat.client.gui.GUIManager;
-import org.klaptech.limechat.client.utils.PropertyManager;
+import org.klaptech.limechat.client.gui.components.sconnector.ServerConnectorView;
 
 /**
  * Main window of LimeChat with application flow.
@@ -33,10 +34,13 @@ public class ApplicationWindow extends Application {
 //        stage.show();
 //        GUIUtils.centerStage(stage);
 //        serverConnectorView.setType(ConnectionType.SUCCESS);
+
+        initStage.setScene(new Scene(new Group(new ServerConnectorView()), 300, 300));
+        initStage.show();/*
         GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();
         GUIManager.getInstance().showMainStage();
-        PropertyManager instance = PropertyManager.INSTANCE;
+        PropertyManager instance = PropertyManager.INSTANCE;*/
     }
 
 }
