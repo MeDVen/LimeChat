@@ -1,9 +1,6 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
 import java.util.ResourceBundle;
-
-import org.klaptech.limechat.client.utils.GUIUtils;
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * MessageBox , alertbox, inputbox etc
@@ -49,7 +47,7 @@ public class Dialogs {
         dialogStage.show();
         GUIUtils.centerStage(dialogStage);
     }
-
+    //TODO add input dialog
     /**
      * Icon for different dialog types , can return imageicon
      *

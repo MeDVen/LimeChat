@@ -11,14 +11,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.klaptech.limechat.client.gui.dialogs.Dialogs;
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
@@ -26,6 +27,12 @@ import org.klaptech.limechat.client.utils.PropertyManager;
 
 /**
  * Panel with status of connection to server, refresh button and connection settings dialog
+ * For styling node with css use:<br>
+ * <ul>
+ * <li>Root component id: serverConnectorPanel</li>
+ * <li>Connect Button id: connectButton</li>
+ * <li>Servers list combobox id: serversListCmb</li>
+ * </ul>
  *
  * @author rlapin
  */
@@ -34,20 +41,11 @@ public class ServerConnectorView extends HBox {
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
     private ConnectionType type;
     private ComboBox<ServerInfo> serversComboBox;
+    /**
+     * Connection button
+     */
     private ToggleButton connectToggleButton;
     private Button addServerBtn;
-    /**
-     * Label with connection state information
-     */
-    private Label infoLabel;
-    /**
-     * Button for refresh connection
-     */
-    private Button refreshButton;
-    /**
-     * Button for show connection settings dialog
-     */
-    private Button settingsButton;
 
     public ServerConnectorView() {
         super(SPACING);
@@ -58,29 +56,72 @@ public class ServerConnectorView extends HBox {
     }
 
     private void initListeners() {
-       /* refreshButton.setOnAction(event -> Executors.newSingleThreadExecutor().execute(this::tryConnect));*/
+        addServerBtn.setOnAction(event -> addServerAction());
+        connectToggleButton.setOnAction(event -> connectAction());
+    }
 
+    private void connectAction() {
+        ServerInfo selServer = serversComboBox.getSelectionModel().getSelectedItem();
+        if (selServer != null) {
+            try {
+                ServerConnector.INSTANCE.connect(selServer.getAddr(), selServer.getPort());
+            } catch (IOException e) {
+                LOGGER.severe("cannot connect to server " + selServer.getName() + " " + selServer.getAddr() + ":" + selServer.getPort());
+            }
+        }
+    }
+
+    private void addServerAction() {
+        // SHOW INPUT DIALOG
+        ObservableList<ServerInfo> items = serversComboBox.getItems();
+        ServerInfo mock = new ServerInfo("testaddr", 1234, "TestServer");
+        // Contains depends on server name
+        if (!items.contains(mock)) {
+            items.add(mock);
+        } else {
+            Dialogs.showMessageBox("Error while adding server", "Server is already existed", Dialogs.IconType.ERROR);
+        }
     }
 
     /**
      * Try connect to server and set info label
-     */
+     *//*
     private void tryConnect() {
-        try {
-            ServerConnector.INSTANCE.connect("127.0.0.132", 3123);
-            setType(ConnectionType.SUCCESS);
-        } catch (IOException e) {
-            LOGGER.severe("cannot connect to server");
-            setType(ConnectionType.FAIL);
-        }
-    }
 
+    }*/
+
+    /**
+     * Create components and setup layout
+     */
     private void initComponents() {
 
         GUIUtils.addCss(this, "fxml/serverconnectorview.css");
         serversComboBox = createServersComboBox();
-        getChildren().addAll(serversComboBox);
+        connectToggleButton = createConnectButton();
+        addServerBtn = createAddServerButton();
+        getChildren().addAll(serversComboBox, connectToggleButton, addServerBtn);
+        initLayout();
 
+    }
+
+    private Button createAddServerButton() {
+        Button btn = new Button();
+        btn.setGraphic(createImageView("images/add.png"));
+        return btn;
+    }
+
+    /**
+     * Bind size and position properties of components
+     */
+    private void initLayout() {
+
+    }
+
+    private ToggleButton createConnectButton() {
+        ToggleButton button = new ToggleButton();
+        button.setGraphic(createImageView("images/connect.png"));
+        button.setId("connectButton");
+        return button;
     }
 
     private ComboBox<ServerInfo> createServersComboBox() {
@@ -102,17 +143,6 @@ public class ServerConnectorView extends HBox {
         refreshImageView.setFitWidth(30);
         refreshImageView.setFitHeight(30);
         return refreshImageView;
-    }
-
-    /**
-     * Set connection type and set connection info label id
-     *
-     * @param type
-     */
-    public void setType(ConnectionType type) {
-        this.type = type;
-        infoLabel.setId(type.getCssID());
-
     }
 
 }

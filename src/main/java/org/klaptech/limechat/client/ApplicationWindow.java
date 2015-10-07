@@ -35,7 +35,7 @@ public class ApplicationWindow extends Application {
 //        GUIUtils.centerStage(stage);
 //        serverConnectorView.setType(ConnectionType.SUCCESS);
 
-        initStage.setScene(new Scene(new Group(new ServerConnectorView()), 300, 300));
+        initStage.setScene(new Scene(new Group(new ServerConnectorView()), 500, 500));
         initStage.show();/*
         GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();
