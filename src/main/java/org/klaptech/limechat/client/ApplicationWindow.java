@@ -2,12 +2,16 @@ package org.klaptech.limechat.client;
 
 import static java.util.logging.Logger.getLogger;
 
+
+
+
+
+
 import java.util.logging.Logger;
-
-import org.klaptech.limechat.client.gui.GUIManager;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.klaptech.limechat.client.gui.GUIManager;
+import org.klaptech.limechat.client.utils.PropertyManager;
 
 /**
  * Main window of LimeChat with application flow.
@@ -15,6 +19,10 @@ import javafx.stage.Stage;
  */
 public class ApplicationWindow extends Application {
     private static final Logger LOGGER = getLogger(ApplicationWindow.class.getName());
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage initStage) throws Exception {
@@ -25,14 +33,10 @@ public class ApplicationWindow extends Application {
 //        stage.show();
 //        GUIUtils.centerStage(stage);
 //        serverConnectorView.setType(ConnectionType.SUCCESS);
-
         GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();
         GUIManager.getInstance().showMainStage();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+        PropertyManager instance = PropertyManager.INSTANCE;
     }
 
 }
