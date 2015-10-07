@@ -1,6 +1,5 @@
 #membersview {
-    -fx-font: 12pt "Helvetica";
-    /*-fx-font-size: 12pt;*/
+    /*-fx-font: 12pt "Helvetica";*/
     -fx-background-color: #828282;
 
     -fx-focus-color: transparent;
@@ -13,8 +12,10 @@
 
 #membersview .list-cell {
     -fx-background-color: #828282;
+    -fx-text-fill: #96b946;
 }
 
 #membersview .list-cell:selected {
     -fx-background-color: #96b946;
+    -fx-text-fill: white;
 }

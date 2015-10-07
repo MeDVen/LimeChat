@@ -1,7 +1,10 @@
 #historytextarea {
     -fx-text-fill: #96b946;
     -fx-background-color: #828282;
-    -fx-font-size: 12px;
+    /*-fx-font: 12pt "Helvetica";*/
+
+    -fx-border-width: 1px;
+    -fx-border-color: black;
 }
 
 #historytextarea .content {

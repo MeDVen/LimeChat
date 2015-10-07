@@ -1,6 +1,6 @@
 #messageview {
+    /*-fx-font: 12pt "Helvetica";*/
     -fx-background-color: #828282;
-    -fx-font: 12 bold;
 
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
