@@ -1,5 +1,10 @@
 package org.klaptech.limechat.client.gui;
 
+import org.klaptech.limechat.client.gui.components.ChatTabPane;
+import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
+import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
+import org.klaptech.limechat.client.utils.GUIUtils;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,19 +16,19 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.klaptech.limechat.client.gui.components.ChatTabPane;
-import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
-import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
-import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Contains all gui entities
@@ -114,6 +119,7 @@ public class GUIManager {
         splashScene.setFill(Color.TRANSPARENT);
         Stage splashStage = new Stage();
         splashStage.initStyle(StageStyle.TRANSPARENT);
+        splashStage.initModality(Modality.WINDOW_MODAL);
         final Rectangle2D bounds = Screen.getPrimary().getBounds();
         splashStage.setScene(splashScene);
         splashStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
@@ -135,8 +141,6 @@ public class GUIManager {
             splashStage.hide();
             showMainStage();
         });
-
-
     }
 
     /**
