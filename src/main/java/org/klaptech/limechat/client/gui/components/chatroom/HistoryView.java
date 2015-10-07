@@ -17,7 +17,8 @@ public class HistoryView extends TextArea {
     private void initComponents() {
         setId("historytextarea");
         setEditable(false);
-        setText("This place for messages history.");
+        setText("(00:00) user1: Cool chat. :limechat: \n"
+                + "(00:01) user2: Yeah. :thumbsup:");
         setContextMenu(new ContextMenu());
 //        historyTextArea = new TextArea();
 //        historyTextArea.setId("historytextarea");
