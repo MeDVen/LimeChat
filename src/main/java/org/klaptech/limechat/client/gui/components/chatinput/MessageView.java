@@ -1,22 +1,19 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
-import java.lang.reflect.Field;
-
-import com.sun.javafx.scene.web.skin.HTMLEditorSkin;
-
 import org.klaptech.limechat.client.utils.GUIUtils;
 
-import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
-import javafx.scene.web.WebView;
 
 /**
- * Ex
- * @author rlapin
+ * MessageView use HTMLEditor control. Editor toolbar hided by GUI-hack method.
+ * By default editor control has focus. You may user another constant to off focus.
+ *
+ * @see GUIUtils - hideHTMLEditorToolbars(HTMLEditor editor)
+ * @author medven
  */
 public class MessageView extends HBox {
 
@@ -71,7 +68,6 @@ public class MessageView extends HBox {
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
         inputHTMLTextArea.setVisible(true);
-        inputHTMLTextArea.requestFocus();
         getChildren().add(inputHTMLTextArea);
     }
 
@@ -79,36 +75,4 @@ public class MessageView extends HBox {
         TEXT.setText(newValue);
         inputHTMLTextArea.setPrefHeight(TEXT.getBoundsInLocal().getHeight());
     }
-
-    public void requestFocusArea() {
-        HTMLEditorSkin skin = (HTMLEditorSkin) inputHTMLTextArea.getSkin();
-        try {
-            Field f = skin.getClass().getDeclaredField("webView");
-            f.setAccessible(true);
-            WebView wv = (WebView) f.get(skin);
-            Platform.runLater(() -> {
-                wv.requestFocus();
-                wv.getEngine().executeScript("document.body.focus()");
-                wv.getEngine().executeScript(
-                        "var el = document.body;\n" +
-                                "if (typeof window.getSelection != \"undefined\"\n" +
-                                "            && typeof document.createRange != \"undefined\") {\n" +
-                                "        var range = document.createRange();\n" +
-                                "        range.selectNodeContents(el);\n" +
-                                "        range.collapse(false);\n" +
-                                "        var sel = window.getSelection();\n" +
-                                "        sel.removeAllRanges();\n" +
-                                "        sel.addRange(range);\n" +
-                                "    } else if (typeof document.body.createTextRange != \"undefined\") {\n" +
-                                "        var textRange = document.body.createTextRange();\n" +
-                                "        textRange.moveToElementText(el);\n" +
-                                "        textRange.collapse(false);\n" +
-                                "        textRange.select();\n" +
-                                "    }");
-            });
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
