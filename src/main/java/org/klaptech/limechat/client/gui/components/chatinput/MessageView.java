@@ -21,17 +21,26 @@ public class MessageView extends VBox {
      * Text using for get height of text
      */
     public static final Text TEXT = new Text();
-    public static final String EDITOR_DEFAULT_STYLE_NOT_FOCUSED = "<body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
-            + "background-color: #828282; border: 1px solid black\"></body>";
-    public static final String EDITOR_DEFAULT_STYLE_FOCUSED = "<body onLoad='document.body.focus();' contenteditable='true' "
+
+    private static final String EDITOR_DEFAULT_FULL_STYLE = "<html><body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
+            + "background-color: #828282; border: 1px solid black\"></body><html>";
+
+    private static final String EDITOR_DEFAULT_STYLE_NOT_FOCUSED = "<html><body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
+            + "background-color: #828282; border: 1px solid black\"></body></html>";
+
+    private static final String EDITOR_DEFAULT_STYLE_FOCUSED = "<html><body "
+            + "onLoad='document.body.focus();'"
+            + " contenteditable='true' "
             + "style='font-family: Helvetica, sans-serif; "
             + "color: #96b946; background-color: #828282; "
-            + "border: 1px solid black;' />";
+            + "border: 1px solid black; "
+            + "' /></html>";
+//            + "background-image: url('background.png');' /></html>";
     public String typedText;
     private HTMLEditor inputHTMLTextArea;
 
     public MessageView() {
-        GUIUtils.addCss(this,"fxml/messageview.css");
+        GUIUtils.addCss(this, "fxml/messageview.css");
         initComponents();
         initListeners();
         updateSize();
@@ -63,8 +72,8 @@ public class MessageView extends VBox {
         inputHTMLTextArea.setId("messageview");
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
+//        inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_NOT_FOCUSED);
         inputHTMLTextArea.setVisible(true);
-
         getChildren().add(new MessageViewToolbar());
         getChildren().add(inputHTMLTextArea);
     }

@@ -25,4 +25,9 @@ public class GUIConstants {
      * Toolbar images
      */
     public static final Image SMILE_IMAGE = new Image(GUIConstants.class.getClassLoader().getResourceAsStream("images/smile.png"));
+
+    /**
+     * Background
+     */
+//    public static final Image BACKGROUND_IMAGE = new Image(GUIConstants.class.getClassLoader().getResourceAsStream("images/background.png"));
 }

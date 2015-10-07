@@ -16,7 +16,7 @@ public class HistoryView extends TextArea {
     }
 
     private void initComponents() {
-        setId("historytextarea");
+        setId("historyview");
         setEditable(false);
         setText("(00:00) user1: Cool chat. :limechat: \n"
                 + "(00:01) user2: Yeah. :thumbsup:");

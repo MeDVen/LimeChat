@@ -1,22 +1,23 @@
-#historytextarea {
+#historyview {
     -fx-text-fill: #96b946;
     -fx-background-color: #828282;
-    /*-fx-font: 12pt "Helvetica";*/
 
     -fx-border-width: 1px;
     -fx-border-color: black;
+
+    -fx-background-image: url("background.png");
 }
 
-#historytextarea .content {
+#historyview .content {
     -fx-background-color: #828282;
 }
 
-#historytextarea .scroll-pane {
+#historyview .scroll-pane {
     -fx-hbar-policy : never;
     -fx-background-color: #828282;
 }
 
-#historytextarea .scroll-pane .viewport {
+#historyview .scroll-pane .viewport {
     -fx-background-color: #828282;
 
 }

@@ -5,6 +5,8 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-background-insets: 0, 0, 1, 2;
+
+    -fx-background-image: url("background.png");
 }
 
 #messageview .content {

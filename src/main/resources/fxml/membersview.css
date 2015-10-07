@@ -8,6 +8,12 @@
 
     -fx-border-width: 1px;
     -fx-border-color: black;
+
+    -fx-background-image: url("background.png");
+}
+
+#membersview .list-view {
+    -fx-background-image: url("background.png");
 }
 
 #membersview .list-cell {

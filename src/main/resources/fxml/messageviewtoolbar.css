@@ -1,4 +1,6 @@
 #mvtoolbar {
     -fx-background-color: #aaaaaa;
     -fx-text-fill: #96b946;
+
+    -fx-background-image: url("background.png");
 }
