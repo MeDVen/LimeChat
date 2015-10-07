@@ -1,15 +1,18 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
+import org.klaptech.limechat.client.gui.GUIConstants;
+import org.klaptech.limechat.client.gui.dialogs.Dialogs;
+
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
- * @author rkushnerev on 07.10.15.
+ * @author MeDVen
  */
 public class MessageViewToolbar extends HBox {
-
     private ToolBar toolbar;
 
     public MessageViewToolbar() {
@@ -18,14 +21,34 @@ public class MessageViewToolbar extends HBox {
     }
 
     private void initComponents() {
-        // TODO imageButtons, change styles
-        Button smilesBtn = new Button("Smiles");
-        Button statusBtn = new Button("Change Status");
+        ImageView smileImg = new ImageView(GUIConstants.SMILE_IMAGE);
+        ImageView statusImg = new ImageView(GUIConstants.ONLINE_IMAGE);
+
+        smileImg.setFitHeight(31);
+        smileImg.setFitWidth(31);
+        statusImg.setFitHeight(31);
+        statusImg.setFitWidth(31);
+
+        Button smilesBtn = new Button("", smileImg);
+        smilesBtn.setMinSize(32, 32);
+        Button statusBtn = new Button("", statusImg);
+        statusBtn.setMinSize(32, 32);
+
+        smileButtonAction(smilesBtn);
+        statusBtnAction(statusBtn);
 
         toolbar = new ToolBar(smilesBtn, statusBtn);
-        toolbar.setId("mvtoolbar"); // messageView toolbar id
+        toolbar.setId("mvtoolbar");
         toolbar.setOrientation(Orientation.HORIZONTAL);
 
         getChildren().add(toolbar);
+    }
+
+    private void smileButtonAction(Button smileBtn) {
+        smileBtn.setOnAction(event -> Dialogs.showMessageBox("Smiles", "Work in progress", Dialogs.IconType.INFO));
+    }
+
+    private void statusBtnAction(Button statusBtn) {
+        statusBtn.setOnAction(event -> Dialogs.showMessageBox("Statuses", "Work in progress", Dialogs.IconType.INFO));
     }
 }

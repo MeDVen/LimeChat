@@ -1,11 +1,13 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
+import org.klaptech.limechat.client.entities.UserInfo;
+import org.klaptech.limechat.shared.enums.UserState;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import org.klaptech.limechat.client.entities.UserInfo;
-import org.klaptech.limechat.shared.enums.UserState;
+import javafx.scene.image.ImageView;
 
 /**
  * View of members in room. Display members name and status circle.
@@ -40,20 +42,22 @@ public class MembersView extends ListView {
         setId("membersview");
         setItems(testData);
         setCellFactory(param -> new UserCell());
-//        listView = new ListView<>();
-//        listView.setId("membersview");
-//        listView.setItems(testData);
-//        listView.setCellFactory(param -> new UserCell());
-//        getChildren().add(listView);
     }
 
-    // TODO add colored circle-statuses
     private class UserCell extends ListCell<UserInfo> {
         public void updateItem(UserInfo item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
-                setText(item.getName() + " " + item.getState());
+                setText(item.getName());
+                setGraphic(createImageView(item, 31));
             }
+        }
+
+        private ImageView createImageView(UserInfo item, int size) {
+            ImageView imageView = new ImageView(item.getState().getStateImg());
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            return imageView;
         }
     }
 
