@@ -1,15 +1,13 @@
 package org.klaptech.limechat.client;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import org.klaptech.limechat.client.gui.components.sconnector.ConnectionType;
-import org.klaptech.limechat.client.gui.components.sconnector.ServerConnectorView;
-import org.klaptech.limechat.client.utils.GUIUtils;
+import static java.util.logging.Logger.getLogger;
 
 import java.util.logging.Logger;
 
-import static java.util.logging.Logger.getLogger;
+import org.klaptech.limechat.client.gui.GUIManager;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Main window of LimeChat with application flow.
@@ -27,15 +25,16 @@ public class ApplicationWindow extends Application {
     public void start(Stage initStage) throws Exception {
 
         //  new ProgressDialog().show();
-        Stage stage = new Stage();
-        ServerConnectorView serverConnectorView = new ServerConnectorView();
-        stage.setScene(new Scene(serverConnectorView.getPanel(),500,500));
-        stage.show();
-        GUIUtils.centerStage(stage);
-        serverConnectorView.setType(ConnectionType.SUCCESS);
-      /*  GUIManager.getInstance().setMainStage(initStage);
-        GUIManager.getInstance().getLoginDialog().show();*/
-//        GUIManager.getInstance().showMainStage();
+//        Stage stage = new Stage();
+//        ServerConnectorView serverConnectorView = new ServerConnectorView();
+//        stage.setScene(new Scene(serverConnectorView.getPanel(),500,500));
+//        stage.show();
+//        GUIUtils.centerStage(stage);
+//        serverConnectorView.setType(ConnectionType.SUCCESS);
+
+        GUIManager.getInstance().setMainStage(initStage);
+//        GUIManager.getInstance().getLoginDialog().show();
+        GUIManager.getInstance().showMainStage();
 
         //  showHTMLEditor(initStage);
     /* showSplashScreen(initStage);

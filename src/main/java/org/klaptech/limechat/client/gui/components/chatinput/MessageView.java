@@ -13,7 +13,7 @@ import javafx.scene.web.HTMLEditor;
  * By default editor control has focus. You may user another constant to off focus.
  *
  * @see GUIUtils - hideHTMLEditorToolbars(HTMLEditor editor)
- * @author medven
+ * @author MeDVen
  */
 public class MessageView extends HBox {
 
