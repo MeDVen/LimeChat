@@ -1,11 +1,13 @@
 package org.klaptech.limechat.client.net;
 
+import java.io.Serializable;
+
 /**
  * Contains server infomarmation
  *
  * @author rlapin
  */
-public class ServerInfo {
+public class ServerInfo implements Serializable {
     private String addr;
     private int port;
     private String name;

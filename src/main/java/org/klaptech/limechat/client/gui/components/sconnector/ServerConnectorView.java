@@ -1,20 +1,26 @@
 package org.klaptech.limechat.client.gui.components.sconnector;
 
+import static java.util.logging.Logger.getLogger;
+
+
+
+
+
+
+import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.klaptech.limechat.client.gui.dialogs.ServerChooserDialog;
 import org.klaptech.limechat.client.net.ServerConnector;
-
-import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.logging.Logger;
-
-import static java.util.logging.Logger.getLogger;
-
+import org.klaptech.limechat.client.net.ServerInfo;
 
 /**
  * Panel with status of connection to server, refresh button and connection settings dialog
@@ -23,6 +29,9 @@ import static java.util.logging.Logger.getLogger;
 public class ServerConnectorView{
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
     private ConnectionType type;
+    private ComboBox<ServerInfo> serversComboBox;
+    private ToggleButton connectToggleButton;
+    private Button addServerBtn;
     /**
      * Label with connection state information
      */
@@ -70,20 +79,15 @@ public class ServerConnectorView{
         panel.setAlignment(Pos.CENTER_RIGHT);
         panel.getStyleClass().add("serverConnectorPanel");
         panel.getStylesheets().add(getClass().getClassLoader().getResource("fxml/serverconnectorview.css").toExternalForm());
-        infoLabel = new Label("Connection succeed");
-        setType(ConnectionType.NOT_CONNECTED);
-        panel.getChildren().add(infoLabel);
-        ImageView refreshImageView = createImageView("images/refresh.png");
-        refreshButton = new Button();
-        refreshButton.setGraphic(refreshImageView);
-        refreshButton.setId("refresh-button");
-        ImageView settingsImageView = createImageView("images/settings.png");
-        settingsButton = new Button();
-        settingsButton.setGraphic(settingsImageView);
-        settingsButton.setId("settings-button");
+        serversComboBox = createServersComboBox();
         panel.getChildren().addAll(refreshButton, settingsButton);
 
 
+    }
+
+    private ComboBox<ServerInfo> createServersComboBox() {
+        //  List<ServerInfo> servers = PropertyManager.INSTANCE.getServerList();
+        return null;
     }
 
     /**
