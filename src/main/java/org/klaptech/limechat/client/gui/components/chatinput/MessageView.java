@@ -23,9 +23,6 @@ public class MessageView extends VBox {
      */
     public static final Text TEXT = new Text();
 
-    private static final String EDITOR_DEFAULT_FULL_STYLE = "<html><body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
-            + "background-color: #828282; border: 1px solid black\"></body><html>";
-
     private static final String EDITOR_DEFAULT_STYLE_NOT_FOCUSED = "<html><body style=\"font-family: Helvetica, sans-serif; color: #96b946; "
             + "background-color: #828282; border: 1px solid black\"></body></html>";
 
@@ -75,7 +72,6 @@ public class MessageView extends VBox {
         inputHTMLTextArea.setId("messageview");
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
         inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
-//        inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_NOT_FOCUSED);
         inputHTMLTextArea.setVisible(true);
         getChildren().add(new MessageViewToolbar());
         getChildren().add(inputHTMLTextArea);
