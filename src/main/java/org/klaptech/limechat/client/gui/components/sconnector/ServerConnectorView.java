@@ -1,16 +1,5 @@
 package org.klaptech.limechat.client.gui.components.sconnector;
 
-import static java.util.logging.Logger.getLogger;
-
-
-
-
-
-
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,6 +13,11 @@ import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.client.utils.PropertyManager;
+
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Panel with status of connection to server, refresh button and connection settings dialog
@@ -124,10 +118,15 @@ public class ServerConnectorView extends HBox {
         return button;
     }
 
+    /**
+     * Create combobox with servers list<br>
+     * Also fill serverslist with data from property file
+     *
+     * @return combobox
+     */
     private ComboBox<ServerInfo> createServersComboBox() {
-        List<ServerInfo> servers = PropertyManager.INSTANCE.getProperties().getServerList();
 
-        ComboBox<ServerInfo> comboBox = new ComboBox<>(FXCollections.observableArrayList(servers));
+        ComboBox<ServerInfo> comboBox = new ComboBox<>(PropertyManager.INSTANCE.getProperties().getServerList());
         comboBox.setId("serversListCmb");
         return comboBox;
     }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Contains server infomarmation
  * @author rlapin
  */
-public class ServerInfo implements Serializable {
+public class ServerInfo implements Serializable, Comparable {
     private String addr;
     private int port;
     private String name;
@@ -49,5 +49,18 @@ public class ServerInfo implements Serializable {
 
     @Override public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (this == o) {
+            return 0;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return 0;
+        }
+
+        ServerInfo that = (ServerInfo) o;
+        return name.compareTo(that.name);
     }
 }
