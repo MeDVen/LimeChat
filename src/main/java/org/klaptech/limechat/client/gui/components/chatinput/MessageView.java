@@ -1,12 +1,13 @@
 package org.klaptech.limechat.client.gui.components.chatinput;
 
+import org.klaptech.limechat.client.utils.GUIUtils;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
-import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * MessageView use HTMLEditor control. Editor toolbar hided by GUI-hack method.
@@ -54,11 +55,13 @@ public class MessageView extends VBox {
         inputHTMLTextArea.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
             case ENTER:
-                typedText = inputHTMLTextArea.getHtmlText();
-                inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
-                event.consume();
-
-                // TODO send messegeView content to server
+                if (event.isControlDown()) {
+                } else {
+                    typedText = inputHTMLTextArea.getHtmlText();
+                    inputHTMLTextArea.setHtmlText(EDITOR_DEFAULT_STYLE_FOCUSED);
+                    event.consume();
+                    // TODO send messegeView content to server
+                }
                 break;
             }
         });
