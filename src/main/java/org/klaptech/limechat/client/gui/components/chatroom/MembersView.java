@@ -23,7 +23,10 @@ import javafx.scene.image.ImageView;
  * <li>Red - busy</li>
  * </ul>
  *
+ * In tooltip of every cell shown user avatar and name.
+ *
  * @see UserState
+ * @see UserInfo
  *
  * @author MeDVen
  */
