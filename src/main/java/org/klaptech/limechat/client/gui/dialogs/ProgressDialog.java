@@ -1,13 +1,5 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
-import static java.util.logging.Logger.getLogger;
-
-
-
-
-
-
-import java.util.logging.Logger;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
@@ -17,12 +9,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
+
 /**
  * Dialog with progress indicator
  *
  * @author rlapin
  */
-public class ProgressDialog {
+public class ProgressDialog implements Dialog {
     private final static Logger LOGGER = getLogger(ProgressDialog.class.getName());
     private Stage stage;
 
@@ -39,6 +35,7 @@ public class ProgressDialog {
     /**
      * Show progress dialog
      */
+    @Override
     public void show() {
         stage.show();
         GUIUtils.centerStage(stage);
@@ -47,6 +44,7 @@ public class ProgressDialog {
     /**
      * Hide progress dialog
      */
+    @Override
     public void hide() {
         stage.hide();
     }

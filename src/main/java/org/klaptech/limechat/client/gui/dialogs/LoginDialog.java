@@ -1,18 +1,5 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
-import static java.util.logging.Logger.getLogger;
-
-
-
-
-
-
-import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,6 +30,15 @@ import org.klaptech.limechat.shared.client.ClientMessageFactory;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
 
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
+
 /**
  * Login/Register dialog
  * Contains: login field, password field, default room selector, remember password check.
@@ -50,7 +46,7 @@ import org.klaptech.limechat.shared.enums.RegisterAnswerType;
  *
  * @author rlapin
  */
-public class LoginDialog {
+public class LoginDialog implements Dialog {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
     private static final Logger LOGGER = getLogger(LoginDialog.class.getName());
@@ -99,9 +95,14 @@ public class LoginDialog {
 
     }
 
-
+    @Override
     public void show() {
         stage.show();
+    }
+
+    @Override
+    public void hide() {
+        stage.hide();
     }
 
     /**
@@ -116,7 +117,7 @@ public class LoginDialog {
         Platform.runLater(() -> {
             switch (loginType) {
                 case SUCCESS:
-                    stage.hide();
+                    hide();
                     GUIManager.getInstance().showSplashScreen();
                     break;
                 case USER_NOT_EXISTS:
