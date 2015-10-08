@@ -18,18 +18,10 @@ public class ChatTabPane extends TabPane {
     }
 
     public void addNewTab(Tab tab) {
-        pinToolbar(tab); // empty
         this.getTabs().add(tab);
     }
 
     public void removeTab(Tab tab) {
         getTabs().removeAll(tab);
-    }
-
-    /**
-     * Need do this.
-     */
-    public void pinToolbar(Tab tab) {
-        // TODO make toolbar
     }
 }

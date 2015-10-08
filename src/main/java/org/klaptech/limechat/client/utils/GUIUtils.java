@@ -2,11 +2,6 @@ package org.klaptech.limechat.client.utils;
 
 import static java.util.logging.Logger.getLogger;
 
-
-
-
-
-
 import java.net.URL;
 import java.util.logging.Logger;
 import javafx.application.Platform;
