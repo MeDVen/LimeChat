@@ -11,6 +11,7 @@
 
 #messageview .content {
     -fx-background-color: #828282;
+    -fx-background-image: url("background.png");
 }
 
 #messageview .scroll-pane {

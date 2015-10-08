@@ -17,12 +17,11 @@
 }
 
 #membersview .list-cell {
-    -fx-background-color: #828282;
     -fx-text-fill: #96b946;
     -fx-background-image: url("background.png");
 }
 
 #membersview .list-cell:selected {
-    -fx-background-color: #96b946;
     -fx-text-fill: white;
+    -fx-background-image: url("bg_green.png");
 }
