@@ -10,6 +10,7 @@
 
 #historyview .content {
     -fx-background-color: #828282;
+    -fx-background-image: url("background.png");
 }
 
 #historyview .scroll-pane {
