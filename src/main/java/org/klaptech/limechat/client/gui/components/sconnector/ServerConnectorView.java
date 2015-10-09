@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
+import org.klaptech.limechat.client.net.ServerAddress;
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
@@ -58,9 +59,9 @@ public class ServerConnectorView extends HBox {
         ServerInfo selServer = serversComboBox.getSelectionModel().getSelectedItem();
         if (selServer != null) {
             try {
-                ServerConnector.INSTANCE.connect(selServer.getAddr(), selServer.getPort());
+                ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort());
             } catch (IOException e) {
-                LOGGER.severe("cannot connect to server " + selServer.getName() + " " + selServer.getAddr() + ":" + selServer.getPort());
+                LOGGER.severe("cannot connect to server " + selServer.getName() + " " + selServer.getAddr());
             }
         }
     }
@@ -68,7 +69,7 @@ public class ServerConnectorView extends HBox {
     private void addServerAction() {
         // SHOW INPUT DIALOG
         ObservableList<ServerInfo> items = serversComboBox.getItems();
-        ServerInfo mock = new ServerInfo("testaddr", 1234, "TestServer");
+        ServerInfo mock = new ServerInfo(new ServerAddress("testaddr", 32), "TestServer");
         // Contains depends on server name
         if (!items.contains(mock)) {
             items.add(mock);

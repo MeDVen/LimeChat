@@ -1,12 +1,14 @@
 package org.klaptech.limechat.client.gui.dialogs.dataeditor;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.gui.dialogs.Dialogs;
 import org.klaptech.limechat.client.gui.dialogs.OkCancelDialog;
 import org.klaptech.limechat.client.gui.dialogs.dataeditor.entities.EditorEntity;
 import org.klaptech.limechat.client.utils.GUIUtils;
@@ -28,7 +30,7 @@ import java.util.List;
  */
 public class DataEditorDialog<T extends EditorEntity> implements OkCancelDialog {
     private Stage stage;
-    private int width = 300;
+    private int width = 400;
     private int height = 300;
     private List<T> fields;
 
@@ -57,13 +59,24 @@ public class DataEditorDialog<T extends EditorEntity> implements OkCancelDialog 
         GUIUtils.addCss(scene, "fxml/editors.css");
         stage.setScene(scene);
         for (T field : fields) {
-            HBox hBox = new HBox();
-            hBox.getStyleClass().add("eLane");
-            Label label = new Label(field.getLabelText());
-            label.getStyleClass().add("eLabel");
-            hBox.getChildren().addAll(label, field.getEntityView().getGraphics());
-            vBox.getChildren().add(hBox);
+            vBox.getChildren().add(field.getEntityView().getGraphics());
         }
+        HBox buttonLane = createButtonLane();
+        vBox.getChildren().add(buttonLane);
+        stage.sizeToScene();
+    }
+
+    private HBox createButtonLane() {
+        HBox buttonLane = new HBox();
+        buttonLane.setAlignment(Pos.CENTER_RIGHT);
+        Button okButton = new Button("OK");
+        okButton.setOnAction(event -> onOK());
+        okButton.setId("okButton");
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(event -> onCancel());
+        cancelButton.setId("cancelButton");
+        buttonLane.getChildren().addAll(okButton, cancelButton);
+        return buttonLane;
     }
 
     @Override
@@ -78,11 +91,13 @@ public class DataEditorDialog<T extends EditorEntity> implements OkCancelDialog 
 
     @Override
     public void onOK() {
+        Dialogs.showMessageBox("INFO", "Ok pressed", Dialogs.IconType.INFO);
         hide();
     }
 
     @Override
     public void onCancel() {
+        Dialogs.showMessageBox("INFO", "Cancel pressed", Dialogs.IconType.INFO);
         hide();
     }
 }

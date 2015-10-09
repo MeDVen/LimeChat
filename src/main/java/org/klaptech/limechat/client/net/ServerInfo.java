@@ -7,23 +7,18 @@ import java.io.Serializable;
  * @author rlapin
  */
 public class ServerInfo implements Serializable, Comparable {
-    private String addr;
-    private int port;
+    private ServerAddress addr;
     private String name;
 
-    public ServerInfo(String addr, int port, String name) {
+    public ServerInfo(ServerAddress addr, String name) {
         this.addr = addr;
-        this.port = port;
         this.name = name;
     }
 
-    public String getAddr() {
+    public ServerAddress getAddr() {
         return addr;
     }
 
-    public int getPort() {
-        return port;
-    }
 
     public String getName() {
         return name;
