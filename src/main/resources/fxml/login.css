@@ -47,6 +47,7 @@
 }
 
 .text-field {
+    -fx-padding: 0 35px 0 0;
     -fx-text-fill: #96b946;
     -fx-background-color: #4c4c4c;
     -fx-prompt-text-fill: #90a040;
@@ -55,17 +56,17 @@
 
 #correct {
     -fx-background-image: url('correct.png');
-    -fx-end-pad: 100px;
+    -fx-padding: 0 35px 0 0;
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 30px, cover;
+    -fx-background-size: 30px;
     -fx-background-position: right center;
 }
 
 #incorrect {
     -fx-background-image: url('incorrect.png');
-    -fx-end-pad: 100px;
+    -fx-padding: 0 35px 0 0;
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 30px, cover;
+    -fx-background-size: 30px;
     -fx-background-position: right center;
 }
 

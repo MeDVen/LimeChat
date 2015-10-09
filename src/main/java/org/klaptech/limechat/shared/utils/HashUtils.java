@@ -8,10 +8,10 @@ import java.util.logging.Logger;
  * @author rlapin
  */
 public class HashUtils {
+    private static final Logger LOGGER = Logger.getLogger(HashUtils.class.getCanonicalName());
+
     private HashUtils() {
     }
-
-    private static final Logger LOGGER = Logger.getLogger(HashUtils.class.getCanonicalName());
 
     /**
      * Generate md5 hash

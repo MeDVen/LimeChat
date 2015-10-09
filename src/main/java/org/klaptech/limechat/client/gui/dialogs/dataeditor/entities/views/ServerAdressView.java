@@ -10,7 +10,7 @@ import org.klaptech.limechat.client.net.ServerAddress;
 /**
  * View consists of different view , but used for change one type<br>
  * For styling use eTextField in editors.css
- *
+ * id eServerPortTextField for styling only port textfield
  * @author rlapin
  */
 public class ServerAdressView implements EntityView {
@@ -26,6 +26,7 @@ public class ServerAdressView implements EntityView {
         }
         TextField addrTextField = createTextField();
         TextField portTextField = createTextField();
+        portTextField.setId("eServerPortTextField");
         hBox.getChildren().addAll(serverLabel, addrTextField, portLabel, portTextField);
     }
 
@@ -39,6 +40,7 @@ public class ServerAdressView implements EntityView {
     private TextField createTextField() {
         TextField resultTextField = new TextField();
         resultTextField.getStyleClass().add("eTextField");
+
         resultTextField.prefHeightProperty().bind(hBox.heightProperty());
         return resultTextField;
     }

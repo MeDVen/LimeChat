@@ -7,7 +7,9 @@ package org.klaptech.limechat.client.gui.components.sconnector;
  */
 public enum ConnectionType {
     SUCCESS("successLabel"), FAIL("errorLabel"), NOT_CONNECTED("notconLabel");
-
+    /**
+     * Css id using for styling element
+     */
     private String cssId;
 
     ConnectionType(String cssID) {

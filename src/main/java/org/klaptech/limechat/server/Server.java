@@ -14,12 +14,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -29,15 +24,15 @@ import java.util.logging.Logger;
  * @author rlapin
  */
 public class Server {
-    private static Server instance;
     private static final Logger LOGGER = Logger.getLogger(Server.class.getCanonicalName());
+    private static Server instance;
+    private final List<ChangeRequest> changeRequests = new ArrayList<>();
+    private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
+    private final Set<User> users = new HashSet<>();
     private Selector selector;
     private Configuration config;
     private ByteBuffer readBuffer = ByteBuffer.allocate(10);
     private ReadWorker readWorker = new ReadWorker();
-    private final List<ChangeRequest> changeRequests = new ArrayList<>();
-    private final Map<SocketChannel, List<Message>> pendingData = new HashMap<>();
-    private final Set<User> users = new HashSet<>();
     private Channels channels;
 
     private Server(Configuration config) {
@@ -51,6 +46,11 @@ public class Server {
         }
         return instance;
     }
+
+    public static void main(String[] args) {
+        Server.getInstance().run();
+    }
+
     private void start() {
         try (
                 ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
@@ -170,10 +170,6 @@ public class Server {
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
         LOGGER.info(String.format("User[ip:%s] connected successfully", socket.getLocalAddress()));
-    }
-
-    public static void main(String[] args) {
-        Server.getInstance().run();
     }
 
     /**
