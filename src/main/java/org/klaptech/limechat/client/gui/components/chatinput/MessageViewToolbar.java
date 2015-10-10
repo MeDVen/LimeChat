@@ -6,6 +6,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.klaptech.limechat.client.gui.GUIConstants;
+import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
@@ -45,10 +46,10 @@ public class MessageViewToolbar extends HBox {
     }
 
     private void smileButtonAction(Button smileBtn) {
-        smileBtn.setOnAction(event -> Dialogs.showMessageBox("Smiles", "Work in progress", Dialogs.IconType.INFO));
+        smileBtn.setOnAction(event -> Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), "Smiles", "Work in progress", Dialogs.IconType.INFO));
     }
 
     private void statusBtnAction(Button statusBtn) {
-        statusBtn.setOnAction(event -> Dialogs.showMessageBox("Statuses", "Work in progress", Dialogs.IconType.INFO));
+        statusBtn.setOnAction(event -> Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), "Statuses", "Work in progress", Dialogs.IconType.INFO));
     }
 }

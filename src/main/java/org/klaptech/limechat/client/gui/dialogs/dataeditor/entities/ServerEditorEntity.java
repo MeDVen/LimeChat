@@ -9,7 +9,7 @@ import org.klaptech.limechat.client.net.ServerAddress;
  */
 public class ServerEditorEntity {
     private ServerAddress address = new ServerAddress("", 0);
-    private String name;
+    private String name = "";
 
     public ServerAddress getAddress() {
         return address;

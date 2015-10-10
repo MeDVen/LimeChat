@@ -6,11 +6,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.gui.GUIManager;
+import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.IntValidator;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthValidator;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.ListNotContainsValidator;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.MaxLengthValidator;
 import org.klaptech.limechat.client.gui.dialogs.DialogListener;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
 import org.klaptech.limechat.client.gui.dialogs.OkCancelDialog;
@@ -18,12 +25,17 @@ import org.klaptech.limechat.client.gui.dialogs.dataeditor.entities.ServerEditor
 import org.klaptech.limechat.client.net.ServerAddress;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Utility dialog for editing or adding new data<br>
  * Styling info: <br>
  * <ul>
+ * <li>use class root for styling dialog contentpane</li>
  * <li>use class eLabel for styling label elements</li>
  * <li>id okButton for styling ok button</li>
+ * <li>class eButton for styling ok button</li>
  * <li>id cancelButton for styling cancel button</li>
  * <li>class eLane for styling field lane</li>
  * <li>class eDialog for styling dialog</li>
@@ -37,10 +49,15 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     private int width = 400;
     private int height = 300;
     private DialogListener listener;
+    private List<String> existedServers;
+    private MaskInputView serverNameMaskView;
+    private MaskInputView portMaskView;
+    private MaskInputView addrMaskView;
 
 
     public ServerDataEditorDialog(ServerEditorEntity serverEntity, Stage parent) {
         this.serverEntity = serverEntity;
+        existedServers = new ArrayList<>();
         listener = new DialogListener() {
         };
         initStage(parent);
@@ -55,19 +72,23 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     private void initStage(Stage parent) {
         stage = new Stage(StageStyle.UTILITY);
 
-        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(parent);
     }
 
     private void initComponents() {
-        VBox vBox = new VBox();
-        Scene scene = new Scene(vBox, width, height);
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(5);
+        Scene scene = new Scene(borderPane, width, height);
+        borderPane.setId("editor");
         GUIUtils.addCss(scene, "fxml/editors.css");
         stage.setScene(scene);
         HBox serverNameLane = createServerNameLane();
         HBox serverAddressLane = createServerAddressLane();
         HBox buttonLane = createButtonLane();
-        vBox.getChildren().addAll(serverNameLane, serverAddressLane, buttonLane);
+        vBox.getChildren().addAll(serverNameLane, serverAddressLane);
+        borderPane.setCenter(vBox);
+        borderPane.setBottom(buttonLane);
     }
 
     private HBox createServerAddressLane() {
@@ -79,22 +100,25 @@ public class ServerDataEditorDialog implements OkCancelDialog {
         portLabel.prefHeightProperty().bind(hBox.heightProperty());
         portLabel.getStyleClass().add("eLabel");
         TextField addrTextField = createTextField();
+        addrMaskView = new MaskInputView(addrTextField, new LengthValidator(5));
         addrTextField.prefHeightProperty().bind(hBox.heightProperty());
         TextField portTextField = createTextField();
+        portMaskView = new MaskInputView(portTextField, new MaxLengthValidator(5), new IntValidator());
         portTextField.prefHeightProperty().bind(hBox.heightProperty());
         portTextField.setId("eServerPortTextField");
         addrTextField.setText(serverEntity.getAddress().getAddr());
         portTextField.setText(String.valueOf(serverEntity.getAddress().getPort()));
         portTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            serverEntity.setAddress(new ServerAddress(serverEntity.getAddress().getAddr(), Integer.parseInt(newValue)));
+            String text = portMaskView.getText();
+            int port = text.isEmpty() ? 0 : Integer.parseInt(text);
+            serverEntity.setAddress(new ServerAddress(serverEntity.getAddress().getAddr(), port));
         });
         addrTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            serverEntity.setAddress(new ServerAddress(newValue, serverEntity.getAddress().getPort()));
+            serverEntity.setAddress(new ServerAddress(addrMaskView.getText(), serverEntity.getAddress().getPort()));
         });
         hBox.getChildren().addAll(serverLabel, addrTextField, portLabel, portTextField);
         return hBox;
     }
-
     private Label createLabel(String caption) {
         Label resultLabel = new Label(caption);
         resultLabel.getStyleClass().add("eLabel");
@@ -114,24 +138,28 @@ public class ServerDataEditorDialog implements OkCancelDialog {
         label.getStyleClass().add("eLabel");
         label.prefHeightProperty().bind(hBox.heightProperty());
         TextField serverNameTextField = createTextField();
+        serverNameMaskView = new MaskInputView(serverNameTextField, new ListNotContainsValidator(existedServers), new LengthValidator(5));
         serverNameTextField.prefHeightProperty().bind(hBox.heightProperty());
         serverNameTextField.setText(serverEntity.getName());
         serverNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            serverEntity.setName(newValue);
+            serverEntity.setName(serverNameMaskView.getText());
         });
         hBox.getChildren().addAll(label, serverNameTextField);
         return hBox;
     }
 
     private HBox createButtonLane() {
-        HBox buttonLane = new HBox();
+        HBox buttonLane = new HBox(5);
         buttonLane.setAlignment(Pos.CENTER_RIGHT);
         Button okButton = new Button("OK");
         okButton.setOnAction(event -> onOK());
         okButton.setId("okButton");
+        okButton.getStyleClass().add("eButton");
+
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(event -> onCancel());
         cancelButton.setId("cancelButton");
+        cancelButton.getStyleClass().add("eButton");
         buttonLane.getChildren().addAll(okButton, cancelButton);
         return buttonLane;
     }
@@ -153,14 +181,27 @@ public class ServerDataEditorDialog implements OkCancelDialog {
 
     @Override
     public void onOK() {
-        Dialogs.showMessageBox("INFO", "Ok pressed", Dialogs.IconType.INFO);
-        listener.onOK();
-        hide();
+
+        if (isCorrect()) {
+            listener.onOK();
+            hide();
+        } else {
+            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), "Error", "Check fields", Dialogs.IconType.ERROR);
+        }
+    }
+
+    /**
+     * Check if is serverentity is correct
+     *
+     * @return true if is valid serverentity
+     */
+    private boolean isCorrect() {
+        return !serverNameMaskView.getText().isEmpty() && !addrMaskView.getText().isEmpty() && !portMaskView.getText().isEmpty();
     }
 
     @Override
     public void onCancel() {
-        Dialogs.showMessageBox("INFO", "Cancel pressed", Dialogs.IconType.INFO);
+        Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), "INFO", "Cancel pressed", Dialogs.IconType.INFO);
         listener.onCancel();
         hide();
     }
@@ -170,5 +211,10 @@ public class ServerDataEditorDialog implements OkCancelDialog {
      */
     public ServerEditorEntity getServerInfo() {
         return serverEntity;
+    }
+
+    public void initServersList(List<String> serversNameList) {
+        existedServers.clear();
+        existedServers.addAll(serversNameList);
     }
 }

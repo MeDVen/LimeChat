@@ -9,22 +9,33 @@ import org.klaptech.limechat.client.gui.components.maskfield.validators.Validato
  * @author rlapin
  */
 public class MaskInputView {
-
+    //TODO add listener when text is valid which return text of hint for observer
     private TextField textField;
     public static final String CORRECT = "correct";
     private static final String INCORRECT = "incorrect";
     private boolean isValid = true;
 
-    public MaskInputView(TextField textField, Validator validator) {
+    public MaskInputView(TextField textField, Validator... validators) {
         this.textField = textField;
-        validate(textField, validator, textField.getText());
+
+        validate(textField, validators, textField.getText());
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            validate(textField, validator, newValue);
+            validate(textField, validators, newValue);
         });
     }
 
-    private void validate(TextField textField, Validator validator, String newValue) {
-        isValid = validator.isValid(newValue);
+    /**
+     * Apply every validator in validators
+     *
+     * @param textField
+     * @param validators
+     * @param value
+     */
+    private void validate(TextField textField, Validator[] validators, String value) {
+        isValid = true;
+        for (Validator validator : validators) {
+            isValid = isValid & validator.isValid(value);
+        }
         textField.setId(isValid ? CORRECT : INCORRECT);
     }
 

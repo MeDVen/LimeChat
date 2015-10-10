@@ -121,13 +121,13 @@ public class LoginDialog implements Dialog {
                     GUIManager.getInstance().showSplashScreen();
                     break;
                 case USER_NOT_EXISTS:
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("usernotexists"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("usernotexists"), Dialogs.IconType.ERROR);
                     break;
                 case USER_ALREADY_CON:
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("useralreadyconnects"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("useralreadyconnects"), Dialogs.IconType.ERROR);
                     break;
                 case INCORRECT_PASSWORD:
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("incorrectpassword"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("incorrectpassword"), Dialogs.IconType.ERROR);
                     break;
                 default:
             }
@@ -146,17 +146,17 @@ public class LoginDialog implements Dialog {
         Platform.runLater(() -> {
             switch (registerAnswerType) {
                 case SUCCESS:
-                    Dialogs.showMessageBox(resourceBundle.getString("info"), resourceBundle.getString("registrationsuccess"), Dialogs.IconType.INFO);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("info"), resourceBundle.getString("registrationsuccess"), Dialogs.IconType.INFO);
                     loginTabPane.getSelectionModel().select(loginPane);
                     clearAllComponents();
                     loginPane.loginMaskView.getTextField().setText(registerPane.loginMaskView.getText());
                     loginPane.passwordMaskView.getTextField().setText("");
                     break;
                 case USER_ALREADY_REGISTER:
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("useralreadyexists"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("useralreadyexists"), Dialogs.IconType.ERROR);
                     break;
                 case ERROR:
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
                     break;
                 default:
             }
@@ -235,7 +235,7 @@ public class LoginDialog implements Dialog {
                 String login = loginMaskView.getText();
                 String password = passwordMaskView.getText();
                 if (login.isEmpty() || password.isEmpty()) {
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
                 } else {
                     try {
                         ServerConnector.INSTANCE.write(ClientMessageFactory.createLoginMessage(login, password.getBytes()));
@@ -244,10 +244,10 @@ public class LoginDialog implements Dialog {
                             condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
                             lock.unlock();
                         } catch (InterruptedException e) {
-                            Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
+                            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
                         }
                     } catch (IOException e) {
-                        Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("autherror"), Dialogs.IconType.ERROR);
+                        Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("autherror"), Dialogs.IconType.ERROR);
                     }
                 }
             });
@@ -321,10 +321,10 @@ public class LoginDialog implements Dialog {
                 String password = passwordMaskView.getText();
                 String email = emailMaskView.getText();
                 if (login.isEmpty() || password.isEmpty() || email.isEmpty()) {
-                    Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
+                    Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
                 } else {
                     if (!captchaTextField.getText().equals(captcha.getValue())) {
-                        Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("incorrectcaptcha"), Dialogs.IconType.ERROR);
+                        Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("incorrectcaptcha"), Dialogs.IconType.ERROR);
                         captcha.generateValue();
                     } else {
                         try {
@@ -334,10 +334,10 @@ public class LoginDialog implements Dialog {
                                 condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
                                 lock.unlock();
                             } catch (InterruptedException e) {
-                                Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
+                                Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
                             }
                         } catch (IOException e) {
-                            Dialogs.showMessageBox(resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
+                            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
                         }
                     }
                 }

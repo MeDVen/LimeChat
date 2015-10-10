@@ -1,6 +1,5 @@
 package org.klaptech.limechat.client.gui.dialogs;
 
-import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
+import java.util.ResourceBundle;
+
 /**
  * MessageBox , alertbox, inputbox etc
  *
@@ -24,10 +25,11 @@ public class Dialogs {
     private static final Image ERROR_ICON = new Image(Dialogs.class.getClassLoader().getResourceAsStream("images/error.png"));
     private static final Image QUESTION_ICON = new Image(Dialogs.class.getClassLoader().getResourceAsStream("images/question.png"));
 
-    public static void showMessageBox(String title, String message, IconType type) {
+    public static void showMessageBox(Stage parent, String title, String message, IconType type) {
         Stage dialogStage = new Stage(StageStyle.DECORATED);
         dialogStage.setIconified(false);
-        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(parent);
         ResourceBundle resourceBundle = ResourceBundle.getBundle("org.klaptech.limechat.client.gui.dialogs.Dialogs");
         dialogStage.setResizable(false);
         dialogStage.getIcons().add(DIALOG_ICON);
@@ -48,6 +50,7 @@ public class Dialogs {
         GUIUtils.centerStage(dialogStage);
     }
     //TODO add input dialog
+
     /**
      * Icon for different dialog types , can return imageicon
      *

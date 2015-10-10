@@ -8,15 +8,19 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import org.klaptech.limechat.client.gui.dialogs.Dialogs;
-import org.klaptech.limechat.client.net.ServerAddress;
+import org.klaptech.limechat.client.gui.GUIManager;
+import org.klaptech.limechat.client.gui.dialogs.DialogListener;
+import org.klaptech.limechat.client.gui.dialogs.dataeditor.ServerDataEditorDialog;
+import org.klaptech.limechat.client.gui.dialogs.dataeditor.entities.ServerEditorEntity;
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.client.utils.PropertyManager;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
 
@@ -68,14 +72,28 @@ public class ServerConnectorView extends HBox {
 
     private void addServerAction() {
         // SHOW INPUT DIALOG
+        ServerDataEditorDialog dataDialog = new ServerDataEditorDialog(new ServerEditorEntity(), GUIManager.getInstance().getMainStage());
         ObservableList<ServerInfo> items = serversComboBox.getItems();
-        ServerInfo mock = new ServerInfo(new ServerAddress("testaddr", 32), "TestServer");
-        // Contains depends on server name
-        if (!items.contains(mock)) {
-            items.add(mock);
-        } else {
-            Dialogs.showMessageBox("Error while adding server", "Server is already existed", Dialogs.IconType.ERROR);
-        }
+        dataDialog.initServersList(getServersNameList());
+        dataDialog.show();
+        dataDialog.setDialogListener(new DialogListener() {
+            @Override
+            public void onOK() {
+                ServerInfo serverInfo = new ServerInfo(dataDialog.getServerInfo().getAddress(), dataDialog.getServerInfo().getName());
+                items.add(serverInfo);
+                LOGGER.info("Server " + serverInfo + " successfully added");
+            }
+
+            @Override
+            public void onCancel() {
+                LOGGER.info("No server will be added as result of cancel event");
+            }
+        });
+
+    }
+
+    private List<String> getServersNameList() {
+        return serversComboBox.getItems().stream().map(ServerInfo::getName).collect(Collectors.toList());
     }
 
     /**

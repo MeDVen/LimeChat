@@ -1,10 +1,5 @@
 package org.klaptech.limechat.client.gui;
 
-import org.klaptech.limechat.client.gui.components.ChatTabPane;
-import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
-import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
-import org.klaptech.limechat.client.utils.GUIUtils;
-
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,6 +24,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.klaptech.limechat.client.gui.components.ChatTabPane;
+import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
+import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Contains all gui entities
@@ -53,6 +52,10 @@ public class GUIManager {
 
     public static GUIManager getInstance() {
         return instance;
+    }
+
+    public Stage getMainStage() {
+        return mainStage;
     }
 
     private GUIManager() {
