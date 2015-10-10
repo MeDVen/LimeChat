@@ -3,22 +3,13 @@
     -fx-text-fill: #82ffa9;
 }
 
-.eTextEditor {
+.eTextField {
     -fx-background-color: #252527;
     -fx-text-fill: #96b946;
 }
 
 .eLane {
-    -fx-background-color: #242524;
+    -fx-background-color: #5e5e5e;
 
 }
 
-#eServerPortTextField {
-    -fx-background-color: #0f0f1f;
-    -fx-columns: 5;
-    -fx-background-position: right;
-    -fx-background-image: url('correct.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 30px;
-    -fx-padding: 0 30 0 0;
-}

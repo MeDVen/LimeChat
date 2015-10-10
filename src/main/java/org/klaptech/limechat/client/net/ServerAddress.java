@@ -20,17 +20,11 @@ public class ServerAddress implements Serializable {
         return addr;
     }
 
-    public void setAddr(String addr) {
-        this.addr = addr;
-    }
 
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
 
     @Override
     public String toString() {

@@ -276,7 +276,7 @@ public class LoginDialog implements Dialog {
 
         private void initComponents() {
             GridPane gridPane = new GridPane();
-            gridPane.setAlignment(Pos.CENTER);
+            gridPane.setAlignment(Pos.CENTER); //TODO define textfields height in css
             gridPane.setVgap(10);
             gridPane.setHgap(10);
             Label loginLabel = new Label(resourceBundle.getString("name"));
