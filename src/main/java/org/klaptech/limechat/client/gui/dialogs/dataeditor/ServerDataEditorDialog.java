@@ -27,6 +27,7 @@ import org.klaptech.limechat.client.utils.GUIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Utility dialog for editing or adding new data<br>
@@ -53,10 +54,12 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     private MaskInputView serverNameMaskView;
     private MaskInputView portMaskView;
     private MaskInputView addrMaskView;
+    private final ResourceBundle resourceBundle;
 
 
     public ServerDataEditorDialog(ServerEditorEntity serverEntity, Stage parent) {
         this.serverEntity = serverEntity;
+        resourceBundle = ResourceBundle.getBundle(this.getClass().getCanonicalName());
         existedServers = new ArrayList<>();
         listener = new DialogListener() {
         };
@@ -94,7 +97,7 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     private HBox createServerAddressLane() {
         HBox hBox = new HBox();
         hBox.getStyleClass().add("eLane");
-        Label serverLabel = createLabel("Server");
+        Label serverLabel = createLabel(resourceBundle.getString("serverAddr"));
         serverLabel.prefHeightProperty().bind(hBox.heightProperty());
         Label portLabel = createLabel(":");
         portLabel.prefHeightProperty().bind(hBox.heightProperty());
@@ -134,17 +137,20 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     private HBox createServerNameLane() {
         HBox hBox = new HBox();
         hBox.getStyleClass().add("eLane");
-        Label label = new Label("Server name: ");
-        label.getStyleClass().add("eLabel");
-        label.prefHeightProperty().bind(hBox.heightProperty());
+        Label nameLabel = new Label(resourceBundle.getString("serverName"));
+        nameLabel.minWidth(nameLabel.getPrefWidth());
+        nameLabel.getStyleClass().add("eLabel");
+        nameLabel.prefHeightProperty().bind(hBox.heightProperty());
         TextField serverNameTextField = createTextField();
+        nameLabel.setWrapText(true);
         serverNameMaskView = new MaskInputView(serverNameTextField, new ListNotContainsValidator(existedServers), new LengthValidator(5));
         serverNameTextField.prefHeightProperty().bind(hBox.heightProperty());
+        serverNameTextField.prefWidthProperty().bind(hBox.widthProperty().subtract(nameLabel.widthProperty()));
         serverNameTextField.setText(serverEntity.getName());
         serverNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             serverEntity.setName(serverNameMaskView.getText());
         });
-        hBox.getChildren().addAll(label, serverNameTextField);
+        hBox.getChildren().addAll(nameLabel, serverNameTextField);
         return hBox;
     }
 
@@ -186,7 +192,7 @@ public class ServerDataEditorDialog implements OkCancelDialog {
             listener.onOK();
             hide();
         } else {
-            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), "Error", "Check fields", Dialogs.IconType.ERROR);
+            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
         }
     }
 
