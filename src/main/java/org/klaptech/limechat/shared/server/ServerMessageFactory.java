@@ -1,10 +1,13 @@
 package org.klaptech.limechat.shared.server;
 
 import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.JoinResultType;
 import org.klaptech.limechat.shared.enums.LeaveType;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
+
+import java.util.List;
 
 /**
  * Factory for server messages
@@ -25,10 +28,11 @@ public class ServerMessageFactory {
     /**
      * Joinanswer
      * @param joinAnswerType
+     * @param channelName
      * @return joinchannel answer
      */
-    public static Message createJoinChannelAnswer(JoinResultType joinAnswerType) {
-        return new JoinChannelAnswer(joinAnswerType);
+    public static Message createJoinChannelAnswer(JoinResultType joinAnswerType, String channelName) {
+        return new JoinRoomAnswer(joinAnswerType, channelName);
     }
 
     /**
@@ -38,7 +42,7 @@ public class ServerMessageFactory {
      * @return leavechannel answer
      */
     public static Message createLeaveChannelAnswer(LeaveType leaveType, String channelName) {
-        return new LeaveChannelAnswer(leaveType, channelName);
+        return new LeaveRoomAnswer(leaveType, channelName);
     }
 
     /**
@@ -49,5 +53,27 @@ public class ServerMessageFactory {
      */
     public static Message createRegisterAnswer(RegisterAnswerType registerAnswerType) {
         return new RegisterAnswer(registerAnswerType);
+    }
+
+    /**
+     * Send when new user join to room for every user in room except new user
+     *
+     * @param userInfo
+     * @param channelName
+     * @return
+     */
+    public static Message createNewUserInRoomMessage(UserInfo userInfo, String channelName) {
+        return new NewUserInRoomMessage(userInfo, channelName);
+    }
+
+    /**
+     * Send all list of user in room for new user
+     *
+     * @param usersInfoList
+     * @param name
+     * @return
+     */
+    public static Message createRoomUsersMessage(List<UserInfo> usersInfoList, String name) {
+        return new RoomUsersMessage(usersInfoList, name);
     }
 }

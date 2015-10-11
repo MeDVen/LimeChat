@@ -1,27 +1,31 @@
-package org.klaptech.limechat.client.entities;
+package org.klaptech.limechat.shared.entities;
 
 import javafx.scene.image.Image;
+import org.klaptech.limechat.client.entities.ChatRoom;
 import org.klaptech.limechat.shared.enums.UserState;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Entity for describing user
  * @author MeDVen
+ * @author rlapin
  */
-public class User {
+public class UserInfo implements Serializable {
 
-    private Image avatar;
+    private Image image;
 
     private String name;
 
     private UserState state;
     private List<ChatRoom> defaultRooms;
 
-    public User(String userName, UserState userState, Image avatar) {
+    public UserInfo(String userName, UserState userState, Image image) {
         this.name = userName;
         this.state = userState;
-        this.avatar = avatar;
+        this.image = image;
         defaultRooms = new ArrayList<>();
     }
 
@@ -33,12 +37,12 @@ public class User {
         return state;
     }
 
-    public Image getAvatar() {
-        return avatar;
+    public Image getImage() {
+        return image;
     }
 
-    public void setAvatar(Image avatar) {
-        this.avatar = avatar;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void setName(String name) {

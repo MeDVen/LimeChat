@@ -7,9 +7,9 @@ import org.klaptech.limechat.shared.enums.MessageType;
  * Message is send by user to server , when he want to join channel
  * @author rlapin
  */
-public class JoinChannelMessage implements Message{
+public class JoinRoomMessage implements Message {
     /**
-     * Channel name
+     * Room name
      */
     private final String channelName;
     /**
@@ -17,7 +17,7 @@ public class JoinChannelMessage implements Message{
      */
     private final String password;
 
-    protected JoinChannelMessage(String channelName, String password) {
+    protected JoinRoomMessage(String channelName, String password) {
         this.channelName = channelName;
         this.password = password;
     }

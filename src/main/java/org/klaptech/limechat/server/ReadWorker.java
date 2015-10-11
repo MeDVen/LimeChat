@@ -1,31 +1,29 @@
 package org.klaptech.limechat.server;
 
-import static java.util.logging.Logger.getLogger;
-
-
-
-
-
-
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 import org.klaptech.limechat.server.auth.Authorizer;
 import org.klaptech.limechat.server.auth.Registrator;
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.client.JoinChannelMessage;
-import org.klaptech.limechat.shared.client.LeaveChannelMessage;
+import org.klaptech.limechat.shared.client.JoinRoomMessage;
+import org.klaptech.limechat.shared.client.LeaveRoomMessage;
 import org.klaptech.limechat.shared.client.LoginMessage;
 import org.klaptech.limechat.shared.client.RegisterMessage;
+import org.klaptech.limechat.shared.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.JoinResultType;
 import org.klaptech.limechat.shared.enums.LeaveType;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
+import org.klaptech.limechat.shared.enums.UserState;
 import org.klaptech.limechat.shared.general.SendMessage;
 import org.klaptech.limechat.shared.server.ServerMessageFactory;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
+
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Worker with input information
@@ -79,37 +77,37 @@ public class ReadWorker implements Runnable {
 
                     } else {
                         authAnswer = Authorizer.auth(loginMessage.getUsername(), loginMessage.getPassword());
-                        if (authAnswer == LoginAnswerType.SUCCESS) {
-                            server.addUser(new User(loginMessage.getUsername(), messageWrapper.getSocket()));
+                        if (authAnswer == LoginAnswerType.SUCCESS) {//TODO image must be not null
+                            server.addUser(new User(new UserInfo(loginMessage.getUsername(), UserState.ONLINE, null), messageWrapper.getSocket()));
                         }
                     }
                     LOGGER.info("LOGIN " + authAnswer);
                     server.send(socket, ServerMessageFactory.createLoginAnswer(authAnswer));
                     break;
                 case JOIN:
-                    JoinChannelMessage joinChannelMessage = (JoinChannelMessage) message;
-                    Channel channel = server.getChannels().getChannelByName(joinChannelMessage.getChannelName());
+                    JoinRoomMessage joinRoomMessage = (JoinRoomMessage) message;
+                    Room room = server.getRooms().getChannelByName(joinRoomMessage.getChannelName());
                     JoinResultType joinAnswer;
-                    if (channel == Channels.DUMMY_CHANNEL) {
+                    if (room == Rooms.DUMMY_ROOM) {
                         joinAnswer = JoinResultType.CHANNEL_NOT_FOUND;
                     } else {
-                        joinAnswer = channel.join(server.getUser(socket));
+                        joinAnswer = room.join(server.getUser(socket));
                     }
-                    server.send(socket, ServerMessageFactory.createJoinChannelAnswer(joinAnswer));
+                    server.send(socket, ServerMessageFactory.createJoinChannelAnswer(joinAnswer, joinRoomMessage.getChannelName()));
                     if(joinAnswer == JoinResultType.SUCCESS){
                         //server.send(socket, ServerMessageFactory.createUserListMessage());
                     }
                     break;
                 case MSG:
                     SendMessage sendMessage = (SendMessage) message;
-                    channel = server.getChannels().getChannelByName(sendMessage.getChannelName());
-                    channel.sendMessage(sendMessage.getMessage());
+                    room = server.getRooms().getChannelByName(sendMessage.getChannelName());
+                    room.sendMessage(sendMessage.getMessage());
                     break;
                 case LEAVE:
-                    LeaveChannelMessage leaveChannelMessage = (LeaveChannelMessage) message;
-                    channel = server.getChannels().getChannelByName(leaveChannelMessage.getChannelName());
-                    if (channel.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
-                        server.send(messageWrapper.getSocket(), ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveChannelMessage.getChannelName()));
+                    LeaveRoomMessage leaveRoomMessage = (LeaveRoomMessage) message;
+                    room = server.getRooms().getChannelByName(leaveRoomMessage.getChannelName());
+                    if (room.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
+                        server.send(messageWrapper.getSocket(), ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveRoomMessage.getChannelName()));
                     }
                     break;
                 case REGISTER:

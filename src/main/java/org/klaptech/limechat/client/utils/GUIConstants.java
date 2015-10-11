@@ -32,7 +32,7 @@ public class GUIConstants {
 //    public static final Image BACKGROUND_IMAGE = new Image(GUIConstants.class.getClassLoader().getResourceAsStream("images/background.png"));
 
     /**
-     * User
+     * UserInfo
      */
     public static final Image USER_IMAGE = new Image(GUIConstants.class.getClassLoader().getResourceAsStream("images/user.png"));
 }

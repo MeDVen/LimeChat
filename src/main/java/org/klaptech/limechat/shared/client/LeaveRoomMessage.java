@@ -7,13 +7,13 @@ import org.klaptech.limechat.shared.enums.MessageType;
  * Message is send by user to server , when he want to leave channel
  * @author rlapin
  */
-public class LeaveChannelMessage implements Message{
+public class LeaveRoomMessage implements Message {
     /**
-     * Channel name
+     * Room name
      */
     private final String channelName;
 
-    protected LeaveChannelMessage(String channelName) {
+    protected LeaveRoomMessage(String channelName) {
         this.channelName = channelName;
     }
 

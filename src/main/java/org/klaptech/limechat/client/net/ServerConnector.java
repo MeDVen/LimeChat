@@ -62,8 +62,13 @@ public enum ServerConnector {
     }
 
 
-    public void write(Message message) throws IOException {
-        socketChannel.write(ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message)));
+    public void write(Message message) {
+        try {
+            socketChannel.write(ByteBuffer.wrap(ByteObjectConverter.objectToBytes(message)));
+        } catch (IOException e) {
+            //TODO mb not disconnected
+            serverEvents.disconnected();
+        }
     }
 
 

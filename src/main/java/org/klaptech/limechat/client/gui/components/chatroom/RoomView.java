@@ -46,4 +46,16 @@ public class RoomView extends GridPane {
         add( membersView, 1, 0 );
         add( chatInputMessage, 0, 1, 2, 1 );
     }
+
+    public MembersView getMembersView() {
+        return membersView;
+    }
+
+    public MessageView getChatInputMessage() {
+        return chatInputMessage;
+    }
+
+    public HistoryView getHistoryView() {
+        return historyView;
+    }
 }

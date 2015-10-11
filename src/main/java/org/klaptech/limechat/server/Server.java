@@ -38,11 +38,11 @@ public class Server {
     private Configuration config;
     private ByteBuffer readBuffer = ByteBuffer.allocate(10);
     private ReadWorker readWorker = new ReadWorker();
-    private Channels channels;
+    private Rooms rooms;
 
     private Server(Configuration config) {
         this.config = config;
-        channels = new Channels();
+        rooms = new Rooms();
 
     }
     public static Server getInstance(){
@@ -87,7 +87,7 @@ public class Server {
                         continue;
                     }
                     if (key.isConnectable()) {
-                        LOGGER.info("User[ip:%s] disconnected");
+                        LOGGER.info("UserInfo[ip:%s] disconnected");
                     }
                     if (key.isAcceptable()) {
                         accept(key);
@@ -142,15 +142,15 @@ public class Server {
 
                     //   key.cancel();
                     //   socketChannel.close();
-                    // User disconnected or lost connection
+                    // UserInfo disconnected or lost connection
                     key.cancel();
                     socketChannel.close();
-                    LOGGER.info("User disconnected");
+                    LOGGER.info("UserInfo disconnected");
                     return;
                 }
                 byteOutputStream.write(readBuffer.array());
             } catch (IOException e) {
-                // User disconnected or lost connection
+                // UserInfo disconnected or lost connection
                 LOGGER.severe("Problem with reading information from client");
                 key.cancel();
                 socketChannel.close();
@@ -174,7 +174,7 @@ public class Server {
         Socket socket = socketChannel.socket();
         socketChannel.configureBlocking(false);
         socketChannel.register(selector, SelectionKey.OP_READ);
-        LOGGER.info(String.format("User[ip:%s] connected successfully", socket.getLocalAddress()));
+        LOGGER.info(String.format("UserInfo[ip:%s] connected successfully", socket.getLocalAddress()));
     }
 
     /**
@@ -214,8 +214,8 @@ public class Server {
         this.selector.wakeup();
     }
 
-    public Channels getChannels() {
-        return channels;
+    public Rooms getRooms() {
+        return rooms;
     }
 
     /**
@@ -248,7 +248,7 @@ public class Server {
      */
     public boolean containsUser(String username) {
         for (User user : users) {
-            if (user.getUsername().equals(username)) {
+            if (user.getUserInfo().getName().equals(username)) {
                 return true;
             }
         }

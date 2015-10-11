@@ -1,15 +1,20 @@
 package org.klaptech.limechat.server;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.JoinResultType;
 import org.klaptech.limechat.shared.general.GeneralMessageFactory;
+import org.klaptech.limechat.shared.server.ServerMessageFactory;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author rlapin
  */
-public class Channel {
+public class Room {
     private String name;
     /**
      * if channel is opened , you don't need to check password
@@ -22,13 +27,13 @@ public class Channel {
     private int maxUserCount = 10;
     private Set<User> users = new HashSet<>();
 
-    public Channel(String name) {
+    public Room(String name) {
         this.name = name;
         password = "";
         isOpened = true;
     }
 
-    public Channel(String name, String password) {
+    public Room(String name, String password) {
         this.name = name;
         this.isOpened = false;
         this.password = password;
@@ -62,18 +67,28 @@ public class Channel {
             return JoinResultType.INCORRECT_PASSWORD;
         }else{
             users.add(user);
-            onUserJoin();
+            onUserJoin(user);
             return JoinResultType.SUCCESS;
         }
 
     }
 
-    public void onUserJoin(){
+    public void onUserJoin(User joinedUser) {
+        for (User user : users) {
+            if (user != joinedUser) {
+                Server.getInstance().send(user.getSocketChannel(), ServerMessageFactory.createNewUserInRoomMessage(joinedUser.getUserInfo(), name));
+            } else {
+                Server.getInstance().send(user.getSocketChannel(), ServerMessageFactory.createRoomUsersMessage(createUsersInfoList(), name));
+            }
+        }
+    }
 
+    private List<UserInfo> createUsersInfoList() {
+        return users.stream().map(User::getUserInfo).collect(Collectors.toList());
     }
 
     public void onUserLeave(){
-
+        //TODO notify all room's clients
     }
 
     /**

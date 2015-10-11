@@ -7,15 +7,15 @@ import org.klaptech.limechat.shared.enums.MessageType;
 /**
  * @author rlapin
  */
-public class LeaveChannelAnswer implements Message{
+public class LeaveRoomAnswer implements Message {
 
     private LeaveType leaveType;
     /**
-     * Channel name
+     * Room name
      */
     private final String channelName;
 
-    protected LeaveChannelAnswer(LeaveType leaveType, String channelName){
+    protected LeaveRoomAnswer(LeaveType leaveType, String channelName) {
 
         this.leaveType = leaveType;
         this.channelName = channelName;

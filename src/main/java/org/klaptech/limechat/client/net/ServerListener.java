@@ -3,8 +3,11 @@ package org.klaptech.limechat.client.net;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.klaptech.limechat.client.events.UserEvents;
 import org.klaptech.limechat.shared.Message;
+import org.klaptech.limechat.shared.server.JoinRoomAnswer;
 import org.klaptech.limechat.shared.server.LoginAnswer;
+import org.klaptech.limechat.shared.server.NewUserInRoomMessage;
 import org.klaptech.limechat.shared.server.RegisterAnswer;
+import org.klaptech.limechat.shared.server.RoomUsersMessage;
 import org.klaptech.limechat.shared.utils.ByteObjectConverter;
 
 import java.io.IOException;
@@ -78,14 +81,14 @@ public class ServerListener implements Runnable {
                 if (numRead == -1) {
                     key.channel().close();
                     key.cancel();
-                    // User disconnected or lost connection
-                    LOGGER.info("User disconnected");
+                    // UserInfo disconnected or lost connection
+                    LOGGER.info("UserInfo disconnected");
                     return;
                 }
 
                 byteOutputStream.write(readBuffer.array());
             } catch (IOException e) {
-                // User disconnected or lost connection
+                // UserInfo disconnected or lost connection
                 LOGGER.severe("Problem with reading information from client");
                 key.cancel();
                 socketChannel.close();
@@ -102,6 +105,16 @@ public class ServerListener implements Runnable {
                         events.userLogged(((LoginAnswer) msg).getAnswerType());
                         break;
                     case ANSWER_JOIN:
+                        JoinRoomAnswer joinRoomAnswer = (JoinRoomAnswer) msg;
+                        events.userJoinedRoom(joinRoomAnswer.getJoinAnswer(), joinRoomAnswer.getChannelName());
+                        break;
+                    case NEW_USER:
+                        NewUserInRoomMessage newUserInRoomMessage = (NewUserInRoomMessage) msg;
+                        events.newUserInRoom(newUserInRoomMessage.getUserInfo(), newUserInRoomMessage.getChannelName());
+                        break;
+                    case ROOM_USERS:
+                        RoomUsersMessage roomUsersMessage = (RoomUsersMessage) msg;
+                        events.updateRoomUsers(roomUsersMessage.getUsersInfoList(), roomUsersMessage.getRoomName());
                         break;
                     case ANSWER_REGISTER:
                         events.userRegistered(((RegisterAnswer) msg).getRegisterAnswerType());

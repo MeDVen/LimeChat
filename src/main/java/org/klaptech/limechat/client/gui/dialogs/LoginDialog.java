@@ -19,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.klaptech.limechat.client.entities.ChatRoom;
-import org.klaptech.limechat.client.entities.User;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.components.CaptchaView;
 import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
@@ -29,11 +28,11 @@ import org.klaptech.limechat.client.gui.components.maskfield.validators.MaxLengt
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
+import org.klaptech.limechat.shared.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
 import org.klaptech.limechat.shared.enums.UserState;
 
-import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -126,10 +125,10 @@ public class LoginDialog implements Dialog {
             switch (loginType) {
                 case SUCCESS:
                     hide();
-                    User user = new User(loginPane.loginMaskView.getText(), UserState.ONLINE, null);
-                    GUIManager.getInstance().setUser(user);
-                    user.getDefaultRooms().add(new ChatRoom(loginPane.defaultRoomMaskView.getText()));
-                    LOGGER.info("I'm " + user);
+                    UserInfo userInfo = new UserInfo(loginPane.loginMaskView.getText(), UserState.ONLINE, null);
+                    GUIManager.getInstance().setUserInfo(userInfo);
+                    userInfo.getDefaultRooms().add(new ChatRoom(loginPane.defaultRoomMaskView.getText()));
+                    LOGGER.info("I'm " + userInfo);
                     GUIManager.getInstance().showSplashScreen();
                     break;
                 case USER_NOT_EXISTS:
@@ -187,7 +186,7 @@ public class LoginDialog implements Dialog {
     }
 
     /**
-     * LoginTab. User input name , password and select default room, then connect to server
+     * LoginTab. UserInfo input name , password and select default room, then connect to server
      */
     private class LoginPane extends Tab {
         private MaskInputView loginMaskView;
@@ -249,18 +248,16 @@ public class LoginDialog implements Dialog {
                 if (login.isEmpty() || password.isEmpty()) {
                     Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("checkinputdata"), Dialogs.IconType.ERROR);
                 } else {
+
+                    ServerConnector.INSTANCE.write(ClientMessageFactory.createLoginMessage(login, password.getBytes()));
                     try {
-                        ServerConnector.INSTANCE.write(ClientMessageFactory.createLoginMessage(login, password.getBytes()));
-                        try {
-                            lock.lock();
-                            condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
-                            lock.unlock();
-                        } catch (InterruptedException e) {
-                            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
-                        }
-                    } catch (IOException e) {
-                        Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("autherror"), Dialogs.IconType.ERROR);
+                        lock.lock();
+                        condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
+                        lock.unlock();
+                    } catch (InterruptedException e) {
+                        Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
                     }
+
                 }
             });
         }
@@ -339,8 +336,8 @@ public class LoginDialog implements Dialog {
                         Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("incorrectcaptcha"), Dialogs.IconType.ERROR);
                         captcha.generateValue();
                     } else {
-                        try {
-                            ServerConnector.INSTANCE.write(ClientMessageFactory.createRegisterMessage(login, password.getBytes(), email));
+
+                        ServerConnector.INSTANCE.write(ClientMessageFactory.createRegisterMessage(login, password.getBytes(), email));
                             try {
                                 lock.lock();
                                 condition.await(ServerConnector.CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -348,9 +345,7 @@ public class LoginDialog implements Dialog {
                             } catch (InterruptedException e) {
                                 Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("timeout"), Dialogs.IconType.ERROR);
                             }
-                        } catch (IOException e) {
-                            Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
-                        }
+
                     }
                 }
             });

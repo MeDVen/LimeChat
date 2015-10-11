@@ -8,19 +8,19 @@ import org.klaptech.limechat.shared.Message;
  */
 public enum MessageType {
     /**
-     * User join room
+     * UserInfo join room
      */
     JOIN,
     /**
-     * User send msg
+     * UserInfo send msg
      */
     MSG,
     /**
-     * User connect to server
+     * UserInfo connect to server
      */
     LOGIN,
     /**
-     * User disconnect
+     * UserInfo disconnect
      */
     DISCONNECT,
     /**
@@ -30,5 +30,5 @@ public enum MessageType {
     /**
      * Server answer on user login
      */
-    ANSWER_LOGIN, ANSWER_JOIN, LEAVE, ANSWER_LEAVE, REGISTER, ANSWER_REGISTER;
+    ANSWER_LOGIN, ANSWER_JOIN, LEAVE, ANSWER_LEAVE, REGISTER, ANSWER_REGISTER, ROOM_USERS, NEW_USER;
 }

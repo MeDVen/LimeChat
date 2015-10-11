@@ -30,29 +30,29 @@ public class ClientMessageFactory {
         return new RegisterMessage(username, HashUtils.md5(password), email);
     }
     /**
-     * User join channel
+     * UserInfo join channel
      * @param channelName
      * @param password
      * @return joinmessage
      */
     public static Message createJoinChannelMessage(String channelName, byte[] password){
-        return new JoinChannelMessage(channelName, HashUtils.md5(password));
+        return new JoinRoomMessage(channelName, HashUtils.md5(password));
     }
     /**
-     * User join channel
+     * UserInfo join channel
      * @param channelName
      * @return joinmessage
      */
     public static Message createJoinChannelMessage(String channelName){
-        return new JoinChannelMessage(channelName, "");
+        return new JoinRoomMessage(channelName, "");
     }
 
     /**
-     * User leave channe
+     * UserInfo leave channe
      * @param channelName
      * @return leavechannelmessage
      */
     public static Message createLeaveChannelMessage(String channelName){
-        return new LeaveChannelMessage(channelName);
+        return new LeaveRoomMessage(channelName);
     }
 }

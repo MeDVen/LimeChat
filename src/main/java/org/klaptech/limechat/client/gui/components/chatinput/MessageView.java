@@ -68,7 +68,7 @@ public class MessageView extends VBox {
     private void initComponents() {
         inputHTMLTextArea = new HTMLEditor();
         inputHTMLTextArea.setMinHeight(200);
-        GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
+
         HBox.setHgrow(inputHTMLTextArea, Priority.ALWAYS);
         inputHTMLTextArea.setId("messageview");
         inputHTMLTextArea.setContextMenu(new MessageViewContextMenu());
@@ -76,6 +76,7 @@ public class MessageView extends VBox {
         inputHTMLTextArea.setVisible(true);
         getChildren().add(new MessageViewToolbar());
         getChildren().add(inputHTMLTextArea);
+        GUIUtils.hideHTMLEditorToolbars(inputHTMLTextArea);
     }
 
     private void updateSize(String newValue) {

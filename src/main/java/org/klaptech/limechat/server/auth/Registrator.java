@@ -22,6 +22,7 @@ public class Registrator {
      */
     public static synchronized RegisterAnswerType register(String username, String password, String email) {
         Connection connection = Connector.INSTANCE.getConnection();
+        username = username.toLowerCase();
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * from users WHERE username='" + username + "'");

@@ -23,10 +23,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.klaptech.limechat.client.entities.User;
 import org.klaptech.limechat.client.gui.components.MainView;
 import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
 import org.klaptech.limechat.client.gui.dialogs.ServerConnectorDialog;
+import org.klaptech.limechat.shared.entities.UserInfo;
 
 /**
  * Contains all gui entities
@@ -48,7 +48,9 @@ public class GUIManager {
     private Pane splashLayout;
     private Label splashMessage;
     private AnchorPane splashImagePane;
-    private User user;
+    private UserInfo userInfo;
+
+    private MainView mainView;
 
 
     public static GUIManager getInstance() {
@@ -104,7 +106,8 @@ public class GUIManager {
         mainStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
         mainStage.setTitle(APP_TITLE);
 
-        Scene scene = new Scene(new MainView(), 800, 600);
+        mainView = new MainView();
+        Scene scene = new Scene(mainView, 800, 600);
 
         mainStage.setScene(scene);
         mainStage.show();
@@ -162,11 +165,15 @@ public class GUIManager {
         return serverConnectorDialog;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
-    public User getUser() {
-        return user;
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public MainView getMainView() {
+        return mainView;
     }
 }

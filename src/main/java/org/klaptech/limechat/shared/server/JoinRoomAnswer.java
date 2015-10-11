@@ -1,22 +1,31 @@
 package org.klaptech.limechat.shared.server;
 
 import org.klaptech.limechat.shared.Message;
-import org.klaptech.limechat.shared.enums.MessageType;
 import org.klaptech.limechat.shared.enums.JoinResultType;
+import org.klaptech.limechat.shared.enums.MessageType;
 
 /**
  * Message is send to client as a result of joining channel
  * @author rlapin
  */
-public class JoinChannelAnswer implements Message {
+public class JoinRoomAnswer implements Message {
     private JoinResultType joinAnswer;
+    /**
+     * Room name
+     */
+    private final String channelName;
 
-    public JoinChannelAnswer(JoinResultType joinAnswer) {
+    public JoinRoomAnswer(JoinResultType joinAnswer, String channelName) {
         this.joinAnswer = joinAnswer;
+        this.channelName = channelName;
     }
 
     public JoinResultType getJoinAnswer() {
         return joinAnswer;
+    }
+
+    public String getChannelName() {
+        return channelName;
     }
 
     @Override

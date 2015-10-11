@@ -20,6 +20,7 @@ public class Authorizer {
      */
     public static synchronized LoginAnswerType auth(String username, String password){
         Connection connection = Connector.INSTANCE.getConnection();
+        username = username.toLowerCase();
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * from users WHERE username='"+username+"'");

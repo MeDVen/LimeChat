@@ -1,21 +1,24 @@
 package org.klaptech.limechat.server;
 
+import org.klaptech.limechat.shared.entities.UserInfo;
+
 import java.nio.channels.SocketChannel;
 
 /**
- * User entity
+ * UserInfo entity
  * @author rlapin
  */
 public class User {
-    private String username;
+    private UserInfo userInfo;
     private SocketChannel socketChannel;
-    public User(String username, SocketChannel socketChannel) {
-        this.username = username;
+
+    public User(UserInfo userInfo, SocketChannel socketChannel) {
+        this.userInfo = userInfo;
         this.socketChannel = socketChannel;
     }
 
-    public String getUsername() {
-        return username;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
     public SocketChannel getSocketChannel() {
