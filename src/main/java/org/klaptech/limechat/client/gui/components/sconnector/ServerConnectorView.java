@@ -94,6 +94,7 @@ public class ServerConnectorView extends HBox {
         ObservableList<ServerInfo> items = serversComboBox.getItems();
         editServerBtn.setDisable(items.isEmpty());
         removeServerBtn.setDisable(items.isEmpty());
+        connectToggleButton.setDisable(items.isEmpty());
     }
 
     private void removeServerAction() {

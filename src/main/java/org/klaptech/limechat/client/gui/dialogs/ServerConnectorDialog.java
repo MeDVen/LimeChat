@@ -6,6 +6,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.klaptech.limechat.client.gui.components.sconnector.ConnectionType;
 import org.klaptech.limechat.client.gui.components.sconnector.ServerConnectorView;
+import org.klaptech.limechat.client.utils.GUIUtils;
 
 import java.util.ResourceBundle;
 
@@ -31,6 +32,7 @@ public class ServerConnectorDialog implements Dialog {
     @Override
     public void show() {
         stage.show();
+        GUIUtils.centerStage(stage);
     }
 
     @Override
