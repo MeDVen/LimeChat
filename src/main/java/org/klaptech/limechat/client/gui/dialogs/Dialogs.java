@@ -38,7 +38,9 @@ public class Dialogs {
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setAlignment(Pos.CENTER);
-        dialogStage.setScene(new Scene(vbox, 400, 100));
+        Scene scene = new Scene(vbox, 400, 100);
+        GUIUtils.addCss(scene, "fxml/dialogs.css");
+        dialogStage.setScene(scene);
         ImageView iconImage = new ImageView(type.getIcon());
         iconImage.setFitHeight(30);
         iconImage.setFitWidth(30);
@@ -71,7 +73,9 @@ public class Dialogs {
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setAlignment(Pos.CENTER);
-        dialogStage.setScene(new Scene(vbox, 400, 100));
+        Scene scene = new Scene(vbox, 400, 100);
+        GUIUtils.addCss(scene, "fxml/dialogs.css");
+        dialogStage.setScene(scene);
         ImageView iconImage = new ImageView(QUESTION_ICON);
         iconImage.setFitHeight(30);
         iconImage.setFitWidth(30);
