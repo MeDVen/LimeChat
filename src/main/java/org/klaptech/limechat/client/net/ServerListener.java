@@ -40,7 +40,7 @@ public class ServerListener implements Runnable {
     public ServerListener(ServerConnector serverConnector) {
 
         this.selector = serverConnector.getSelector();
-        this.events = serverConnector.getEvents();
+        this.events = serverConnector.getUserEvents();
 
     }
 

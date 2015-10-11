@@ -12,6 +12,6 @@ public class DefaultConfiguration implements Configuration{
 
     @Override
     public String getAddr() {
-        return "192.168.1.28";
+        return "127.0.0.1";
     }
 }

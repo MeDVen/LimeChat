@@ -10,8 +10,6 @@ import org.klaptech.limechat.shared.enums.RegisterAnswerType;
  * @author rlapin
  */
 public class UserEvents {
-    public UserEvents() {
-    }
 
     /**
      * user try to logging on server

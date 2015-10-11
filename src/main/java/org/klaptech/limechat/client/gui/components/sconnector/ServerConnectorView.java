@@ -19,7 +19,6 @@ import org.klaptech.limechat.client.net.ServerInfo;
 import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.client.utils.PropertyManager;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -127,11 +126,7 @@ public class ServerConnectorView extends HBox {
     private void connectAction() {
         ServerInfo selServer = serversComboBox.getValue();
         if (selServer != null) {
-            try {
-                ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort());
-            } catch (IOException e) {
-                LOGGER.severe("cannot connect to server " + selServer.getName() + " " + selServer.getAddr());
-            }
+            ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort());
         }
     }
 
