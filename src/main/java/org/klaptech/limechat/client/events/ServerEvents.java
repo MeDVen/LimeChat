@@ -1,5 +1,7 @@
 package org.klaptech.limechat.client.events;
 
+import org.klaptech.limechat.client.gui.GUIManager;
+
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
@@ -11,11 +13,12 @@ public class ServerEvents {
     private static final Logger LOGGER = getLogger(ServerEvents.class.getName());
 
     public void connected() {
-        LOGGER.info("Connected");
+        GUIManager.getInstance().getServerConnectorDialog().connectionSucceed();
     }
 
+
     public void connectionFailed() {
-        LOGGER.info("Connection failed");
+        GUIManager.getInstance().getServerConnectorDialog().connectionFailed();
     }
 
     public void disconnected() {

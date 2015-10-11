@@ -21,6 +21,10 @@ import org.klaptech.limechat.client.utils.PropertyManager;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,8 @@ import static java.util.logging.Logger.getLogger;
  */
 public class ServerConnectorView extends HBox {
     public static final int SPACING = 5;
+    private Lock lock = new ReentrantLock();
+    private Condition connectCondition = lock.newCondition();
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
     private final ResourceBundle resourceBundle;
     private ConnectionType type;
@@ -126,7 +132,16 @@ public class ServerConnectorView extends HBox {
     private void connectAction() {
         ServerInfo selServer = serversComboBox.getValue();
         if (selServer != null) {
-            ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort());
+            Executors.newSingleThreadExecutor().submit(() -> ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort()));
+
+            lock.lock();
+            try {
+                connectCondition.await();
+                System.out.println(1);
+            } catch (InterruptedException e) {
+                Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
+            }
+            lock.unlock();
         }
     }
 
@@ -227,4 +242,20 @@ public class ServerConnectorView extends HBox {
         return refreshImageView;
     }
 
+    public void onConnect(ConnectionType success) {
+        lock.lock();
+        connectCondition.signal();
+        switch (success) {
+            case SUCCESS:
+                LOGGER.info("Connected");
+                break;
+            case FAIL:
+                LOGGER.info("Failed");
+                break;
+            case NOT_CONNECTED:
+                LOGGER.info("Not conneted");
+                break;
+        }
+        lock.unlock();
+    }
 }

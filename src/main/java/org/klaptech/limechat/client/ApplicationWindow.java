@@ -1,11 +1,8 @@
 package org.klaptech.limechat.client;
 
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.klaptech.limechat.client.gui.GUIManager;
-import org.klaptech.limechat.client.gui.components.sconnector.ServerConnectorView;
 
 import java.util.logging.Logger;
 
@@ -34,8 +31,7 @@ public class ApplicationWindow extends Application {
 //        serverConnectorView.setType(ConnectionType.SUCCESS);
 //        LoginDialog loginDialog = new LoginDialog();
 //        loginDialog.show();
-        initStage.setScene(new Scene(new Group(new ServerConnectorView()), 500, 500));
-        initStage.show();
+        GUIManager.getInstance().getServerConnectorDialog().show();
 
 //       GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();

@@ -27,6 +27,7 @@ import javafx.util.Duration;
 import org.klaptech.limechat.client.gui.components.ChatTabPane;
 import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
 import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
+import org.klaptech.limechat.client.gui.dialogs.ServerConnectorDialog;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
@@ -37,6 +38,7 @@ import org.klaptech.limechat.client.utils.GUIUtils;
  */
 public class GUIManager {
     private static GUIManager instance = new GUIManager();
+    private final ServerConnectorDialog serverConnectorDialog;
     private Stage mainStage;
     private static final String LIME_CHAT_ICON_64x64 = "images/limechat_64x64.png";
     private static final String LIME_CHAT_SPLASH = "images/limes_transperent_splash.png";
@@ -44,7 +46,7 @@ public class GUIManager {
     public static final String APP_TITLE = "Lime Chat alpha v.0.0.1";
     private static final int SPLASH_WIDTH = 800;
     private static final int SPLASH_HEIGHT = 600;
-    private LoginDialog loginDialog;
+    private final LoginDialog loginDialog;
     private Pane splashLayout;
     private Label splashMessage;
     private AnchorPane splashImagePane;
@@ -60,6 +62,7 @@ public class GUIManager {
 
     private GUIManager() {
         loginDialog = new LoginDialog();
+        serverConnectorDialog = new ServerConnectorDialog(mainStage);
         initSplashScreen();
     }
 
@@ -160,5 +163,9 @@ public class GUIManager {
 
     public LoginDialog getLoginDialog() {
         return loginDialog;
+    }
+
+    public ServerConnectorDialog getServerConnectorDialog() {
+        return serverConnectorDialog;
     }
 }
