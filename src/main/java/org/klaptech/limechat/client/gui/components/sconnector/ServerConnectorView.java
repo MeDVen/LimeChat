@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.dialogs.DialogListener;
+import org.klaptech.limechat.client.gui.dialogs.Dialogs;
 import org.klaptech.limechat.client.gui.dialogs.dataeditor.ServerDataEditorDialog;
 import org.klaptech.limechat.client.gui.dialogs.dataeditor.entities.ServerEditorEntity;
 import org.klaptech.limechat.client.net.ServerConnector;
@@ -87,13 +88,16 @@ public class ServerConnectorView extends HBox {
     }
 
     private void removeServerAction() {
-        //TODO add confirm dialog
-        serversComboBox.getItems().remove(serversComboBox.getValue());
-        serversComboBox.getSelectionModel().selectNext();
+        Dialogs.showConfirmBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("deleteTitle"), resourceBundle.getString("deleteText"), new DialogListener() {
+            @Override
+            public void onOK() {
+                serversComboBox.getItems().remove(serversComboBox.getValue());
+                serversComboBox.getSelectionModel().selectNext();
+            }
+        });
     }
 
     private void editServerAction() {
-        // SHOW INPUT DIALOG
         ServerInfo selectedItem = serversComboBox.getValue();
         ServerEditorEntity serverEntity = new ServerEditorEntity();
         serverEntity.setName(selectedItem.getName());
