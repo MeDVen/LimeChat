@@ -19,6 +19,13 @@ public class ServerInfo implements Serializable, Comparable {
         return addr;
     }
 
+    public void setAddr(ServerAddress addr) {
+        this.addr = addr;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

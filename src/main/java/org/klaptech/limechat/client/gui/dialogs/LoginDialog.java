@@ -69,7 +69,7 @@ public class LoginDialog implements Dialog {
     public LoginDialog() {
         stage = new Stage(StageStyle.DECORATED);
         stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
-        resourceBundle = ResourceBundle.getBundle("org.klaptech.limechat.client.gui.dialogs.LoginDialog");
+        resourceBundle = ResourceBundle.getBundle(getClass().getCanonicalName());
         stage.setTitle(resourceBundle.getString("login"));
         initComponents();
         initListeners();
@@ -103,6 +103,11 @@ public class LoginDialog implements Dialog {
     @Override
     public void hide() {
         stage.hide();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        stage.setTitle(title);
     }
 
     /**

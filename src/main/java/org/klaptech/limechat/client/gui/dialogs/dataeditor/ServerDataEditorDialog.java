@@ -1,6 +1,7 @@
 package org.klaptech.limechat.client.gui.dialogs.dataeditor;
 
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -67,6 +68,12 @@ public class ServerDataEditorDialog implements OkCancelDialog {
         initComponents();
 
     }
+
+    @Override
+    public void setTitle(String title) {
+        stage.setTitle(title);
+    }
+
     /**
      * init stage as a child of parent stage
      *
@@ -81,6 +88,7 @@ public class ServerDataEditorDialog implements OkCancelDialog {
 
     private void initComponents() {
         BorderPane borderPane = new BorderPane();
+        borderPane.setPadding(new Insets(0, 10, 0, 10));
         VBox vBox = new VBox(5);
         Scene scene = new Scene(borderPane, width, height);
         borderPane.setId("editor");
@@ -95,7 +103,8 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     }
 
     private HBox createServerAddressLane() {
-        HBox hBox = new HBox();
+        HBox hBox = new HBox(5);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
         hBox.getStyleClass().add("eLane");
         Label serverLabel = createLabel(resourceBundle.getString("serverAddr"));
         serverLabel.prefHeightProperty().bind(hBox.heightProperty());
@@ -111,6 +120,7 @@ public class ServerDataEditorDialog implements OkCancelDialog {
         portTextField.setId("eServerPortTextField");
         addrTextField.setText(serverEntity.getAddress().getAddr());
         portTextField.setText(String.valueOf(serverEntity.getAddress().getPort()));
+        portTextField.setPrefColumnCount(5);
         portTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             String text = portMaskView.getText();
             int port = text.isEmpty() ? 0 : Integer.parseInt(text);
@@ -135,17 +145,17 @@ public class ServerDataEditorDialog implements OkCancelDialog {
     }
 
     private HBox createServerNameLane() {
-        HBox hBox = new HBox();
+        HBox hBox = new HBox(5);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
         hBox.getStyleClass().add("eLane");
         Label nameLabel = new Label(resourceBundle.getString("serverName"));
-        nameLabel.minWidth(nameLabel.getPrefWidth());
         nameLabel.getStyleClass().add("eLabel");
         nameLabel.prefHeightProperty().bind(hBox.heightProperty());
         TextField serverNameTextField = createTextField();
         nameLabel.setWrapText(true);
         serverNameMaskView = new MaskInputView(serverNameTextField, new ListNotContainsValidator(existedServers), new LengthValidator(5));
         serverNameTextField.prefHeightProperty().bind(hBox.heightProperty());
-        serverNameTextField.prefWidthProperty().bind(hBox.widthProperty().subtract(nameLabel.widthProperty()));
+        //    serverNameTextField.prefWidthProperty().bind(hBox.widthProperty().subtract(nameLabel.widthProperty()));
         serverNameTextField.setText(serverEntity.getName());
         serverNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             serverEntity.setName(serverNameMaskView.getText());

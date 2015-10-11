@@ -1,5 +1,6 @@
 package org.klaptech.limechat.client.gui.components.sconnector;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import org.klaptech.limechat.client.utils.PropertyManager;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ import static java.util.logging.Logger.getLogger;
 public class ServerConnectorView extends HBox {
     public static final int SPACING = 5;
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
+    private final ResourceBundle resourceBundle;
     private ConnectionType type;
     private ComboBox<ServerInfo> serversComboBox;
     /**
@@ -45,22 +48,80 @@ public class ServerConnectorView extends HBox {
      */
     private ToggleButton connectToggleButton;
     private Button addServerBtn;
+    private Button editServerBtn;
+    private Button removeServerBtn;
 
     public ServerConnectorView() {
         super(SPACING);
+        resourceBundle = ResourceBundle.getBundle(this.getClass().getCanonicalName());
         setAlignment(Pos.CENTER_RIGHT);
         setId("serverConnectorPanel");
         initComponents();
         initListeners();
+        updateComboBox();
+        serversComboBox.getSelectionModel().selectFirst();
     }
 
     private void initListeners() {
         addServerBtn.setOnAction(event -> addServerAction());
+        editServerBtn.setOnAction(event -> editServerAction());
+        removeServerBtn.setOnAction(event -> removeServerAction());
         connectToggleButton.setOnAction(event -> connectAction());
+        ObservableList<ServerInfo> items = serversComboBox.getItems();
+        items.addListener((ListChangeListener<ServerInfo>) c -> {
+                    updateComboBox();
+                }
+        );
+        serversComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+        });
+    }
+
+    /**
+     * invoke when need to disable/enable edit controls and select value in cmb
+     */
+    private void updateComboBox() {
+        ObservableList<ServerInfo> items = serversComboBox.getItems();
+        editServerBtn.setDisable(items.isEmpty());
+        removeServerBtn.setDisable(items.isEmpty());
+    }
+
+    private void removeServerAction() {
+        //TODO add confirm dialog
+        serversComboBox.getItems().remove(serversComboBox.getValue());
+        serversComboBox.getSelectionModel().selectNext();
+    }
+
+    private void editServerAction() {
+        // SHOW INPUT DIALOG
+        ServerInfo selectedItem = serversComboBox.getValue();
+        ServerEditorEntity serverEntity = new ServerEditorEntity();
+        serverEntity.setName(selectedItem.getName());
+        serverEntity.setAddress(selectedItem.getAddr());
+        ServerDataEditorDialog dataDialog = new ServerDataEditorDialog(serverEntity, GUIManager.getInstance().getMainStage());
+        dataDialog.initServersList(getServersNameList());
+        dataDialog.setTitle(resourceBundle.getString("editServerDlgTitle"));
+        dataDialog.show();
+        dataDialog.setDialogListener(new DialogListener() {
+            @Override
+            public void onOK() {
+                selectedItem.setName(dataDialog.getServerInfo().getName());
+                selectedItem.setAddr(dataDialog.getServerInfo().getAddress());
+                serversComboBox.getItems().set(serversComboBox.getItems().indexOf(selectedItem), selectedItem);
+
+                LOGGER.info("Server " + selectedItem + " successfully edit");
+
+            }
+
+            @Override
+            public void onCancel() {
+                LOGGER.info("No server will be added as result of cancel event");
+            }
+        });
     }
 
     private void connectAction() {
-        ServerInfo selServer = serversComboBox.getSelectionModel().getSelectedItem();
+        ServerInfo selServer = serversComboBox.getValue();
         if (selServer != null) {
             try {
                 ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort());
@@ -75,12 +136,14 @@ public class ServerConnectorView extends HBox {
         ServerDataEditorDialog dataDialog = new ServerDataEditorDialog(new ServerEditorEntity(), GUIManager.getInstance().getMainStage());
         ObservableList<ServerInfo> items = serversComboBox.getItems();
         dataDialog.initServersList(getServersNameList());
+        dataDialog.setTitle(resourceBundle.getString("addServerDlgTitle"));
         dataDialog.show();
         dataDialog.setDialogListener(new DialogListener() {
             @Override
             public void onOK() {
                 ServerInfo serverInfo = new ServerInfo(dataDialog.getServerInfo().getAddress(), dataDialog.getServerInfo().getName());
                 items.add(serverInfo);
+                serversComboBox.getSelectionModel().selectLast();
                 LOGGER.info("Server " + serverInfo + " successfully added");
             }
 
@@ -111,15 +174,17 @@ public class ServerConnectorView extends HBox {
         GUIUtils.addCss(this, "fxml/serverconnectorview.css");
         serversComboBox = createServersComboBox();
         connectToggleButton = createConnectButton();
-        addServerBtn = createAddServerButton();
-        getChildren().addAll(serversComboBox, connectToggleButton, addServerBtn);
+        addServerBtn = createButton("images/add.png");
+        editServerBtn = createButton("images/edit.png");
+        removeServerBtn = createButton("images/remove.png");
+        getChildren().addAll(serversComboBox, connectToggleButton, addServerBtn, editServerBtn, removeServerBtn);
         initLayout();
 
     }
 
-    private Button createAddServerButton() {
+    private Button createButton(String path) {
         Button btn = new Button();
-        btn.setGraphic(createImageView("images/add.png"));
+        btn.setGraphic(createImageView(path));
         return btn;
     }
 

@@ -49,4 +49,9 @@ public class ProgressDialog implements Dialog {
         stage.hide();
     }
 
+    @Override
+    public void setTitle(String title) {
+        throw new UnsupportedOperationException("Set title not supported by progress dialog as it undecorated");
+    }
+
 }
