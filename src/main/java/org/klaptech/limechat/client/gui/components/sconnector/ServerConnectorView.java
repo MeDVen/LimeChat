@@ -10,6 +10,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.dialogs.DialogListener;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
@@ -59,9 +60,11 @@ public class ServerConnectorView extends HBox {
     private Button addServerBtn;
     private Button editServerBtn;
     private Button removeServerBtn;
+    private Stage root;
 
-    public ServerConnectorView() {
+    public ServerConnectorView(Stage root) {
         super(SPACING);
+        this.root = root;
 
         resourceBundle = ResourceBundle.getBundle(this.getClass().getCanonicalName());
         setAlignment(Pos.CENTER_RIGHT);
@@ -248,9 +251,14 @@ public class ServerConnectorView extends HBox {
         switch (success) {
             case SUCCESS:
                 LOGGER.info("Connected");
+                Platform.runLater(() -> {
+                    root.hide();
+                    GUIManager.getInstance().getLoginDialog().show();
+                });
                 break;
             case FAIL:
                 LOGGER.info("Failed");
+                Platform.runLater(() -> Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("cannotConnectTitle"), resourceBundle.getString("cannotConnectText"), Dialogs.IconType.ERROR));
                 break;
             case NOT_CONNECTED:
                 LOGGER.info("Not conneted");

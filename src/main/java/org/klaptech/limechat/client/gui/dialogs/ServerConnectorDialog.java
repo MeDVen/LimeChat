@@ -25,7 +25,7 @@ public class ServerConnectorDialog implements Dialog {
         stage.setTitle(resourceBundle.getString("dialogTitle"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(parent);
-        serverConnectorView = new ServerConnectorView();
+        serverConnectorView = new ServerConnectorView(stage);
         stage.setScene(new Scene(new Group(serverConnectorView), 500, 500));
     }
 

@@ -1,10 +1,5 @@
 package org.klaptech.limechat.client.gui.components.chatroom;
 
-import org.klaptech.limechat.client.entities.UserInfo;
-import org.klaptech.limechat.client.gui.GUIConstants;
-import org.klaptech.limechat.client.utils.GUIUtils;
-import org.klaptech.limechat.shared.enums.UserState;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
@@ -12,6 +7,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.klaptech.limechat.client.entities.User;
+import org.klaptech.limechat.client.utils.GUIConstants;
+import org.klaptech.limechat.client.utils.GUIUtils;
+import org.klaptech.limechat.shared.enums.UserState;
 
 /**
  * View of members in room. Display members name and status circle.
@@ -26,18 +25,18 @@ import javafx.scene.image.ImageView;
  * In tooltip of every cell shown user avatar and name.
  *
  * @see UserState
- * @see UserInfo
+ * @see User
  *
  * @author MeDVen
  */
 public class MembersView extends ListView {
 
-    private ObservableList<UserInfo> testData = FXCollections.observableArrayList(
-            new UserInfo("user1", UserState.ONLINE, GUIConstants.USER_IMAGE),
-            new UserInfo("user2", UserState.AFK, GUIConstants.USER_IMAGE),
-            new UserInfo("user3", UserState.BUSY, GUIConstants.USER_IMAGE),
-            new UserInfo("user4", UserState.OFFLINE, GUIConstants.USER_IMAGE),
-            new UserInfo("user5", UserState.TYPING, GUIConstants.USER_IMAGE));
+    private ObservableList<User> testData = FXCollections.observableArrayList(
+            new User("user1", UserState.ONLINE, GUIConstants.USER_IMAGE),
+            new User("user2", UserState.AFK, GUIConstants.USER_IMAGE),
+            new User("user3", UserState.BUSY, GUIConstants.USER_IMAGE),
+            new User("user4", UserState.OFFLINE, GUIConstants.USER_IMAGE),
+            new User("user5", UserState.TYPING, GUIConstants.USER_IMAGE));
 
     public MembersView() {
         GUIUtils.addCss(this, "fxml/membersview.css");
@@ -50,8 +49,8 @@ public class MembersView extends ListView {
         setCellFactory(param -> new UserCell());
     }
 
-    private class UserCell extends ListCell<UserInfo> {
-        public void updateItem(UserInfo item, boolean empty) {
+    private class UserCell extends ListCell<User> {
+        public void updateItem(User item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
                 setGraphic(createImageView(item.getState().getStateImg(), 31));
@@ -60,7 +59,7 @@ public class MembersView extends ListView {
             }
         }
 
-        private Tooltip createTooltip(UserInfo item) {
+        private Tooltip createTooltip(User item) {
             Tooltip tooltip = new Tooltip();
             tooltip.setText(item.getName());
             tooltip.setGraphic(createImageView(item.getAvatar(), 31));

@@ -12,7 +12,6 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,11 +23,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.klaptech.limechat.client.gui.components.ChatTabPane;
-import org.klaptech.limechat.client.gui.components.chatroom.RoomTab;
+import org.klaptech.limechat.client.entities.User;
+import org.klaptech.limechat.client.gui.components.MainView;
 import org.klaptech.limechat.client.gui.dialogs.LoginDialog;
 import org.klaptech.limechat.client.gui.dialogs.ServerConnectorDialog;
-import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**
  * Contains all gui entities
@@ -50,6 +48,7 @@ public class GUIManager {
     private Pane splashLayout;
     private Label splashMessage;
     private AnchorPane splashImagePane;
+    private User user;
 
 
     public static GUIManager getInstance() {
@@ -101,18 +100,12 @@ public class GUIManager {
      * Init and show main stage
      */
     // TODO changed to private
-    public void showMainStage() {
+    public void showChatWindow() {
         mainStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(LIME_CHAT_ICON_64x64)));
         mainStage.setTitle(APP_TITLE);
-        GridPane grid = new GridPane();
-        Scene scene = new Scene(grid, 800, 600);
-        ChatTabPane tabPane = new ChatTabPane();
-        tabPane.addNewTab(new RoomTab("Room 1"));
-        tabPane.addNewTab(new RoomTab("Room 2"));
-        tabPane.addNewTab(new RoomTab("Room 3"));
-        grid.add(tabPane, 0, 0);
-        GUIUtils.autoSizeGridPaneColumns(grid);
-        GUIUtils.autoSizeGridPaneRows(grid);
+
+        Scene scene = new Scene(new MainView(), 800, 600);
+
         mainStage.setScene(scene);
         mainStage.show();
     }
@@ -145,7 +138,7 @@ public class GUIManager {
         });
         fadeSplash.setOnFinished(event -> {
             splashStage.hide();
-            showMainStage();
+            showChatWindow();
         });
     }
 
@@ -167,5 +160,9 @@ public class GUIManager {
 
     public ServerConnectorDialog getServerConnectorDialog() {
         return serverConnectorDialog;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

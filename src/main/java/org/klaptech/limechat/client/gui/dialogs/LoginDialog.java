@@ -8,7 +8,6 @@ import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
@@ -19,16 +18,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.klaptech.limechat.client.entities.ChatRoom;
+import org.klaptech.limechat.client.entities.User;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.components.CaptchaView;
 import org.klaptech.limechat.client.gui.components.maskfield.MaskInputView;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.EmailValidator;
 import org.klaptech.limechat.client.gui.components.maskfield.validators.LengthValidator;
+import org.klaptech.limechat.client.gui.components.maskfield.validators.MaxLengthValidator;
 import org.klaptech.limechat.client.net.ServerConnector;
 import org.klaptech.limechat.client.utils.GUIUtils;
 import org.klaptech.limechat.shared.client.ClientMessageFactory;
 import org.klaptech.limechat.shared.enums.LoginAnswerType;
 import org.klaptech.limechat.shared.enums.RegisterAnswerType;
+import org.klaptech.limechat.shared.enums.UserState;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -123,6 +126,9 @@ public class LoginDialog implements Dialog {
             switch (loginType) {
                 case SUCCESS:
                     hide();
+                    User user = new User("Newuser", UserState.ONLINE, null);
+                    GUIManager.getInstance().setUser(user);
+                    user.getDefaultRooms().add(new ChatRoom(loginPane.defaultRoomMaskView.getText()));
                     GUIManager.getInstance().showSplashScreen();
                     break;
                 case USER_NOT_EXISTS:
@@ -185,7 +191,7 @@ public class LoginDialog implements Dialog {
     private class LoginPane extends Tab {
         private MaskInputView loginMaskView;
         private MaskInputView passwordMaskView;
-        private ComboBox<String> defaultRoomCmb;
+        private MaskInputView defaultRoomMaskView;
         private CheckBox rememberChb;
         private Label fillerLabel;
         private Label loginLabel;
@@ -217,9 +223,9 @@ public class LoginDialog implements Dialog {
             gridPane.add(passwordField, 1, 1);
             Label defaultRoomLabel = new Label(resourceBundle.getString("defaultRoom"));
             gridPane.add(defaultRoomLabel, 0, 2);
-            defaultRoomCmb = new ComboBox<>(roomList);
-
-            gridPane.add(defaultRoomCmb, 1, 2);
+            TextField defaultRoomField = new TextField();
+            defaultRoomMaskView = new MaskInputView(defaultRoomField, new LengthValidator(5), new MaxLengthValidator(10));
+            gridPane.add(defaultRoomField, 1, 2);
             fillerLabel = new Label();
             gridPane.add(fillerLabel, 0, 3);
             rememberChb = new CheckBox(resourceBundle.getString("rememberUser"));
@@ -232,7 +238,7 @@ public class LoginDialog implements Dialog {
 
         private void initListeners() {
             TextField loginField = loginMaskView.getTextField();
-            defaultRoomCmb.prefWidthProperty().bind(loginField.widthProperty());
+            defaultRoomMaskView.getTextField().prefWidthProperty().bind(loginField.widthProperty());
             rememberChb.prefWidthProperty().bind(loginField.widthProperty());
             fillerLabel.prefWidthProperty().bind(loginLabel.widthProperty());
 

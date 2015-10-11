@@ -1,4 +1,4 @@
-package org.klaptech.limechat.client.gui;
+package org.klaptech.limechat.client.utils;
 
 import javafx.scene.image.Image;
 

@@ -35,7 +35,7 @@ public class ApplicationWindow extends Application {
 
 //       GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();
-//        GUIManager.getInstance().showMainStage();
+//        GUIManager.getInstance().showChatWindow();
 //        PropertyManager instance = PropertyManager.INSTANCE;
     }
 

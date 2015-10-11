@@ -14,7 +14,12 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -177,7 +182,7 @@ public class Server {
      */
     private void run() {
 
-        Executors.newSingleThreadExecutor().execute(() -> start());
+        Executors.newSingleThreadExecutor().execute(this::start);
         startReadWorker();
     }
 

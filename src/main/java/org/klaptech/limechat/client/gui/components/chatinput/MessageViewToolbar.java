@@ -5,9 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import org.klaptech.limechat.client.gui.GUIConstants;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
+import org.klaptech.limechat.client.utils.GUIConstants;
 import org.klaptech.limechat.client.utils.GUIUtils;
 
 /**

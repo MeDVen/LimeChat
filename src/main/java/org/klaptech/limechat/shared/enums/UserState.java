@@ -1,8 +1,7 @@
 package org.klaptech.limechat.shared.enums;
 
-import org.klaptech.limechat.client.gui.GUIConstants;
-
 import javafx.scene.image.Image;
+import org.klaptech.limechat.client.utils.GUIConstants;
 
 /**
  * @author MeDVen
