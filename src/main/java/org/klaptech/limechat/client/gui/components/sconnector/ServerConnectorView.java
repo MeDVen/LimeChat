@@ -1,5 +1,6 @@
 package org.klaptech.limechat.client.gui.components.sconnector;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -12,6 +13,7 @@ import javafx.scene.layout.HBox;
 import org.klaptech.limechat.client.gui.GUIManager;
 import org.klaptech.limechat.client.gui.dialogs.DialogListener;
 import org.klaptech.limechat.client.gui.dialogs.Dialogs;
+import org.klaptech.limechat.client.gui.dialogs.ProgressDialog;
 import org.klaptech.limechat.client.gui.dialogs.dataeditor.ServerDataEditorDialog;
 import org.klaptech.limechat.client.gui.dialogs.dataeditor.entities.ServerEditorEntity;
 import org.klaptech.limechat.client.net.ServerConnector;
@@ -47,7 +49,8 @@ public class ServerConnectorView extends HBox {
     private Condition connectCondition = lock.newCondition();
     private static final Logger LOGGER = getLogger(ServerConnectorView.class.getName());
     private final ResourceBundle resourceBundle;
-    private ConnectionType type;
+    //    private ConnectionType type;
+    private ProgressDialog progressDialog;
     private ComboBox<ServerInfo> serversComboBox;
     /**
      * Connection button
@@ -59,6 +62,7 @@ public class ServerConnectorView extends HBox {
 
     public ServerConnectorView() {
         super(SPACING);
+
         resourceBundle = ResourceBundle.getBundle(this.getClass().getCanonicalName());
         setAlignment(Pos.CENTER_RIGHT);
         setId("serverConnectorPanel");
@@ -131,17 +135,14 @@ public class ServerConnectorView extends HBox {
 
     private void connectAction() {
         ServerInfo selServer = serversComboBox.getValue();
+        progressDialog = new ProgressDialog(GUIManager.getInstance().getMainStage());
         if (selServer != null) {
-            Executors.newSingleThreadExecutor().submit(() -> ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort()));
+            progressDialog.show();
+            Executors.newSingleThreadExecutor().submit(() ->
+                    ServerConnector.INSTANCE.connect(selServer.getAddr().getAddr(), selServer.getAddr().getPort()));
 
-            lock.lock();
-            try {
-                connectCondition.await();
-                System.out.println(1);
-            } catch (InterruptedException e) {
-                Dialogs.showMessageBox(GUIManager.getInstance().getMainStage(), resourceBundle.getString("error"), resourceBundle.getString("registererror"), Dialogs.IconType.ERROR);
-            }
-            lock.unlock();
+
+            //      progressDialog.hide();
         }
     }
 
@@ -243,8 +244,6 @@ public class ServerConnectorView extends HBox {
     }
 
     public void onConnect(ConnectionType success) {
-        lock.lock();
-        connectCondition.signal();
         switch (success) {
             case SUCCESS:
                 LOGGER.info("Connected");
@@ -256,6 +255,7 @@ public class ServerConnectorView extends HBox {
                 LOGGER.info("Not conneted");
                 break;
         }
-        lock.unlock();
+        Platform.runLater(progressDialog::hide);
+
     }
 }

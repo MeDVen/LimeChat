@@ -22,10 +22,11 @@ public class ProgressDialog implements Dialog {
     private final static Logger LOGGER = getLogger(ProgressDialog.class.getName());
     private Stage stage;
 
-    public ProgressDialog() {
+    public ProgressDialog(Stage parent) {
         stage = new Stage(StageStyle.TRANSPARENT);
         ProgressIndicator progressIndicator = new ProgressIndicator();
         Group group = new Group(progressIndicator);
+        stage.initOwner(parent);
         Scene scene = new Scene(group, Color.TRANSPARENT);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
