@@ -32,6 +32,10 @@ public class ApplicationWindow extends Application {
 //        LoginDialog loginDialog = new LoginDialog();
 //        loginDialog.show();
         GUIManager.getInstance().getServerConnectorDialog().show();
+       /* User user = new User("TEST USER", UserState.ONLINE, null);
+        user.getDefaultRooms().add(new ChatRoom("dasd"));
+        GUIManager.getInstance().setUser(user);
+        GUIManager.getInstance().showChatWindow();*/
 
 //       GUIManager.getInstance().setMainStage(initStage);
 //        GUIManager.getInstance().getLoginDialog().show();

@@ -126,9 +126,10 @@ public class LoginDialog implements Dialog {
             switch (loginType) {
                 case SUCCESS:
                     hide();
-                    User user = new User("Newuser", UserState.ONLINE, null);
+                    User user = new User(loginPane.loginMaskView.getText(), UserState.ONLINE, null);
                     GUIManager.getInstance().setUser(user);
                     user.getDefaultRooms().add(new ChatRoom(loginPane.defaultRoomMaskView.getText()));
+                    LOGGER.info("I'm " + user);
                     GUIManager.getInstance().showSplashScreen();
                     break;
                 case USER_NOT_EXISTS:

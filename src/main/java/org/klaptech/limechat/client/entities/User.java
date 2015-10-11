@@ -52,4 +52,9 @@ public class User {
     public List<ChatRoom> getDefaultRooms() {
         return defaultRooms;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Username: %s , Default rooms ", name) + defaultRooms;
+    }
 }
