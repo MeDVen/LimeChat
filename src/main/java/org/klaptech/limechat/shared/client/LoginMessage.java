@@ -8,7 +8,6 @@ import org.klaptech.limechat.shared.enums.MessageType;
  * @author rlapin
  */
 public class LoginMessage implements Message {
-
     private final String username;
     private final String password;
 

@@ -31,22 +31,31 @@ public class ClientMessageFactory {
     }
     /**
      * UserInfo join channel
-     * @param channelName
+     * @param roomName
      * @param password
      * @return joinmessage
      */
-    public static Message createJoinChannelMessage(String channelName, byte[] password){
-        return new JoinRoomMessage(channelName, HashUtils.md5(password));
+    public static Message createJoinChannelMessage(String roomName, byte[] password) {
+        return new JoinRoomMessage(roomName, HashUtils.md5(password));
     }
     /**
      * UserInfo join channel
-     * @param channelName
+     * @param roomName
      * @return joinmessage
      */
-    public static Message createJoinChannelMessage(String channelName){
-        return new JoinRoomMessage(channelName, "");
+    public static Message createJoinChannelMessage(String roomName) {
+        return new JoinRoomMessage(roomName, "");
     }
 
+    /**
+     * Request users list in room
+     *
+     * @param roomName
+     * @return roomusers request
+     */
+    public static Message createRoomUsersRequest(String roomName) {
+        return new RoomUsersRequest(roomName);
+    }
     /**
      * UserInfo leave channe
      * @param channelName

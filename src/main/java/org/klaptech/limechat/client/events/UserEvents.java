@@ -49,6 +49,7 @@ public class UserEvents {
      * @param roomName room which user join in
      */
     public void newUserInRoom(UserInfo userInfo, String roomName) {
+        System.out.println(userInfo.getName());
         GUIManager.getInstance().getMainView().newUserInRoom(userInfo, roomName);
     }
 

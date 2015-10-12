@@ -44,8 +44,9 @@ public class MainView extends GridPane {
                 addNewRoom(room.getName());
 
             }
-            Platform.runLater(() -> add(tabPane, 0, 0));
+
         });
+        add(tabPane, 0, 0);
     }
 
     /**
@@ -63,6 +64,7 @@ public class MainView extends GridPane {
         switch (joinResultType) {
             case SUCCESS:
                 Platform.runLater(() -> tabPane.addNewTab(new RoomTab(roomName)));
+                ServerConnector.INSTANCE.write(ClientMessageFactory.createRoomUsersRequest(roomName));
                 LOGGER.info("You successfully join room" + roomName);
                 break;
             case ACCESS_FORBIDDEN:

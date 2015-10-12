@@ -8,6 +8,7 @@ import org.klaptech.limechat.shared.client.JoinRoomMessage;
 import org.klaptech.limechat.shared.client.LeaveRoomMessage;
 import org.klaptech.limechat.shared.client.LoginMessage;
 import org.klaptech.limechat.shared.client.RegisterMessage;
+import org.klaptech.limechat.shared.client.RoomUsersRequest;
 import org.klaptech.limechat.shared.entities.UserInfo;
 import org.klaptech.limechat.shared.enums.JoinResultType;
 import org.klaptech.limechat.shared.enums.LeaveType;
@@ -103,11 +104,16 @@ public class ReadWorker implements Runnable {
                     room = server.getRooms().getChannelByName(sendMessage.getChannelName());
                     room.sendMessage(sendMessage.getMessage());
                     break;
+                case ROOM_USERS_REQUEST:
+                    RoomUsersRequest roomUsersRequest = (RoomUsersRequest) message;
+                    room = server.getRooms().getChannelByName(roomUsersRequest.getRoomName());
+                    server.send(messageWrapper.getSocket(), ServerMessageFactory.createRoomUsersMessage(room.createUsersInfoList(), roomUsersRequest.getRoomName()));
+                    break;
                 case LEAVE:
                     LeaveRoomMessage leaveRoomMessage = (LeaveRoomMessage) message;
-                    room = server.getRooms().getChannelByName(leaveRoomMessage.getChannelName());
+                    room = server.getRooms().getChannelByName(leaveRoomMessage.getRoomName());
                     if (room.dropUser(Server.getInstance().getUser(messageWrapper.getSocket()))) {
-                        server.send(messageWrapper.getSocket(), ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveRoomMessage.getChannelName()));
+                        server.send(messageWrapper.getSocket(), ServerMessageFactory.createLeaveChannelAnswer(LeaveType.USER, leaveRoomMessage.getRoomName()));
                     }
                     break;
                 case REGISTER:

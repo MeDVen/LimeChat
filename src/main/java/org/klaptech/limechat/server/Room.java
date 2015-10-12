@@ -74,16 +74,11 @@ public class Room {
     }
 
     public void onUserJoin(User joinedUser) {
-        for (User user : users) {
-            if (user != joinedUser) {
-                Server.getInstance().send(user.getSocketChannel(), ServerMessageFactory.createNewUserInRoomMessage(joinedUser.getUserInfo(), name));
-            } else {
-                Server.getInstance().send(user.getSocketChannel(), ServerMessageFactory.createRoomUsersMessage(createUsersInfoList(), name));
-            }
-        }
+        users.stream().filter(user -> user != joinedUser).forEach(user -> Server.getInstance().send(user.getSocketChannel(), ServerMessageFactory.createNewUserInRoomMessage(joinedUser.getUserInfo(), name)));
     }
 
-    private List<UserInfo> createUsersInfoList() {
+
+    public List<UserInfo> createUsersInfoList() {
         return users.stream().map(User::getUserInfo).collect(Collectors.toList());
     }
 

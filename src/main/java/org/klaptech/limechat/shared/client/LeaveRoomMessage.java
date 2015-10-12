@@ -22,7 +22,7 @@ public class LeaveRoomMessage implements Message {
         return MessageType.LEAVE;
     }
 
-    public String getChannelName() {
+    public String getRoomName() {
         return channelName;
     }
 
